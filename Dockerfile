@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package.json \
   package-lock.json \
   ./
-RUN npm ci --ignore-scripts
+RUN npm ci --ignore-scripts --production
 COPY observablehq.config.js observablehq.config.js
 COPY src/ src/
 RUN npx observable build
