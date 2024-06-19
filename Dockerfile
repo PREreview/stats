@@ -9,7 +9,7 @@ COPY observablehq.config.js observablehq.config.js
 COPY src/ src/
 RUN npm run build
 
-FROM caddy
+FROM caddy AS prod
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist /usr/share/caddy
 EXPOSE 80
