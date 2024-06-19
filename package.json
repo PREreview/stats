@@ -1,13 +1,6 @@
 {
   "type": "module",
   "private": true,
-  "scripts": {
-    "clean": "rimraf src/.observablehq/cache",
-    "build": "rimraf dist && observable build",
-    "dev": "observable preview",
-    "deploy": "observable deploy",
-    "observable": "observable"
-  },
   "dependencies": {
     "@observablehq/framework": "^1.9.0",
     "d3-dsv": "^3.0.1",
@@ -17,8 +10,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "prettier": "^3.3.2",
     "prettier-plugin-sh": "^0.14.0",
-    "prettier-plugin-toml": "^2.0.1",
-    "rimraf": "^5.0.5"
+    "prettier-plugin-toml": "^2.0.1"
   },
   "engines": {
     "node": ">=18"

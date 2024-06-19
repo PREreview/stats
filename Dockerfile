@@ -7,7 +7,7 @@ COPY package.json \
 RUN npm ci --ignore-scripts
 COPY observablehq.config.js observablehq.config.js
 COPY src/ src/
-RUN npm run build
+RUN npx observable build
 
 FROM caddy AS prod
 COPY Caddyfile /etc/caddy/Caddyfile
