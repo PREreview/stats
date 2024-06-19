@@ -104,16 +104,12 @@ jobs:
         run: docker push ${{ steps.image.outputs.image }}
 
   deploy:
-    name: 'Deploy (${{ matrix.instance }})'
+    name: 'Deploy'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     if: github.ref == 'refs/heads/main'
     needs:
       - push
-    strategy:
-      fail-fast: false
-      matrix:
-        instance: ['prod', 'sandbox']
 
     steps:
       - name: 'Checkout code'
