@@ -8,6 +8,7 @@ toc: false
 
 ```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%S.%LZ')
+const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 
 const requests = FileAttachment('./data/requests.json')
   .json()
@@ -27,13 +28,24 @@ function requestsTimeline({ width } = {}) {
     title: 'Requests per week',
     width: Math.max(width, 600),
     height: 400,
-    color: {},
+    color: {
+      legend: true,
+      tickFormat: d => (d ? languageNames.of(d) : 'Not yet detected'),
+    },
     y: { grid: true, label: 'Requests' },
     x: { label: '' },
     marks: [
       Plot.rectY(
         requests,
-        Plot.binX({ y: 'count' }, { x: 'timestamp', interval: d3.utcWeek, fill: 'var(--theme-foreground-focus)' }),
+        Plot.binX(
+          { y: 'count' },
+          {
+            x: 'timestamp',
+            interval: d3.utcWeek,
+            fill: 'language',
+            order: ['en', 'es', 'pt'],
+          },
+        ),
       ),
       Plot.ruleY([0]),
     ],

@@ -2,9 +2,15 @@ import { HttpClient, Terminal } from '@effect/platform'
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
 import { Effect } from 'effect'
+import * as LanguageCode from '../lib/LanguageCode.js'
 import * as Temporal from '../lib/Temporal.js'
 
-const Requests = Schema.Array(Schema.Struct({ timestamp: Temporal.InstantFromStringSchema }))
+const Requests = Schema.Array(
+  Schema.Struct({
+    timestamp: Temporal.InstantFromStringSchema,
+    language: Schema.optional(LanguageCode.LanguageCodeSchema, { nullable: true }),
+  }),
+)
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
