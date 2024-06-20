@@ -44,6 +44,7 @@ function requestsTimeline({ width } = {}) {
             interval: d3.utcWeek,
             fill: 'language',
             order: ['en', 'es', 'pt'],
+            tip: true,
           },
         ),
       ),
