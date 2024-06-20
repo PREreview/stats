@@ -1,5 +1,6 @@
 FROM node:20.13.1-alpine3.18 AS builder
 WORKDIR /app
+ENV OBSERVABLE_TELEMETRY_DISABLE=1
 
 COPY package.json \
   package-lock.json \
