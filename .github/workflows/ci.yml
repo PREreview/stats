@@ -102,7 +102,7 @@ jobs:
 
       - name: 'Generate image name'
         id: image
-        run: echo "image=registry.fly.io/prereview-stats:${{ github.sha }}" >> $GITHUB_OUTPUT
+        run: echo "image=registry.fly.io/prereview-stats:${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}" >> $GITHUB_OUTPUT
 
       - name: 'Tag image'
         run: docker tag ${{ needs.build-image.outputs.image }} ${{ steps.image.outputs.image }}
