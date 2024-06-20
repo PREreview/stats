@@ -1,4 +1,4 @@
-FROM node:20.13.1-alpine3.18 as build
+FROM node:20.13.1-alpine3.18 AS builder
 WORKDIR /app
 
 COPY package.json \
@@ -7,6 +7,8 @@ COPY package.json \
 RUN npm ci --ignore-scripts --production
 COPY observablehq.config.js observablehq.config.js
 COPY src/ src/
+
+FROM builder AS build
 RUN npx observable build
 
 FROM caddy AS prod
