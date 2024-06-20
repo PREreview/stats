@@ -1,9 +1,5 @@
-# flyctl launch added from .gitignore
-**/.DS_Store
-dist
-**/node_modules
-**/yarn-error.log
-
-# flyctl launch added from src/.gitignore
-src/.observablehq/cache
-fly.toml
+/.git/
+/.github/
+/dist/
+/node_modules/
+/src/.observablehq/
