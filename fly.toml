@@ -14,7 +14,7 @@ processes = ['app']
 [[vm]]
 size = 'shared-cpu-1x'
 
-[[services.http_checks]]
+[[http_service.checks]]
 grace_period = "2s"
 interval = "5s"
 method = "get"
