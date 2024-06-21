@@ -2,10 +2,16 @@
 	@files {
 		not path /health
 	}
+	@health {
+	  path /health
+	}
+
+  log
+  log_skip @health
 
 	root * /usr/share/caddy
 
-	respond /health 200
+	respond @health 200
 
 	try_files @files {path}.html
 
