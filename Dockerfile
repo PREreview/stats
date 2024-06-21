@@ -1,4 +1,4 @@
-FROM node:20.13.1-alpine3.18 AS builder
+FROM node:21.7.3-alpine3.18 AS builder
 WORKDIR /app
 ENV OBSERVABLE_TELEMETRY_DISABLE=1
 
