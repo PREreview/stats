@@ -1,11 +1,17 @@
 :80 {
+	@files {
+		not path /health
+	}
+
 	root * /usr/share/caddy
 
-	try_files {path}.html
+	respond /health 200
 
-	file_server
+	try_files @files {path}.html
 
-	basic_auth {
+	file_server @files
+
+	basic_auth @files {
 		prereview {$PASSWORD}
 	}
 }
