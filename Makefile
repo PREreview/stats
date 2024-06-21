@@ -1,4 +1,7 @@
-.PHONY: start
+.PHONY: build-image prod start
+
+CADDY_PASSWORD=letmein
+IMAGE_TAG=prereview-stats
 
 export OBSERVABLE_TELEMETRY_DISABLE := 1
 
@@ -8,3 +11,13 @@ node_modules: package.json package-lock.json
 
 start: node_modules
 	npx observable preview
+
+build-image:
+	docker build --target prod --tag ${IMAGE_TAG} .
+
+.dev/caddy-env: build-image
+	@mkdir -p .dev
+	@echo 'PASSWORD=$(shell docker run --rm ${IMAGE_TAG} caddy hash-password --plaintext ${CADDY_PASSWORD})' > .dev/caddy-env
+
+prod: .dev/caddy-env build-image
+	docker run --rm --publish 8080:80 --env-file .dev/caddy-env ${IMAGE_TAG}
