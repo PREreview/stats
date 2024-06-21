@@ -12,7 +12,7 @@ COPY src/ src/
 FROM builder AS build
 RUN npx observable build
 
-FROM caddy AS prod
+FROM caddy:2.8.4-alpine AS prod
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=build /app/dist /usr/share/caddy
 EXPOSE 80
