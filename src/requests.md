@@ -13,6 +13,9 @@ const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const requests = FileAttachment('./data/requests.json')
   .json()
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
+
+const openAlexFields = FileAttachment('./data/openalex-fields.json')
+  .json()
 ```
 
 ```js
