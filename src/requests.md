@@ -96,7 +96,6 @@ function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
     title: 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
-    marginLeft: 240,
     color: {
       ...languageColor,
       legend: true,
@@ -125,6 +124,7 @@ function requestsByFieldTimeline({ width } = {}) {
           },
         ),
       ),
+      Plot.axisY({ lineWidth: 20, marginLeft: 220 }),
     ],
   })
 }
