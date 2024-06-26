@@ -15,6 +15,10 @@ const requests = FileAttachment('./data/requests.json')
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
 ```
 
+```js
+const requestsByField = requests.flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
+```
+
 <div class="grid grid-cols-4">
   <div class="card">
     <h2>Requests</h2> 
@@ -23,7 +27,7 @@ const requests = FileAttachment('./data/requests.json')
 </div>
 
 ```js
-function requestsTimeline({ width } = {}) {
+function requestsByLanguageTimeline({ width } = {}) {
   return Plot.plot({
     title: 'Requests per week',
     width: Math.max(width, 600),
@@ -56,6 +60,43 @@ function requestsTimeline({ width } = {}) {
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => requestsTimeline({width}))}
+    ${resize((width) => requestsByLanguageTimeline({width}))}
+  </div>
+</div>
+
+```js
+function requestsByFieldTimeline({ width } = {}) {
+  return Plot.plot({
+    title: 'Requests per week',
+    width: Math.max(width, 600),
+    height: 400,
+    color: {
+      legend: true,
+      type: 'ordinal',
+    },
+    y: { grid: true, label: 'Requests' },
+    x: { label: '' },
+    marks: [
+      Plot.rectY(
+        requestsByField,
+        Plot.binX(
+          { y: 'count' },
+          {
+            x: 'timestamp',
+            interval: d3.utcWeek,
+            fill: 'field',
+            tip: true,
+          },
+        ),
+      ),
+      Plot.ruleY([0]),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => requestsByFieldTimeline({width}))}
   </div>
 </div>
