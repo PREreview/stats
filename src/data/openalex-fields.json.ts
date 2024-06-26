@@ -19,7 +19,7 @@ const FieldNames = Schema.Record(FieldIdSchema, Schema.String)
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
-  const request = HttpClient.request.get('https://api.openalex.org/fields')
+  const request = HttpClient.request.get('https://api.openalex.org/fields?per-page=200')
 
   const data = yield* HttpClient.client
     .fetchOk(request)
