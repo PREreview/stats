@@ -9,6 +9,7 @@ toc: false
 ```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%S.%LZ')
 const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
+const languageName = code => (code ? languageNames.of(code) : 'Not yet detected')
 
 const requests = FileAttachment('./data/requests.json')
   .json()
@@ -38,7 +39,7 @@ function requestsByLanguageTimeline({ width } = {}) {
     height: 400,
     color: {
       legend: true,
-      tickFormat: d => (d ? languageNames.of(d) : 'Not yet detected'),
+      tickFormat: languageName,
     },
     y: { grid: true, label: 'Requests' },
     x: { label: '' },
@@ -52,7 +53,11 @@ function requestsByLanguageTimeline({ width } = {}) {
             interval: d3.utcWeek,
             fill: 'language',
             order: ['en', 'es', 'pt'],
-            tip: true,
+            tip: {
+              format: {
+                fill: languageName,
+              },
+            },
           },
         ),
       ),
@@ -74,7 +79,7 @@ function requestsByFieldTimeline({ width } = {}) {
     title: 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
     marginLeft: 240,
-    color: { legend: true, tickFormat: d => languageNames.of(d) },
+    color: { legend: true, tickFormat: languageName },
     x: { grid: true, label: 'Requests' },
     y: { label: '' },
     marks: [
