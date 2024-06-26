@@ -93,6 +93,12 @@ function requestsByFieldTimeline({ width } = {}) {
             y: 'field',
             fill: 'language',
             sort: { y: 'x', reverse: true },
+            tip: {
+              format: {
+                fill: languageName,
+                y: false,
+              },
+            },
           },
         ),
       ),
