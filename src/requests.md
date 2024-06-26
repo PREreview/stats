@@ -14,12 +14,13 @@ const requests = FileAttachment('./data/requests.json')
   .json()
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
 
-const openAlexFields = FileAttachment('./data/openalex-fields.json')
-  .json()
+const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
 ```js
-const requestsByField = requests.flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field: openAlexFields[field] })))
+const requestsByField = requests.flatMap(({ fields, ...request }) =>
+  fields.map(field => ({ ...request, field: openAlexFields[field] })),
+)
 ```
 
 <div class="grid grid-cols-4">
@@ -79,7 +80,7 @@ function requestsByFieldTimeline({ width } = {}) {
     x: { label: '' },
     marks: [
       Plot.barX(
-        requestsByField, 
+        requestsByField,
         Plot.groupY(
           {
             x: 'count',
@@ -87,9 +88,9 @@ function requestsByFieldTimeline({ width } = {}) {
           {
             y: 'field',
             fill: 'language',
-            sort: {y:'x', reverse: true}
+            sort: { y: 'x', reverse: true },
           },
-        )
+        ),
       ),
     ],
   })
