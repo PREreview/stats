@@ -73,11 +73,10 @@ function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
     title: 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
-    height: 400,
-    marginLeft: 300,
-    color: { legend: true },
-    y: { grid: true, label: 'Requests' },
-    x: { label: '' },
+    marginLeft: 240,
+    color: { legend: true, tickFormat: d => languageNames.of(d) },
+    x: { grid: true, label: 'Requests' },
+    y: { label: '' },
     marks: [
       Plot.barX(
         requestsByField,
