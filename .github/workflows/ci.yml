@@ -71,6 +71,28 @@ jobs:
       - name: 'Run formatter'
         run: npx prettier --ignore-unknown --check '**'
 
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    if: github.event_name != 'schedule'
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.1.6
+
+      - name: 'Set up Node.js'
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version-file: package.json
+          cache: ${{ !env.ACT && 'npm' || '' }}
+
+      - name: 'Install dependencies'
+        run: npm ci
+
+      - name: 'Run the linter'
+        run: npx eslint . --max-warnings 0
+
   typecheck:
     name: 'Typecheck'
     runs-on: ubuntu-22.04
@@ -103,6 +125,7 @@ jobs:
     needs:
       - build-image
       - format
+      - lint
       - typecheck
 
     steps:
