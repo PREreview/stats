@@ -19,6 +19,23 @@ const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
 ```js
+const languageColor = Plot.scale({
+  color: {
+    type: 'categorical',
+    domain: [
+      'en',
+      ...d3
+        .groupSort(
+          requests,
+          requests => -requests.length,
+          request => request.language,
+        )
+        .filter(language => language !== 'en' && language !== undefined),
+    ],
+    unknown: 'var(--theme-foreground-muted)',
+  },
+})
+
 const requestsByField = requests.flatMap(({ fields, ...request }) =>
   fields.map(field => ({ ...request, field: openAlexFields[field] })),
 )
@@ -38,6 +55,7 @@ function requestsByLanguageTimeline({ width } = {}) {
     width: Math.max(width, 600),
     height: 400,
     color: {
+      ...languageColor,
       legend: true,
       tickFormat: languageName,
     },
@@ -52,7 +70,7 @@ function requestsByLanguageTimeline({ width } = {}) {
             x: 'timestamp',
             interval: d3.utcWeek,
             fill: 'language',
-            order: ['en', 'es', 'pt'],
+            order: languageColor.domain,
             tip: {
               format: {
                 fill: languageName,
@@ -79,7 +97,11 @@ function requestsByFieldTimeline({ width } = {}) {
     title: 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
     marginLeft: 240,
-    color: { legend: true, tickFormat: languageName },
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
     x: { grid: true, label: 'Requests' },
     y: { label: '' },
     marks: [
@@ -92,6 +114,7 @@ function requestsByFieldTimeline({ width } = {}) {
           {
             y: 'field',
             fill: 'language',
+            order: languageColor.domain,
             sort: { y: 'x', reverse: true },
             tip: {
               format: {
