@@ -1,8 +1,8 @@
 import { HttpClient, Terminal } from '@effect/platform'
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
-import { Effect } from 'effect'
-import { FieldIdFromUrlSchema } from '../lib/OpenAlex.js'
+import { Array, Effect } from 'effect'
+import { FieldIdFromUrlSchema, FieldIdSchema } from '../lib/OpenAlex.js'
 import { UrlFromStringSchema } from '../lib/Url.js'
 
 const Fields = Schema.Struct({
@@ -14,6 +14,8 @@ const Fields = Schema.Struct({
   ),
 })
 
+const FieldNames = Schema.Record(FieldIdSchema, Schema.String)
+
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
@@ -23,7 +25,9 @@ const program = Effect.gen(function* () {
     .fetchOk(request)
     .pipe(Effect.andThen(HttpClient.response.schemaBodyJson(Fields)), Effect.scoped)
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Fields))(data)
+  const transformedData = Object.fromEntries(Array.map(data.results, field => [field.id, field.display_name]))
+
+  const encoded = yield* Schema.encode(Schema.parseJson(FieldNames))(transformedData)
 
   yield* terminal.display(encoded)
 })
