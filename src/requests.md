@@ -19,7 +19,7 @@ const openAlexFields = FileAttachment('./data/openalex-fields.json')
 ```
 
 ```js
-const requestsByField = requests.flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
+const requestsByField = requests.flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field: openAlexFields[field] })))
 ```
 
 <div class="grid grid-cols-4">
@@ -70,29 +70,27 @@ function requestsByLanguageTimeline({ width } = {}) {
 ```js
 function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
-    title: 'Requests per week',
+    title: 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
     height: 400,
-    color: {
-      legend: true,
-      type: 'ordinal',
-    },
+    marginLeft: 300,
+    color: { legend: true },
     y: { grid: true, label: 'Requests' },
     x: { label: '' },
     marks: [
-      Plot.rectY(
-        requestsByField,
-        Plot.binX(
-          { y: 'count' },
+      Plot.barX(
+        requestsByField, 
+        Plot.groupY(
           {
-            x: 'timestamp',
-            interval: d3.utcWeek,
-            fill: 'field',
-            tip: true,
+            x: 'count',
           },
-        ),
+          {
+            y: 'field',
+            fill: 'language',
+            sort: {y:'x', reverse: true}
+          },
+        )
       ),
-      Plot.ruleY([0]),
     ],
   })
 }
