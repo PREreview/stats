@@ -34,7 +34,31 @@ const chosenDomain = view(
 ```
 
 ```js
-const requestsSelected = chosenDomain ? requests.filter(d => d.domains.includes(chosenDomain)) : requests
+const chosenField = view(
+  Inputs.select(
+    [
+      null,
+      ...Object.keys(
+        Object.fromEntries(
+          Object.entries(openAlexFields).filter(([, field]) => (chosenDomain ? field.domain === chosenDomain : true)),
+        ),
+      ),
+    ],
+    {
+      label: 'Field',
+      disabled: chosenDomain === null,
+      format: field => (field ? openAlexFields[field].name : 'All fields'),
+    },
+  ),
+)
+```
+
+```js
+const requestsSelected = chosenField
+  ? requests.filter(d => d.fields.includes(chosenField))
+  : chosenDomain
+    ? requests.filter(d => d.domains.includes(chosenDomain))
+    : requests
 ```
 
 ```js
@@ -63,8 +87,11 @@ const requestsByField = requestsSelected
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
+    <h2>${chosenField ? `${openAlexFields[chosenField].name} requests` : chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
     <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
+    ${chosenField ? html`
+      <div>${d3.format(".1%")(requestsSelected.length / requests.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
+    ` : ''}
     ${chosenDomain ? html`
       <div>${d3.format(".1%")(requestsSelected.length / requests.length)} of all requests</div>
     ` : ''}
@@ -74,7 +101,11 @@ const requestsByField = requestsSelected
 ```js
 function requestsByLanguageTimeline({ width } = {}) {
   return Plot.plot({
-    title: chosenDomain ? `${openAlexDomains[chosenDomain]} requests per week` : 'Requests per week',
+    title: chosenField
+      ? `${openAlexFields[chosenField].name} requests per week`
+      : chosenDomain
+        ? `${openAlexDomains[chosenDomain]} requests per week`
+        : 'Requests per week',
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -117,9 +148,11 @@ function requestsByLanguageTimeline({ width } = {}) {
 ```js
 function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
-    title: chosenDomain
-      ? `Fields of ${openAlexDomains[chosenDomain]} requests (request may have multiple fields)`
-      : 'Fields of requests (request may have multiple fields)',
+    title: chosenField
+      ? `Fields of ${openAlexFields[chosenField].name} requests (request may have multiple fields)`
+      : chosenDomain
+        ? `Fields of ${openAlexDomains[chosenDomain]} requests (request may have multiple fields)`
+        : 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
     color: {
       ...languageColor,

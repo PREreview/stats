@@ -2,6 +2,12 @@ import { ParseResult, Schema } from '@effect/schema'
 import { Brand, Either } from 'effect'
 import { UrlFromSelfSchema } from './Url.js'
 
+type SubfieldId = string & Brand.Brand<'OpenAlexSubfieldId'>
+
+const SubfieldId = Brand.nominal<SubfieldId>()
+
+export const SubfieldIdSchema = Schema.String.pipe(Schema.fromBrand(SubfieldId))
+
 type FieldId = string & Brand.Brand<'OpenAlexFieldId'>
 
 const FieldId = Brand.nominal<FieldId>()
