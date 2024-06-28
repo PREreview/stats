@@ -19,6 +19,11 @@ const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
 ```js
+const now = new Date()
+const firstRequest = d3.min(requests, request => request.timestamp)
+```
+
+```js
 const languageColor = Plot.scale({
   color: {
     type: 'categorical',
@@ -60,7 +65,7 @@ function requestsByLanguageTimeline({ width } = {}) {
       tickFormat: languageName,
     },
     y: { grid: true, label: 'Requests' },
-    x: { label: '' },
+    x: { label: '', domain: [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)] },
     marks: [
       Plot.rectY(
         requests,
