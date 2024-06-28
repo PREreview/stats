@@ -15,12 +15,26 @@ const requests = FileAttachment('./data/requests.json')
   .json()
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
 
+const openAlexDomains = FileAttachment('./data/openalex-domains.json').json()
 const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
 ```js
 const now = new Date()
 const firstRequest = d3.min(requests, request => request.timestamp)
+```
+
+```js
+const chosenDomain = view(
+  Inputs.select([null, ...Object.keys(openAlexDomains)], {
+    label: 'Domain',
+    format: domain => (domain ? openAlexDomains[domain] : 'All domains'),
+  }),
+)
+```
+
+```js
+const requestsSelected = chosenDomain ? requests.filter(d => d.domains.includes(chosenDomain)) : requests
 ```
 
 ```js
@@ -41,15 +55,16 @@ const languageColor = Plot.scale({
   },
 })
 
-const requestsByField = requests.flatMap(({ fields, ...request }) =>
-  fields.map(field => ({ ...request, field: openAlexFields[field].name })),
-)
+const requestsByField = requestsSelected
+  .flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
+  .filter(request => (chosenDomain ? openAlexFields[request.field].domain === chosenDomain : true))
+  .map(({ field, ...request }) => ({ ...request, field: openAlexFields[field].name }))
 ```
 
 <div class="grid grid-cols-4">
   <div class="card">
     <h2>Requests</h2> 
-    <span class="big">${requests.length.toLocaleString("en-US")}</span>
+    <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
   </div>
 </div>
 
@@ -68,7 +83,7 @@ function requestsByLanguageTimeline({ width } = {}) {
     x: { label: '', domain: [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)] },
     marks: [
       Plot.rectY(
-        requests,
+        requestsSelected,
         Plot.binX(
           { y: 'count' },
           {
