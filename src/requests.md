@@ -65,6 +65,9 @@ const requestsByField = requestsSelected
   <div class="card">
     <h2>${chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
     <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
+    ${chosenDomain ? html`
+      <div>${d3.format(".1%")(requestsSelected.length / requests.length)} of all requests</div>
+    ` : ''}
   </div>
 </div>
 
