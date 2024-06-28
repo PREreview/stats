@@ -15,3 +15,17 @@ export const FieldIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, Fi
       : Either.left(new ParseResult.Type(ast, url)),
   encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/fields/${encodeURIComponent(topicId)}`)),
 })
+
+type DomainId = string & Brand.Brand<'OpenAlexDomainId'>
+
+const DomainId = Brand.nominal<DomainId>()
+
+export const DomainIdSchema = Schema.String.pipe(Schema.fromBrand(DomainId))
+
+export const DomainIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, DomainIdSchema, {
+  decode: (url, _, ast) =>
+    url.origin === 'https://openalex.org' && url.pathname.startsWith('/domains/')
+      ? Either.right(decodeURIComponent(url.pathname.substring(9)))
+      : Either.left(new ParseResult.Type(ast, url)),
+  encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/domains/${encodeURIComponent(topicId)}`)),
+})

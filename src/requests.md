@@ -42,7 +42,7 @@ const languageColor = Plot.scale({
 })
 
 const requestsByField = requests.flatMap(({ fields, ...request }) =>
-  fields.map(field => ({ ...request, field: openAlexFields[field] })),
+  fields.map(field => ({ ...request, field: openAlexFields[field].name })),
 )
 ```
 
