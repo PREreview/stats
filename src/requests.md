@@ -63,7 +63,7 @@ const requestsByField = requestsSelected
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>Requests</h2> 
+    <h2>${chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
     <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
   </div>
 </div>
@@ -71,7 +71,7 @@ const requestsByField = requestsSelected
 ```js
 function requestsByLanguageTimeline({ width } = {}) {
   return Plot.plot({
-    title: 'Requests per week',
+    title: chosenDomain ? `${openAlexDomains[chosenDomain]} requests per week` : 'Requests per week',
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -114,7 +114,9 @@ function requestsByLanguageTimeline({ width } = {}) {
 ```js
 function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
-    title: 'Fields of requests (request may have multiple fields)',
+    title: chosenDomain
+      ? `Fields of ${openAlexDomains[chosenDomain]} requests (request may have multiple fields)`
+      : 'Fields of requests (request may have multiple fields)',
     width: Math.max(width, 600),
     color: {
       ...languageColor,
