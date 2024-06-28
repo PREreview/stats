@@ -79,7 +79,7 @@ function requestsByLanguageTimeline({ width } = {}) {
       legend: true,
       tickFormat: languageName,
     },
-    y: { grid: true, label: 'Requests' },
+    y: { grid: true, label: 'Requests', tickFormat: Math.floor, interval: 1 },
     x: { label: '', domain: [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)] },
     marks: [
       Plot.rectY(
@@ -121,7 +121,7 @@ function requestsByFieldTimeline({ width } = {}) {
       legend: true,
       tickFormat: languageName,
     },
-    x: { grid: true, label: 'Requests' },
+    x: { grid: true, label: 'Requests', tickFormat: Math.floor, interval: 1 },
     y: { label: '' },
     marks: [
       Plot.barX(
