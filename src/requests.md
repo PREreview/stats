@@ -17,6 +17,7 @@ const requests = FileAttachment('./data/requests.json')
 
 const openAlexDomains = FileAttachment('./data/openalex-domains.json').json()
 const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
+const openAlexSubfields = FileAttachment('./data/openalex-subfields.json').json()
 ```
 
 ```js
@@ -83,6 +84,17 @@ const requestsByField = requestsSelected
   .flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
   .filter(request => (chosenDomain ? openAlexFields[request.field].domain === chosenDomain : true))
   .map(({ field, ...request }) => ({ ...request, field: openAlexFields[field].name }))
+
+const requestsBySubfield = requestsSelected
+  .flatMap(({ subfields, ...request }) => subfields.map(subfield => ({ ...request, subfield })))
+  .filter(request =>
+    chosenField
+      ? openAlexSubfields[request.subfield].field === chosenField
+      : chosenDomain
+        ? openAlexFields[openAlexSubfields[request.subfield].field].domain === chosenDomain
+        : true,
+  )
+  .map(({ subfield, ...request }) => ({ ...request, subfield: openAlexSubfields[subfield].name }))
 ```
 
 <div class="grid grid-cols-4">
@@ -149,7 +161,7 @@ function requestsByLanguageTimeline({ width } = {}) {
 function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
     title: chosenField
-      ? `Fields of ${openAlexFields[chosenField].name} requests (request may have multiple fields)`
+      ? `Subfields of ${openAlexFields[chosenField].name} requests (request may have multiple subfields)`
       : chosenDomain
         ? `Fields of ${openAlexDomains[chosenDomain]} requests (request may have multiple fields)`
         : 'Fields of requests (request may have multiple fields)',
@@ -163,13 +175,13 @@ function requestsByFieldTimeline({ width } = {}) {
     y: { label: '' },
     marks: [
       Plot.barX(
-        requestsByField,
+        chosenField ? requestsBySubfield : requestsByField,
         Plot.groupY(
           {
             x: 'count',
           },
           {
-            y: 'field',
+            y: chosenField ? 'subfield' : 'field',
             fill: 'language',
             order: languageColor.domain,
             sort: { y: 'x', reverse: true },

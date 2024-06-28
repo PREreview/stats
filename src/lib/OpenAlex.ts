@@ -8,6 +8,14 @@ const SubfieldId = Brand.nominal<SubfieldId>()
 
 export const SubfieldIdSchema = Schema.String.pipe(Schema.fromBrand(SubfieldId))
 
+export const SubfieldIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, SubfieldIdSchema, {
+  decode: (url, _, ast) =>
+    url.origin === 'https://openalex.org' && url.pathname.startsWith('/subfields/')
+      ? Either.right(decodeURIComponent(url.pathname.substring(11)))
+      : Either.left(new ParseResult.Type(ast, url)),
+  encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/subfields/${encodeURIComponent(topicId)}`)),
+})
+
 type FieldId = string & Brand.Brand<'OpenAlexFieldId'>
 
 const FieldId = Brand.nominal<FieldId>()
