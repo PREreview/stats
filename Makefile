@@ -9,11 +9,14 @@ node_modules: package.json package-lock.json
 	npm install
 	touch node_modules
 
-start: node_modules
-	npx observable preview
+.env:
+	cp .env.dist .env
 
-build-image:
-	docker build --target prod --tag ${IMAGE_TAG} .
+start: .env node_modules
+	npx @dotenvx/dotenvx run -- npx observable preview
+
+build-image: .env node_modules
+	npx @dotenvx/dotenvx run -- docker build --target prod --tag ${IMAGE_TAG} .
 
 check: format lint typecheck
 
