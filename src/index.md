@@ -8,9 +8,15 @@ toc: false
 
 ```js
 const requests = FileAttachment('./data/requests.json').json()
+const reviews = FileAttachment('./data/reviews.json').json()
 ```
 
 <div class="grid grid-cols-4">
+  <div class="card">
+    <h2>Total PREreviews</h2>
+    <span class="big">${reviews.length.toLocaleString("en-US")}</span>
+  </div>
+
   <div class="card">
     <h2>Total requests</h2>
     <span class="big">${requests.length.toLocaleString("en-US")}</span>
