@@ -10,7 +10,9 @@ COPY observablehq.config.js observablehq.config.js
 COPY src/ src/
 
 FROM builder AS build
-RUN npx observable build
+RUN --mount=type=secret,id=PREREVIEW_REVIEWS_DATA_TOKEN \
+  PREREVIEW_REVIEWS_DATA_TOKEN=$(cat /run/secrets/PREREVIEW_REVIEWS_DATA_TOKEN) \
+  npx observable build
 
 FROM caddy:2.8.4-alpine AS prod
 COPY Caddyfile /etc/caddy/Caddyfile
