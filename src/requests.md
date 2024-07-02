@@ -14,6 +14,7 @@ const languageName = code => (code ? languageNames.of(code) : 'Not yet detected'
 const requests = FileAttachment('./data/requests.json')
   .json()
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
+const reviews = FileAttachment('./data/reviews.json').json()
 
 const openAlexDomains = FileAttachment('./data/openalex-domains.json').json()
 const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
@@ -81,6 +82,10 @@ const languageColor = Plot.scale({
 })
 
 const requestsGroupedByPreprint = d3.group(requestsSelected, request => request.preprint)
+const reviewsGroupedByPreprint = d3.group(reviews, reviews => reviews.preprint)
+
+const requestsWithAReview = d3.filter(requestsSelected, request => reviewsGroupedByPreprint.has(request.preprint))
+const requestsWithAReviewGroupedByPreprint = d3.group(requestsWithAReview, request => request.preprint)
 
 const requestsByField = requestsSelected
   .flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
@@ -111,6 +116,13 @@ const requestsBySubfield = requestsSelected
     ` : ''}
     ${chosenDomain ? html`
       <div>${d3.format(".1%")(requestsSelected.length / requests.length)} of all requests</div>
+    ` : ''}
+  </div>
+  <div class="card">
+    <h2>With a PREreview</h2>
+    <span class="big">${requestsWithAReview.length.toLocaleString('en-US')}</span>
+    ${requestsWithAReviewGroupedByPreprint.size !== requestsWithAReview.length ? html`
+      <span class="muted">for ${requestsWithAReviewGroupedByPreprint.size.toLocaleString("en-US")} preprints</span>
     ` : ''}
   </div>
 </div>
