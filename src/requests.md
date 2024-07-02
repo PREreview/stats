@@ -80,6 +80,8 @@ const languageColor = Plot.scale({
   },
 })
 
+const requestsGroupedByPreprint = d3.group(requestsSelected, request => request.preprint)
+
 const requestsByField = requestsSelected
   .flatMap(({ fields, ...request }) => fields.map(field => ({ ...request, field })))
   .filter(request => (chosenDomain ? openAlexFields[request.field].domain === chosenDomain : true))
@@ -101,6 +103,9 @@ const requestsBySubfield = requestsSelected
   <div class="card">
     <h2>${chosenField ? `${openAlexFields[chosenField].name} requests` : chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
     <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
+    ${requestsGroupedByPreprint.size !== requestsSelected.length ? html`
+      <span class="muted">for ${requestsGroupedByPreprint.size.toLocaleString("en-US")} preprints</span>
+    ` : ''}
     ${chosenField ? html`
       <div>${d3.format(".1%")(requestsSelected.length / requests.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
     ` : ''}
