@@ -4,6 +4,7 @@ import { Schema } from '@effect/schema'
 import { Config, Effect, Redacted } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
+import * as PreprintServer from '../lib/PreprintServer.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Reviews = Schema.Array(
@@ -11,6 +12,7 @@ const Reviews = Schema.Array(
     createdAt: Temporal.PlainDateFromStringSchema,
     preprint: Doi.ParseDoiSchema,
     language: Schema.optional(LanguageCode.LanguageCodeSchema),
+    server: PreprintServer.PreprintServerSchema,
   }),
 )
 
