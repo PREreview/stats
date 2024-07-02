@@ -19,10 +19,25 @@ const now = new Date()
 const firstReview = d3.min(reviews, review => review.createdAt)
 ```
 
+```js
+const chosenYear = view(
+  Inputs.select([null, ..._.range(now.getUTCFullYear(), firstReview.getUTCFullYear() - 1)], {
+    label: 'Year',
+    format: year => year ?? 'All-time',
+  }),
+)
+```
+
+```js
+const reviewsSelected = chosenYear
+  ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
+  : reviews
+```
+
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>PREreviews</h2>
-    <span class="big">${reviews.length.toLocaleString("en-US")}</span>
+    <h2>PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
   </div>
 </div>
 
@@ -33,10 +48,15 @@ function reviewsTimeline({ width } = {}) {
     width: Math.max(width, 600),
     height: 400,
     y: { grid: true, label: 'PREreviews', tickFormat: Math.floor, interval: 1 },
-    x: { label: '', domain: [d3.utcMonth.floor(firstReview), d3.utcMonth.ceil(now)] },
+    x: {
+      label: '',
+      domain: chosenYear
+        ? [new Date(chosenYear, 0, 1, 0, 0, 0, 0), new Date(chosenYear + 1, 0, 1, 0, 0, 0, 0)]
+        : [d3.utcMonth.floor(firstReview), d3.utcMonth.ceil(now)],
+    },
     marks: [
       Plot.rectY(
-        reviews,
+        reviewsSelected,
         Plot.binX(
           { y: 'count' },
           {
