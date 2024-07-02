@@ -11,6 +11,7 @@ const parseDate = d3.utcParse('%Y-%m-%d')
 const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const languageName = code => (code ? languageNames.of(code) : 'Unknown')
 
+const preprintServers = FileAttachment('./data/preprint-servers.json').json()
 const reviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
@@ -19,6 +20,8 @@ const reviews = FileAttachment('./data/reviews.json')
 ```js
 const now = new Date()
 const firstReview = d3.min(reviews, review => review.createdAt)
+
+const preprintServerName = id => preprintServers[id]
 ```
 
 ```js
@@ -121,7 +124,7 @@ function reviewsByPreprintServer({ width } = {}) {
     y: { label: '' },
     marks: [
       Plot.barX(
-        reviewsSelected,
+        reviewsSelected.map(review => ({ ...review, server: preprintServerName(review.server) })),
         Plot.groupY(
           {
             x: 'count',
@@ -140,7 +143,7 @@ function reviewsByPreprintServer({ width } = {}) {
           },
         ),
       ),
-      Plot.axisY({ lineWidth: 15, marginLeft: 100 }),
+      Plot.axisY({ lineWidth: 15, marginLeft: 115 }),
     ],
   })
 }
