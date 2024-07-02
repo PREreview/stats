@@ -106,3 +106,48 @@ function reviewsTimeline({ width } = {}) {
     ${resize((width) => reviewsTimeline({width}))}
   </div>
 </div>
+
+```js
+function reviewsByPreprintServer({ width } = {}) {
+  return Plot.plot({
+    title: `Reviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    width: Math.max(width, 600),
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
+    x: { grid: true, label: 'Reviews', tickFormat: Math.floor, interval: 1 },
+    y: { label: '' },
+    marks: [
+      Plot.barX(
+        reviewsSelected,
+        Plot.groupY(
+          {
+            x: 'count',
+          },
+          {
+            y: 'server',
+            fill: 'language',
+            order: languageColor.domain,
+            sort: { y: 'x', reverse: true },
+            tip: {
+              format: {
+                fill: languageName,
+                y: false,
+              },
+            },
+          },
+        ),
+      ),
+      Plot.axisY({ lineWidth: 15, marginLeft: 100 }),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => reviewsByPreprintServer({width}))}
+  </div>
+</div>
