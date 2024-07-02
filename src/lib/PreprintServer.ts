@@ -3,7 +3,7 @@ import type { Predicate } from 'effect'
 
 export type PreprintServer = keyof typeof preprintServers
 
-const preprintServers = {
+export const preprintServers = {
   africarxiv: 'AfricArXiv Preprints',
   arxiv: 'arXiv',
   authorea: 'Authorea',
