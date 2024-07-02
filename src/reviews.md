@@ -8,6 +8,8 @@ toc: false
 
 ```js
 const parseDate = d3.utcParse('%Y-%m-%d')
+const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
+const languageName = code => (code ? languageNames.of(code) : 'Unknown')
 
 const reviews = FileAttachment('./data/reviews.json')
   .json()
@@ -32,6 +34,23 @@ const chosenYear = view(
 const reviewsSelected = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
+
+const languageColor = Plot.scale({
+  color: {
+    type: 'categorical',
+    domain: [
+      'en',
+      ...d3
+        .groupSort(
+          reviews,
+          reviews => -reviews.length,
+          review => review.language,
+        )
+        .filter(language => language !== 'en' && language !== undefined),
+    ],
+    unknown: 'var(--theme-foreground-muted)',
+  },
+})
 ```
 
 <div class="grid grid-cols-4">
@@ -47,6 +66,11 @@ function reviewsTimeline({ width } = {}) {
     title: `PREreviews per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
     y: { grid: true, label: 'PREreviews', tickFormat: Math.floor, interval: 1 },
     x: {
       label: '',
@@ -62,7 +86,13 @@ function reviewsTimeline({ width } = {}) {
           {
             x: 'createdAt',
             interval: chosenYear ? d3.utcWeek : d3.utcMonth,
-            tip: true,
+            fill: 'language',
+            order: languageColor.domain,
+            tip: {
+              format: {
+                fill: languageName,
+              },
+            },
           },
         ),
       ),
