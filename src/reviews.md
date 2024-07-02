@@ -44,7 +44,7 @@ const reviewsSelected = chosenYear
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: 'PREreviews per month',
+    title: `PREreviews per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     y: { grid: true, label: 'PREreviews', tickFormat: Math.floor, interval: 1 },
@@ -61,7 +61,7 @@ function reviewsTimeline({ width } = {}) {
           { y: 'count' },
           {
             x: 'createdAt',
-            interval: d3.utcMonth,
+            interval: chosenYear ? d3.utcWeek : d3.utcMonth,
             tip: true,
           },
         ),
