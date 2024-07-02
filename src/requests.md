@@ -124,6 +124,14 @@ const requestsBySubfield = requestsSelected
     ${requestsWithAReviewGroupedByPreprint.size !== requestsWithAReview.length ? html`
       <span class="muted">for ${requestsWithAReviewGroupedByPreprint.size.toLocaleString("en-US")} preprints</span>
     ` : ''}
+    ${requestsWithAReviewGroupedByPreprint.size === 0 ? '' :
+      chosenField ? html`
+        <div>${d3.format(".1%")(requestsWithAReview.length / requests.filter(d => d.fields.includes(chosenField)).length)} of all ${openAlexFields[chosenField].name} requests</div>
+      ` : chosenDomain ? html`
+        <div>${d3.format(".1%")(requestsWithAReview.length / requests.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
+      ` : html`
+        <div>${d3.format(".1%")(requestsWithAReview.length / requests.length)} of all requests</div>
+      `}
   </div>
 </div>
 
