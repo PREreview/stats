@@ -27,6 +27,15 @@ const firstRequest = d3.min(requests, request => request.timestamp)
 ```
 
 ```js
+const chosenYear = view(
+  Inputs.select([null, ..._.range(now.getUTCFullYear(), firstRequest.getUTCFullYear() - 1)], {
+    label: 'Year',
+    format: year => year ?? 'All-time',
+  }),
+)
+```
+
+```js
 const chosenDomain = view(
   Inputs.select([null, ...Object.keys(openAlexDomains)], {
     label: 'Domain',
@@ -56,11 +65,15 @@ const chosenField = view(
 ```
 
 ```js
+const requestsInTimePeriod = chosenYear
+  ? requests.filter(request => request.timestamp.getUTCFullYear() === chosenYear)
+  : requests
+
 const requestsSelected = chosenField
-  ? requests.filter(d => d.fields.includes(chosenField))
+  ? requestsInTimePeriod.filter(d => d.fields.includes(chosenField))
   : chosenDomain
-    ? requests.filter(d => d.domains.includes(chosenDomain))
-    : requests
+    ? requestsInTimePeriod.filter(d => d.domains.includes(chosenDomain))
+    : requestsInTimePeriod
 ```
 
 ```js
@@ -106,16 +119,16 @@ const requestsBySubfield = requestsSelected
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenField ? `${openAlexFields[chosenField].name} requests` : chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'}</h2> 
+    <h2>${chosenField ? `${openAlexFields[chosenField].name} requests` : chosenDomain ? `${openAlexDomains[chosenDomain]} requests` : 'Requests'} ${chosenYear ? `in ${chosenYear}` : ''}</h2> 
     <span class="big">${requestsSelected.length.toLocaleString("en-US")}</span>
     ${requestsGroupedByPreprint.size !== requestsSelected.length ? html`
       <span class="muted">for ${requestsGroupedByPreprint.size.toLocaleString("en-US")} preprints</span>
     ` : ''}
     ${chosenField ? html`
-      <div>${d3.format(".1%")(requestsSelected.length / requests.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
+      <div>${d3.format(".1%")(requestsSelected.length / requestsInTimePeriod.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
     ` : ''}
     ${chosenDomain ? html`
-      <div>${d3.format(".1%")(requestsSelected.length / requests.length)} of all requests</div>
+      <div>${d3.format(".1%")(requestsSelected.length / requestsInTimePeriod.length)} of all requests</div>
     ` : ''}
   </div>
   <div class="card">
@@ -126,11 +139,11 @@ const requestsBySubfield = requestsSelected
     ` : ''}
     ${requestsWithAReviewGroupedByPreprint.size === 0 ? '' :
       chosenField ? html`
-        <div>${d3.format(".1%")(requestsWithAReview.length / requests.filter(d => d.fields.includes(chosenField)).length)} of all ${openAlexFields[chosenField].name} requests</div>
+        <div>${d3.format(".1%")(requestsWithAReview.length / requestsInTimePeriod.filter(d => d.fields.includes(chosenField)).length)} of all ${openAlexFields[chosenField].name} requests ${chosenYear ? `in ${chosenYear}` : ''}</div>
       ` : chosenDomain ? html`
-        <div>${d3.format(".1%")(requestsWithAReview.length / requests.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests</div>
+        <div>${d3.format(".1%")(requestsWithAReview.length / requestsInTimePeriod.filter(d => d.domains.includes(chosenDomain)).length)} of all ${openAlexDomains[chosenDomain]} requests ${chosenYear ? `in ${chosenYear}` : ''}</div>
       ` : html`
-        <div>${d3.format(".1%")(requestsWithAReview.length / requests.length)} of all requests</div>
+        <div>${d3.format(".1%")(requestsWithAReview.length / requestsInTimePeriod.length)} of all requests ${chosenYear ? `in ${chosenYear}` : ''}</div>
       `}
   </div>
 </div>
@@ -151,7 +164,12 @@ function requestsByLanguageTimeline({ width } = {}) {
       tickFormat: languageName,
     },
     y: { grid: true, label: 'Requests', tickFormat: Math.floor, interval: 1 },
-    x: { label: '', domain: [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)] },
+    x: {
+      label: '',
+      domain: chosenYear
+        ? [new Date(chosenYear, 0, 1, 0, 0, 0, 0), new Date(chosenYear + 1, 0, 1, 0, 0, 0, 0)]
+        : [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)],
+    },
     marks: [
       Plot.rectY(
         requestsSelected,
@@ -186,10 +204,10 @@ function requestsByLanguageTimeline({ width } = {}) {
 function requestsByFieldTimeline({ width } = {}) {
   return Plot.plot({
     title: chosenField
-      ? `Subfields of ${openAlexFields[chosenField].name} requests (request may have multiple subfields)`
+      ? `Subfields of ${openAlexFields[chosenField].name} requests ${chosenYear ? `in ${chosenYear}` : ''} (request may have multiple subfields)`
       : chosenDomain
-        ? `Fields of ${openAlexDomains[chosenDomain]} requests (request may have multiple fields)`
-        : 'Fields of requests (request may have multiple fields)',
+        ? `Fields of ${openAlexDomains[chosenDomain]} requests ${chosenYear ? `in ${chosenYear}` : ''} (request may have multiple fields)`
+        : `Fields of requests ${chosenYear ? `in ${chosenYear}` : ''} (request may have multiple fields)`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
