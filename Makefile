@@ -16,7 +16,8 @@ start: .env node_modules
 	npx @dotenvx/dotenvx run -- npx observable preview
 
 build-image: .env node_modules
-	npx @dotenvx/dotenvx run -- docker build --target prod --tag ${IMAGE_TAG} .
+	npx @dotenvx/dotenvx run -- npx observable build
+	docker build --target prod --tag ${IMAGE_TAG} .
 
 check: format lint typecheck
 
