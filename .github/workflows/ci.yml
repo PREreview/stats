@@ -40,6 +40,16 @@ jobs:
           node-version-file: package.json
           cache: ${{ !env.ACT && 'npm' || '' }}
 
+      - name: 'Find current date'
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: 'Setup data cache'
+        uses: actions/cache@v4.0.2
+        with:
+          path: src/.observablehq/cache
+          key: data-${{ hashFiles('src/data/*') }}-${{ steps.date.outputs.date }}
+
       - name: 'Install dependencies'
         run: npm ci
 
