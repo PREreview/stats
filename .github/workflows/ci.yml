@@ -48,15 +48,11 @@ jobs:
         env:
           PREREVIEW_REVIEWS_DATA_TOKEN: ${{ secrets.PREREVIEW_REVIEWS_DATA_TOKEN }}
 
-      - name: 'Debug'
-        run: |
-          pwd
-          ls -l
-
       - name: 'Build image'
         id: build
         uses: docker/build-push-action@v5.3.0
         with:
+          context: .
           outputs: type=docker,dest=/tmp/image.tar
           cache-from: type=gha,ignore-error=true
           cache-to: type=gha,mode=max,ignore-error=true
