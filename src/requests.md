@@ -248,3 +248,52 @@ function requestsByFieldTimeline({ width } = {}) {
     ${resize((width) => requestsByFieldTimeline({width}))}
   </div>
 </div>
+
+```js
+function requestsByPreprintServer({ width } = {}) {
+  return Plot.plot({
+    title: chosenField
+      ? `${openAlexFields[chosenField].name} requests ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`
+      : chosenDomain
+        ? `${openAlexDomains[chosenDomain]} requests ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`
+        : `Requests ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    width: Math.max(width, 600),
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
+    x: { grid: true, label: 'Requests', tickFormat: Math.floor, interval: 1 },
+    y: { label: '' },
+    marks: [
+      Plot.barX(
+        chosenField ? requestsBySubfield : requestsByField,
+        Plot.groupY(
+          {
+            x: 'count',
+          },
+          {
+            y: 'server',
+            fill: 'language',
+            order: languageColor.domain,
+            sort: { y: 'x', reverse: true },
+            tip: {
+              format: {
+                fill: languageName,
+                y: false,
+              },
+            },
+          },
+        ),
+      ),
+      Plot.axisY({ lineWidth: 20, marginLeft: 220 }),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => requestsByPreprintServer({width}))}
+  </div>
+</div>
