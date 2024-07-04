@@ -1,4 +1,4 @@
-import { HttpClient, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
 import { Effect } from 'effect'
@@ -23,11 +23,12 @@ const Requests = Schema.Array(
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
-  const request = HttpClient.request.get('https://coar-notify.prereview.org/requests')
+  const request = HttpClientRequest.get('https://coar-notify.prereview.org/requests')
 
-  const data = yield* HttpClient.client
-    .fetchOk(request)
-    .pipe(Effect.andThen(HttpClient.response.schemaBodyJson(Requests)), Effect.scoped)
+  const data = yield* HttpClient.fetchOk(request).pipe(
+    Effect.andThen(HttpClientResponse.schemaBodyJson(Requests)),
+    Effect.scoped,
+  )
 
   const encoded = yield* Schema.encode(Schema.parseJson(Requests))(data)
 

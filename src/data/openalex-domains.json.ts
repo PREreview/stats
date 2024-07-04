@@ -1,4 +1,4 @@
-import { HttpClient, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
 import { Effect, Record } from 'effect'
@@ -19,11 +19,12 @@ const DomainNames = Schema.Record(DomainIdSchema, Schema.String)
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
-  const request = HttpClient.request.get('https://api.openalex.org/domains?per-page=200')
+  const request = HttpClientRequest.get('https://api.openalex.org/domains?per-page=200')
 
-  const data = yield* HttpClient.client
-    .fetchOk(request)
-    .pipe(Effect.andThen(HttpClient.response.schemaBodyJson(Domains)), Effect.scoped)
+  const data = yield* HttpClient.fetchOk(request).pipe(
+    Effect.andThen(HttpClientResponse.schemaBodyJson(Domains)),
+    Effect.scoped,
+  )
 
   const transformedData = Record.fromIterableWith(data.results, domain => [domain.id, domain.display_name])
 
