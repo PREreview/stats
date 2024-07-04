@@ -2,8 +2,13 @@ import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@ef
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
 import { Config, Effect, Redacted } from 'effect'
+import * as Temporal from '../lib/Temporal.js'
 
-const Users = Schema.Array(Schema.Struct({}))
+const Users = Schema.Array(
+  Schema.Struct({
+    timestamp: Temporal.InstantFromStringSchema,
+  }),
+)
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
