@@ -11,6 +11,7 @@ const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%S.%LZ')
 const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const languageName = code => (code ? languageNames.of(code) : 'Not yet detected')
 
+const preprintServers = FileAttachment('./data/preprint-servers.json').json()
 const requests = FileAttachment('./data/requests.json')
   .json()
   .then(data => data.map(request => ({ ...request, timestamp: parseTimestamp(request.timestamp) })))
@@ -24,6 +25,8 @@ const openAlexSubfields = FileAttachment('./data/openalex-subfields.json').json(
 ```js
 const now = new Date()
 const firstRequest = d3.min(requests, request => request.timestamp)
+
+const preprintServerName = id => preprintServers[id] ?? 'Unknown'
 ```
 
 ```js
@@ -65,9 +68,9 @@ const chosenField = view(
 ```
 
 ```js
-const requestsInTimePeriod = chosenYear
-  ? requests.filter(request => request.timestamp.getUTCFullYear() === chosenYear)
-  : requests
+const requestsInTimePeriod = (
+  chosenYear ? requests.filter(request => request.timestamp.getUTCFullYear() === chosenYear) : requests
+).map(request => ({ ...request, server: preprintServerName(request.server) }))
 
 const requestsSelected = chosenField
   ? requestsInTimePeriod.filter(d => d.fields.includes(chosenField))
