@@ -19,20 +19,15 @@ env:
   OBSERVABLE_TELEMETRY_DISABLE: 1
 
 jobs:
-  build-image:
-    name: 'Build image'
+  build-dist:
+    name: 'Build dist'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     if: github.ref == 'refs/heads/main'
-    outputs:
-      image: ${{ steps.build.outputs.imageid }}
 
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v4.1.7
-
-      - name: 'Set up Docker Build'
-        uses: docker/setup-buildx-action@v3.4.0
 
       - name: 'Set up Node.js'
         uses: actions/setup-node@v4.0.2
@@ -57,6 +52,35 @@ jobs:
         run: npx observable build
         env:
           PREREVIEW_REVIEWS_DATA_TOKEN: ${{ secrets.PREREVIEW_REVIEWS_DATA_TOKEN }}
+
+      - name: 'Upload build'
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: dist
+          path: dist/
+
+  build-image:
+    name: 'Build image'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    if: github.ref == 'refs/heads/main' && !failure() && !cancelled()
+    outputs:
+      image: ${{ steps.build.outputs.imageid }}
+    needs:
+      - build-dist
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.1.7
+
+      - name: 'Set up Docker Build'
+        uses: docker/setup-buildx-action@v3.4.0
+
+      - name: 'Download dist'
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: dist
+          path: dist/
 
       - name: 'Build image'
         id: build
