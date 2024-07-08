@@ -34,8 +34,8 @@ const usersInTimePeriod = chosenYear ? users.filter(user => user.timestamp.getUT
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>PREreviewers</h2>
-    <span class="big">${users.length.toLocaleString("en-US")}</span>
+    <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''}</h2>
+    <span class="big">${usersInTimePeriod.length.toLocaleString("en-US")}</span>
   </div>
 </div>
 
