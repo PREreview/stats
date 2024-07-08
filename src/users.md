@@ -40,7 +40,6 @@ const usersInTimePeriod = chosenYear ? users.filter(user => user.timestamp.getUT
 </div>
 
 ```js
-console.log(users)
 function usersTimeline({ width } = {}) {
   return Plot.plot({
     title: `PREreviewers joining ${chosenYear ? `in ${chosenYear} per week` : 'per month'}`,
