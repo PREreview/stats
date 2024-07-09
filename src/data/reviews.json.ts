@@ -11,7 +11,7 @@ const Reviews = Schema.Array(
   Schema.Struct({
     createdAt: Temporal.PlainDateFromStringSchema,
     preprint: Doi.ParseDoiSchema,
-    language: Schema.optional(LanguageCode.LanguageCodeSchema),
+    language: Schema.OptionFromUndefinedOr(LanguageCode.LanguageCodeSchema),
     server: PreprintServer.PreprintServerSchema,
   }),
 )

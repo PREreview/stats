@@ -12,8 +12,8 @@ const Requests = Schema.Array(
   Schema.Struct({
     timestamp: Temporal.InstantFromStringSchema,
     preprint: Doi.DoiSchema,
-    server: Schema.optional(PreprintServer.PreprintServerSchema, { nullable: true }),
-    language: Schema.optional(LanguageCode.LanguageCodeSchema, { nullable: true }),
+    server: Schema.OptionFromNullishOr(PreprintServer.PreprintServerSchema, undefined),
+    language: Schema.OptionFromNullishOr(LanguageCode.LanguageCodeSchema, undefined),
     fields: Schema.Array(FieldIdSchema),
     subfields: Schema.Array(SubfieldIdSchema),
     domains: Schema.Array(DomainIdSchema),
