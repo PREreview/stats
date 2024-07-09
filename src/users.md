@@ -77,3 +77,21 @@ function usersTimeline({ width } = {}) {
     ${resize((width) => usersTimeline({width}))}
   </div>
 </div>
+
+```js
+function usersByCareerStage({ width } = {}) {
+  return Plot.plot({
+    title: `PREreviewers ${chosenYear ? `joining in ${chosenYear}` : ''} by career stage`,
+    width,
+    height: 100,
+    x: { label: 'PREreviewers' },
+    marks: [Plot.barX(usersInTimePeriod, Plot.groupZ({ x: 'count' }, { fill: 'careerStage' }))],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => usersByCareerStage({width}))}
+  </div>
+</div>
