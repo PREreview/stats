@@ -9,6 +9,19 @@ toc: false
 ```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%SZ')
 
+const regionNames = new Intl.DisplayNames(['en-US'], { type: 'region' })
+const regionName = code => regionNames.of(code)
+
+const getFlagEmoji = code =>
+  String.fromCodePoint(
+    ...code
+      .toUpperCase()
+      .split('')
+      .map(char => 127397 + char.charCodeAt()),
+  )
+
+const regionNameWithFlag = code => `${getFlagEmoji(code)} ${regionName(code)}`
+
 const careerStage = id => {
   switch (id) {
     case 'early':
@@ -136,7 +149,7 @@ function usersByCareerStage({ width } = {}) {
 function usersByLocation() {
   return Inputs.table(
     usersInTimePeriod.flatMap(user => (user.location ? { location: user.location, country: user.country } : [])),
-    { header: { country: 'Country', location: 'Location' }, sort: 'location' },
+    { format: { country: regionNameWithFlag }, header: { country: 'Country', location: 'Location' }, sort: 'location' },
   )
 }
 ```
