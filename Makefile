@@ -1,4 +1,4 @@
-.PHONY: build-image check format lint prod start typecheck
+.PHONY: build-image check format lint prod start test typecheck
 
 CADDY_PASSWORD=letmein
 IMAGE_TAG=prereview-stats
@@ -19,13 +19,16 @@ build-image: .env node_modules
 	npx @dotenvx/dotenvx run -- npx observable build
 	docker build --target prod --tag ${IMAGE_TAG} .
 
-check: format lint typecheck
+check: format lint test typecheck
 
 format: node_modules
 	npx prettier --ignore-unknown --check '**'
 
 lint: node_modules
 	npx eslint . --max-warnings 0
+
+test: node_modules
+	npx vitest run
 
 typecheck: node_modules
 	npx tsc --noEmit
