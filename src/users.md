@@ -131,3 +131,19 @@ function usersByCareerStage({ width } = {}) {
     ${resize((width) => usersByCareerStage({width}))}
   </div>
 </div>
+
+```js
+function usersByLocation() {
+  return Inputs.table(
+    usersInTimePeriod.flatMap(user => (user.location ? { location: user.location } : [])),
+    { header: { location: 'Location' }, sort: 'location' },
+  )
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    <h2>${`PREreviewers ${chosenYear ? `joining in ${chosenYear}` : ''} locations`}</h2>
+    ${usersByLocation()}
+  </div>
+</div>
