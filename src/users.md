@@ -9,6 +9,21 @@ toc: false
 ```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%SZ')
 
+const careerStage = id => {
+  switch (id) {
+    case 'early':
+      return 'Early'
+    case 'mid':
+      return 'Mid'
+    case 'late':
+      return 'Late'
+    case undefined:
+      return 'Unknown'
+    default:
+      return id
+  }
+}
+
 const users = FileAttachment('./data/users.json')
   .json()
   .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
@@ -30,6 +45,14 @@ const chosenYear = view(
 
 ```js
 const usersInTimePeriod = chosenYear ? users.filter(user => user.timestamp.getUTCFullYear() === chosenYear) : users
+
+const careerStageColor = Plot.scale({
+  color: {
+    type: 'categorical',
+    domain: ['early', 'mid', 'late'],
+    unknown: 'var(--theme-foreground-muted)',
+  },
+})
 ```
 
 <div class="grid grid-cols-4">
@@ -84,8 +107,21 @@ function usersByCareerStage({ width } = {}) {
     title: `PREreviewers ${chosenYear ? `joining in ${chosenYear}` : ''} by career stage`,
     width,
     height: 100,
+    color: {
+      ...careerStageColor,
+      legend: true,
+      tickFormat: careerStage,
+    },
     x: { label: 'PREreviewers' },
-    marks: [Plot.barX(usersInTimePeriod, Plot.groupZ({ x: 'count' }, { fill: 'careerStage' }))],
+    marks: [
+      Plot.barX(
+        usersInTimePeriod,
+        Plot.groupZ(
+          { x: 'count' },
+          { fill: 'careerStage', order: careerStageColor.domain, tip: { format: { fill: careerStage } } },
+        ),
+      ),
+    ],
   })
 }
 ```
