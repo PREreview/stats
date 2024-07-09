@@ -135,8 +135,8 @@ function usersByCareerStage({ width } = {}) {
 ```js
 function usersByLocation() {
   return Inputs.table(
-    usersInTimePeriod.flatMap(user => (user.location ? { location: user.location } : [])),
-    { header: { location: 'Location' }, sort: 'location' },
+    usersInTimePeriod.flatMap(user => (user.location ? { location: user.location, country: user.country } : [])),
+    { header: { country: 'Country', location: 'Location' }, sort: 'location' },
   )
 }
 ```
