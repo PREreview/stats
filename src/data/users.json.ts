@@ -6,6 +6,7 @@ import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
   Schema.Struct({
+    careerStage: Schema.optional(Schema.Literal('early', 'mid', 'late')),
     timestamp: Temporal.InstantFromStringSchema,
   }),
 )
