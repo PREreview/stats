@@ -6,6 +6,7 @@ describe('guessCountry', () => {
   test.for([
     ['Algiers ( Algeria)', 'DZ'],
     ['Baylor College of Medicine, Houston, Texas', 'US'],
+    ['Beijing University of Technology, Beijing 100124, PR China', 'CN'],
     ['Chicago, IL, USA', 'US'],
     ['Colorado - United States', 'US'],
     ['Czech Republic', 'CZ'],
@@ -30,13 +31,7 @@ describe('guessCountry', () => {
     expect(actual).toStrictEqual(Option.some(expected))
   })
 
-  test.for([
-    'Beijing University of Technology, Beijing 100124, PR China',
-    'Fayetteville GA (near Atlanta)',
-    'Mars',
-    'Southeast Asia',
-    'The UK',
-  ])("doesn't guess %s", input => {
+  test.for(['Fayetteville GA (near Atlanta)', 'Mars', 'Southeast Asia', 'The UK'])("doesn't guess %s", input => {
     const actual = _.guessCountry(input)
 
     expect(actual).toStrictEqual(Option.none())

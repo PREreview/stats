@@ -15,6 +15,7 @@ export const Alpha2CodeSchema: Schema.Schema<Alpha2Code, string> = Schema.String
 export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flow(
   String.replaceAll('.', ''),
   String.replaceAll(/\((.+?)\)/g, ', $1'),
+  String.replaceAll(/ [0-9]+/g, ' '),
   String.replaceAll(/( and | - )/gi, ', '),
   location => Array.prepend(Array.map(location.split(',').reverse(), String.trim), location),
   Array.findFirst(location =>
