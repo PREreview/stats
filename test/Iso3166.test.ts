@@ -8,6 +8,7 @@ describe('guessCountry', () => {
     ['Czechia', 'CZ'],
     ['GHANA', 'GH'],
     ['UK', 'GB'],
+    ['U.K.', 'GB'],
     ['United Kingdom', 'GB'],
     ['united states', 'US'],
   ])('guesses %s', ([input, expected]) => {
@@ -34,7 +35,6 @@ describe('guessCountry', () => {
     'Southeast Asia',
     'Sunnyvale, California',
     'The UK',
-    'U.K.',
     'Washington, DC',
   ])("doesn't guess %s", input => {
     const actual = _.guessCountry(input)
