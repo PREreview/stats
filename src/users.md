@@ -7,6 +7,11 @@ toc: false
 # PREreviewers 🫅
 
 ```js
+import countries from 'npm:@geo-maps/countries-land-10km'
+import i18nIsoCountries from 'npm:i18n-iso-countries'
+```
+
+```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%SZ')
 
 const regionNames = new Intl.DisplayNames(['en-US'], { type: 'region' })
@@ -147,10 +152,32 @@ function usersByCareerStage({ width } = {}) {
 
 ```js
 function usersByLocation() {
-  return Inputs.table(
-    usersInTimePeriod.flatMap(user => (user.location ? { location: user.location, country: user.country } : [])),
-    { format: { country: regionNameWithFlag }, header: { country: 'Country', location: 'Location' }, sort: 'location' },
+  const colors = d3.rollup(
+    usersInTimePeriod.filter(user => user.country),
+    users => users.length,
+    user => user.country,
   )
+
+  return Plot.plot({
+    projection: 'equal-earth',
+    width,
+    height: d3.min([700, width / 2]),
+    color: {
+      scheme: 'reds',
+      domain: [0, d3.max(colors.values())],
+      unknown: 'var(--theme-background-alt)',
+      type: 'linear',
+      label: 'PREreviewers',
+      legend: true,
+    },
+    marks: [
+      Plot.geo(countries(), {
+        fill: d => colors.get(i18nIsoCountries.alpha3ToAlpha2(d.properties.A3)),
+        stroke: 'var(--theme-foreground-muted)',
+        strokeWidth: 0.2,
+      }),
+    ],
+  })
 }
 ```
 
