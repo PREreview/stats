@@ -11,12 +11,14 @@ describe('guessCountry', () => {
     ['Colorado - United States', 'US'],
     ['Czech Republic', 'CZ'],
     ['Czechia', 'CZ'],
+    ['Düsseldorf', 'DE'],
     ['GHANA', 'GH'],
     ['London', 'GB'],
     ['London, Ontario', 'CA'],
     ['London, UK', 'GB'],
     ['London, United Kingdom', 'GB'],
     ['New York City and Los Angeles', 'US'],
+    ['Norwich', 'GB'],
     ['Québec', 'CA'],
     ['Rio de Janeiro, Brazil.', 'BR'],
     ['Sunnyvale, California', 'US'],
@@ -31,18 +33,12 @@ describe('guessCountry', () => {
     expect(actual).toStrictEqual(Option.some(expected))
   })
 
-  test.for([
-    'Babol iran',
-    'Düsseldorf',
-    'Fayetteville GA (near Atlanta)',
-    'Mars',
-    'Norwich',
-    'Southeast Asia',
-    'The UK',
-    'Yale university',
-  ])("doesn't guess %s", input => {
-    const actual = _.guessCountry(input)
+  test.for(['Babol iran', 'Fayetteville GA (near Atlanta)', 'Mars', 'Southeast Asia', 'The UK', 'Yale university'])(
+    "doesn't guess %s",
+    input => {
+      const actual = _.guessCountry(input)
 
-    expect(actual).toStrictEqual(Option.none())
-  })
+      expect(actual).toStrictEqual(Option.none())
+    },
+  )
 })
