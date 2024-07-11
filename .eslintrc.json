@@ -41,7 +41,8 @@
     {
       "files": ["./**/*.md/*.js"],
       "rules": {
-        "@typescript-eslint/no-unused-vars": "off"
+        "@typescript-eslint/no-unused-vars": "off",
+        "import/no-unresolved": "off"
       }
     }
   ],
