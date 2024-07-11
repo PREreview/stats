@@ -24,7 +24,7 @@
     "import/no-cycle": "error",
     "import/no-duplicates": ["error", { "prefer-inline": true }],
     "import/no-extraneous-dependencies": ["error"],
-    "import/no-internal-modules": ["error", { "allow": ["*/lib/*"] }],
+    "import/no-internal-modules": ["error", { "allow": ["*/lib/*", "world_countries_lists/data/**/*.json"] }],
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",
     "quotes": ["error", "single", { "avoidEscape": true }]

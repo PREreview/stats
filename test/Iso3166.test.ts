@@ -5,18 +5,23 @@ import * as _ from '../src/lib/Iso3166.js'
 describe('guessCountry', () => {
   test.for([
     ['Algiers ( Algeria)', 'DZ'],
+    ['Baylor College of Medicine, Houston, Texas', 'US'],
     ['Chicago, IL, USA', 'US'],
     ['Colorado - United States', 'US'],
     ['Czech Republic', 'CZ'],
     ['Czechia', 'CZ'],
     ['GHANA', 'GH'],
+    ['London, Ontario', 'CA'],
     ['London, UK', 'GB'],
     ['London, United Kingdom', 'GB'],
+    ['Québec', 'CA'],
     ['Rio de Janeiro, Brazil.', 'BR'],
+    ['Sunnyvale, California', 'US'],
     ['UK', 'GB'],
     ['U.K.', 'GB'],
     ['United Kingdom', 'GB'],
     ['united states', 'US'],
+    ['Washington, DC', 'US'],
   ])('guesses %s', ([input, expected]) => {
     const actual = _.guessCountry(input)
 
@@ -24,18 +29,13 @@ describe('guessCountry', () => {
   })
 
   test.for([
-    'Baylor College of Medicine, Houston, Texas',
     'Beijing University of Technology, Beijing 100124, PR China',
     'Fayetteville GA (near Atlanta)',
     'London',
-    'London, Ontario',
     'Mars',
     'New York City and Los Angeles',
-    'Québec',
     'Southeast Asia',
-    'Sunnyvale, California',
     'The UK',
-    'Washington, DC',
   ])("doesn't guess %s", input => {
     const actual = _.guessCountry(input)
 
