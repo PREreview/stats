@@ -170,7 +170,10 @@ function requestsByLanguageTimeline({ width } = {}) {
     x: {
       label: '',
       domain: chosenYear
-        ? [new Date(chosenYear, 0, 1, 0, 0, 0, 0), new Date(chosenYear + 1, 0, 1, 0, 0, 0, 0)]
+        ? [
+            d3.utcSunday.floor(new Date(chosenYear, 0, 1, 0, 0, 0, 0)),
+            d3.utcSunday.ceil(new Date(chosenYear + 1, 0, 1, 0, 0, 0, 0)),
+          ]
         : [d3.utcSunday.floor(firstRequest), d3.utcSunday.ceil(now)],
     },
     marks: [

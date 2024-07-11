@@ -89,7 +89,7 @@ function usersTimeline({ width } = {}) {
             d3.utcSunday.floor(new Date(chosenYear, 0, 1, 0, 0, 0, 0)),
             d3.utcSunday.ceil(new Date(chosenYear + 1, 0, 1, 0, 0, 0, 0)),
           ]
-        : [d3.utcSunday.floor(firstUser), d3.utcSunday.ceil(now)],
+        : [d3.utcMonth.floor(firstUser), d3.utcMonth.ceil(now)],
     },
     marks: [
       Plot.rectY(
