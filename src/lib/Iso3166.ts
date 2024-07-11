@@ -1,5 +1,5 @@
 import { Schema } from '@effect/schema'
-import { Option, type Predicate, String, flow } from 'effect'
+import { Array, Option, type Predicate, String, flow } from 'effect'
 import iso3166 from 'i18n-iso-countries'
 
 export type Alpha2Code = iso3166.Alpha2Code
@@ -11,6 +11,7 @@ export const Alpha2CodeSchema: Schema.Schema<Alpha2Code, string> = Schema.String
 
 export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flow(
   String.replaceAll('.', ''),
-  Option.liftNullable(location => iso3166.getAlpha2Code(location, 'en')),
+  location => Array.prepend(Array.map(location.split(',').reverse(), String.trim), location),
+  Array.findFirst(Option.liftNullable(location => iso3166.getAlpha2Code(location, 'en'))),
   Option.filter(isAlpha2Code),
 )
