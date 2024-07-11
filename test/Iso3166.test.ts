@@ -4,7 +4,9 @@ import * as _ from '../src/lib/Iso3166.js'
 
 describe('guessCountry', () => {
   test.for([
+    ['Algiers ( Algeria)', 'DZ'],
     ['Chicago, IL, USA', 'US'],
+    ['Colorado - United States', 'US'],
     ['Czech Republic', 'CZ'],
     ['Czechia', 'CZ'],
     ['GHANA', 'GH'],
@@ -22,10 +24,8 @@ describe('guessCountry', () => {
   })
 
   test.for([
-    'Algiers ( Algeria)',
     'Baylor College of Medicine, Houston, Texas',
     'Beijing University of Technology, Beijing 100124, PR China',
-    'Colorado - United States',
     'Fayetteville GA (near Atlanta)',
     'London',
     'London, Ontario',
