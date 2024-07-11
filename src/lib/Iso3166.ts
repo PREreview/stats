@@ -1,4 +1,5 @@
 import { Schema } from '@effect/schema'
+import { rawTimeZones } from '@vvo/tzdb'
 import diacritics from 'diacritics'
 import { Array, Option, type Predicate, String, flow } from 'effect'
 import iso3166 from 'i18n-iso-countries'
@@ -25,6 +26,17 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
             subDivision => diacritics.remove(location).toLowerCase() === subDivision.name.toLowerCase(),
           ),
           subDivision => subDivision.country,
+        ),
+      ),
+      Option.orElse(() =>
+        Option.map(
+          Array.findFirst(rawTimeZones, timezone =>
+            Array.some(
+              timezone.mainCities,
+              mainCity => diacritics.remove(location).toLowerCase() === diacritics.remove(mainCity).toLowerCase(),
+            ),
+          ),
+          timeZone => timeZone.countryCode,
         ),
       ),
     ),

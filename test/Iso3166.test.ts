@@ -11,9 +11,11 @@ describe('guessCountry', () => {
     ['Czech Republic', 'CZ'],
     ['Czechia', 'CZ'],
     ['GHANA', 'GH'],
+    ['London', 'GB'],
     ['London, Ontario', 'CA'],
     ['London, UK', 'GB'],
     ['London, United Kingdom', 'GB'],
+    ['New York City and Los Angeles', 'US'],
     ['Québec', 'CA'],
     ['Rio de Janeiro, Brazil.', 'BR'],
     ['Sunnyvale, California', 'US'],
@@ -31,9 +33,7 @@ describe('guessCountry', () => {
   test.for([
     'Beijing University of Technology, Beijing 100124, PR China',
     'Fayetteville GA (near Atlanta)',
-    'London',
     'Mars',
-    'New York City and Los Angeles',
     'Southeast Asia',
     'The UK',
   ])("doesn't guess %s", input => {
