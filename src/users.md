@@ -184,6 +184,7 @@ function usersByLocation() {
 <div class="grid grid-cols-1">
   <div class="card">
     <h2>${`PREreviewers ${chosenYear ? `joining in ${chosenYear}` : ''} locations`}</h2>
+    <div class="muted">Location available for ${d3.format(".1%")(usersInTimePeriod.filter(user => user.country).length/ usersInTimePeriod.length)} of PREreviewers ${chosenYear ? `joining in ${chosenYear}` : ''}</div>
     ${usersByLocation()}
   </div>
 </div>
