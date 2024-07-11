@@ -31,7 +31,16 @@ describe('guessCountry', () => {
     expect(actual).toStrictEqual(Option.some(expected))
   })
 
-  test.for(['Fayetteville GA (near Atlanta)', 'Mars', 'Southeast Asia', 'The UK'])("doesn't guess %s", input => {
+  test.for([
+    'Babol iran',
+    'Düsseldorf',
+    'Fayetteville GA (near Atlanta)',
+    'Mars',
+    'Norwich',
+    'Southeast Asia',
+    'The UK',
+    'Yale university',
+  ])("doesn't guess %s", input => {
     const actual = _.guessCountry(input)
 
     expect(actual).toStrictEqual(Option.none())
