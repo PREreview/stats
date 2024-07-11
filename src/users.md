@@ -157,7 +157,6 @@ function usersByLocation() {
     users => users.length,
     user => user.country,
   )
-
   return Plot.plot({
     projection: 'equal-earth',
     width,
@@ -171,11 +170,19 @@ function usersByLocation() {
       legend: true,
     },
     marks: [
-      Plot.geo(countries(), {
-        fill: d => colors.get(i18nIsoCountries.alpha3ToAlpha2(d.properties.A3)),
-        stroke: 'var(--theme-foreground-muted)',
-        strokeWidth: 0.2,
-      }),
+      Plot.geo(
+        countries(),
+        Plot.centroid({
+          fill: d => colors.get(i18nIsoCountries.alpha3ToAlpha2(d.properties.A3)),
+          stroke: 'var(--theme-foreground-muted)',
+          strokeWidth: 0.2,
+          tip: true,
+          title: d => {
+            const alpha2 = i18nIsoCountries.alpha3ToAlpha2(d.properties.A3)
+            return `${alpha2 ? regionNameWithFlag(alpha2) : d.properties.A3} ${(colors.get(alpha2) ?? 0).toLocaleString('en-US')}`
+          },
+        }),
+      ),
     ],
   })
 }
