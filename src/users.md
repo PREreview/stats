@@ -71,6 +71,15 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
+const userReviews = reviewsInTimePeriod.flatMap(({ authors, ...review }) =>
+  authors.map(author => ({ ...review, ...author })),
+)
+const reviewsByAuthor = d3.rollup(
+  userReviews,
+  d => d.length,
+  d => `${d.authorType}:${d.author}`,
+)
+
 const careerStageColor = Plot.scale({
   color: {
     type: 'categorical',
@@ -85,14 +94,31 @@ const careerStageColor = Plot.scale({
     <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''}</h2>
     <span class="big">${usersInTimePeriod.length.toLocaleString("en-US")}</span>
   </div>
+  <div class="card">
+    <h2>PREreviewers with PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <table>
+      <tr class="highlight">
+        <th>At least 1</th>
+        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] >= 1 ? 1 : 0).toLocaleString('en-US')}</td>
+      </tr>
+      <tr>
+        <th>Only 1</th>
+        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] === 1 ? 1 : 0).toLocaleString('en-US')}</td>
+      </tr>
+      <tr>
+        <th>More than 1</th>
+        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] > 1 ? 1 : 0).toLocaleString('en-US')}</td>
+      </tr>
+      <tr>
+        <th>More than 3</th>
+        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] > 3 ? 1 : 0).toLocaleString('en-US')}</td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 ```js
 function mostAuthored({ width } = {}) {
-  const userReviews = reviewsInTimePeriod.flatMap(({ authors, ...review }) =>
-    authors.map(author => ({ ...review, ...author })),
-  )
-
   return Plot.plot({
     title: `PREreviewers by number of PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
     width: Math.max(width, 600),
@@ -228,3 +254,16 @@ function usersByLocation() {
     ${usersByLocation()}
   </div>
 </div>
+
+<style>
+
+tr.highlight {
+  border-color: currentColor;
+}
+
+td.numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+</style>
