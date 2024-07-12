@@ -95,7 +95,7 @@ const careerStageColor = Plot.scale({
     <span class="big">${usersInTimePeriod.length.toLocaleString("en-US")}</span>
   </div>
   <div class="card">
-    <h2>PREreviewers with PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>PREreviewer personas with PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <table>
       <tr class="highlight">
         <th>At least 1</th>
@@ -120,7 +120,7 @@ const careerStageColor = Plot.scale({
 ```js
 function mostAuthored({ width } = {}) {
   return Plot.plot({
-    title: `PREreviewers by number of PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
+    title: `PREreviewer personas by number of PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
     width: Math.max(width, 600),
     height: 500,
     marginBottom: 150,
