@@ -131,17 +131,17 @@ const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 
       <tr>
         <th>Only 1</th>
         <td class="numeric">${usersWith1ReviewPublished.toLocaleString('en-US')}</td>
-        <td class="numeric">${d3.format(".1%")(usersWith1ReviewPublished / usersWithAtLeast1ReviewPublished)}</td>
+        <td class="numeric">${usersWithAtLeast1ReviewPublished > 0 ? d3.format(".1%")(usersWith1ReviewPublished / usersWithAtLeast1ReviewPublished) : ''}</td>
       </tr>
       <tr>
         <th>More than 1</th>
         <td class="numeric">${usersWithMoreThan1ReviewsPublished.toLocaleString('en-US')}</td>
-        <td class="numeric">${d3.format(".1%")(usersWithMoreThan1ReviewsPublished / usersWithAtLeast1ReviewPublished)}</td>
+        <td class="numeric">${usersWithAtLeast1ReviewPublished > 0 ? d3.format(".1%")(usersWithMoreThan1ReviewsPublished / usersWithAtLeast1ReviewPublished) : ''}</td>
       </tr>
       <tr>
         <th>More than 3</th>
         <td class="numeric">${usersWithMoreThan3ReviewsPublished.toLocaleString('en-US')}</td>
-        <td class="numeric">${d3.format(".1%")(usersWithMoreThan3ReviewsPublished / usersWithAtLeast1ReviewPublished)}</td>
+        <td class="numeric">${usersWithAtLeast1ReviewPublished > 0 ? d3.format(".1%")(usersWithMoreThan3ReviewsPublished / usersWithAtLeast1ReviewPublished) : ''}</td>
       </tr>
     </table>
   </div>
