@@ -26,6 +26,7 @@ const Reviews = Schema.Array(
     preprint: Doi.ParseDoiSchema,
     language: Schema.OptionFromUndefinedOr(LanguageCode.LanguageCodeSchema),
     server: PreprintServer.PreprintServerSchema,
+    type: Schema.Literal('full', 'structured'),
   }),
 )
 
