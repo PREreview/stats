@@ -82,6 +82,9 @@ const languageColor = Plot.scale({
   <div class="card">
     <h2>${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
+    ${chosenType ? html`
+      <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
+    ` : ''}
   </div>
 </div>
 
