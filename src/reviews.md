@@ -22,6 +22,17 @@ const now = new Date()
 const firstReview = d3.min(reviews, review => review.createdAt)
 
 const preprintServerName = id => preprintServers[id]
+
+const reviewType = id => {
+  switch (id) {
+    case 'full':
+      return 'Full'
+    case 'structured':
+      return 'Structured'
+    default:
+      return id
+  }
+}
 ```
 
 ```js
@@ -31,12 +42,23 @@ const chosenYear = view(
     format: year => year ?? 'All-time',
   }),
 )
+
+const chosenType = view(
+  Inputs.select([null, 'full', 'structured'], {
+    label: 'PREreview type',
+    format: type => reviewType(type) ?? 'All',
+  }),
+)
 ```
 
 ```js
-const reviewsSelected = chosenYear
+const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
+
+const reviewsSelected = chosenType
+  ? reviewsInTimePeriod.filter(review => review.type === chosenType)
+  : reviewsInTimePeriod
 
 const languageColor = Plot.scale({
   color: {
@@ -58,7 +80,7 @@ const languageColor = Plot.scale({
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
   </div>
 </div>
@@ -66,7 +88,7 @@ const languageColor = Plot.scale({
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: `PREreviews per ${chosenYear ? 'week' : 'month'}`,
+    title: `${chosenType ? reviewType(chosenType) : ''} PREreviews per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -113,7 +135,7 @@ function reviewsTimeline({ width } = {}) {
 ```js
 function reviewsByPreprintServer({ width } = {}) {
   return Plot.plot({
-    title: `Reviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    title: `${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
