@@ -123,6 +123,10 @@ const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 
   <div class="card">
     <h2>PREreviewer personas with ${chosenType ? reviewType(chosenType) : ''} PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <table>
+      <colgroup>
+        <col>
+        <col span="2" style="width: 5em">
+      </colgroup>
       <tr class="highlight">
         <th>At least 1</th>
         <td class="numeric">${usersWithAtLeast1ReviewPublished.toLocaleString('en-US')}</td>
