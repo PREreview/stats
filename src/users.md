@@ -12,6 +12,7 @@ import i18nIsoCountries from 'npm:i18n-iso-countries'
 ```
 
 ```js
+const parseDate = d3.utcParse('%Y-%m-%d')
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%SZ')
 
 const regionNames = new Intl.DisplayNames(['en-US'], { type: 'region' })
@@ -45,6 +46,9 @@ const careerStage = id => {
 const users = FileAttachment('./data/users.json')
   .json()
   .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
+const reviews = FileAttachment('./data/reviews.json')
+  .json()
+  .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
 ```
 
 ```js
@@ -63,6 +67,9 @@ const chosenYear = view(
 
 ```js
 const usersInTimePeriod = chosenYear ? users.filter(user => user.timestamp.getUTCFullYear() === chosenYear) : users
+const reviewsInTimePeriod = chosenYear
+  ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
+  : reviews
 
 const careerStageColor = Plot.scale({
   color: {
@@ -77,6 +84,32 @@ const careerStageColor = Plot.scale({
   <div class="card">
     <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''}</h2>
     <span class="big">${usersInTimePeriod.length.toLocaleString("en-US")}</span>
+  </div>
+</div>
+
+```js
+function mostAuthored({ width } = {}) {
+  const userReviews = reviewsInTimePeriod.flatMap(({ authors, ...review }) =>
+    authors.map(author => ({ ...review, ...author })),
+  )
+
+  return Plot.plot({
+    title: `PREreviewers by number of PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
+    width: Math.max(width, 600),
+    height: 500,
+    marginBottom: 150,
+    y: { grid: true, label: 'PREreviews', tickFormat: Math.floor, interval: 1 },
+    x: { label: 'PREreviewer', tickRotate: -90 },
+    marks: [
+      Plot.rectY(userReviews, Plot.groupX({ y: 'count' }, { x: 'author', y: 'x', sort: { x: '-y', limit: 25 } })),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => mostAuthored({width}))}
   </div>
 </div>
 
