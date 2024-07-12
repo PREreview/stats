@@ -43,6 +43,16 @@ const careerStage = id => {
   }
 }
 
+const reviewType = id => {
+  switch (id) {
+    case 'full':
+      return 'Full'
+    case 'structured':
+      return 'Structured'
+    default:
+      return id
+  }
+}
 const users = FileAttachment('./data/users.json')
   .json()
   .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
@@ -63,6 +73,13 @@ const chosenYear = view(
     format: year => year ?? 'All-time',
   }),
 )
+
+const chosenType = view(
+  Inputs.select([null, 'full', 'structured'], {
+    label: 'PREreview type',
+    format: type => reviewType(type) ?? 'All',
+  }),
+)
 ```
 
 ```js
@@ -71,7 +88,11 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const userReviews = reviewsInTimePeriod.flatMap(({ authors, ...review }) =>
+const reviewsSelected = chosenType
+  ? reviewsInTimePeriod.filter(review => review.type === chosenType)
+  : reviewsInTimePeriod
+
+const userReviews = reviewsSelected.flatMap(({ authors, ...review }) =>
   authors.map(author => ({ ...review, ...author })),
 )
 const reviewsByAuthor = d3.rollup(
@@ -100,7 +121,7 @@ const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 
     <span class="big">${usersInTimePeriod.length.toLocaleString("en-US")}</span>
   </div>
   <div class="card">
-    <h2>PREreviewer personas with PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>PREreviewer personas with ${chosenType ? reviewType(chosenType) : ''} PREreviews published ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <table>
       <tr class="highlight">
         <th>At least 1</th>
@@ -129,7 +150,7 @@ const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 
 ```js
 function mostAuthored({ width } = {}) {
   return Plot.plot({
-    title: `PREreviewer personas by number of PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
+    title: `PREreviewer personas by number of ${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenYear ? ` published in ${chosenYear}` : ''}`,
     width: Math.max(width, 600),
     height: 500,
     marginBottom: 150,
