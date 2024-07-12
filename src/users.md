@@ -87,6 +87,11 @@ const careerStageColor = Plot.scale({
     unknown: 'var(--theme-foreground-muted)',
   },
 })
+
+const usersWithAtLeast1ReviewPublished = d3.sum(reviewsByAuthor, d => (d[1] >= 1 ? 1 : 0))
+const usersWith1ReviewPublished = d3.sum(reviewsByAuthor, d => (d[1] === 1 ? 1 : 0))
+const usersWithMoreThan1ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 1 ? 1 : 0))
+const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 3 ? 1 : 0))
 ```
 
 <div class="grid grid-cols-4">
@@ -99,19 +104,23 @@ const careerStageColor = Plot.scale({
     <table>
       <tr class="highlight">
         <th>At least 1</th>
-        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] >= 1 ? 1 : 0).toLocaleString('en-US')}</td>
+        <td class="numeric">${usersWithAtLeast1ReviewPublished.toLocaleString('en-US')}</td>
+        <td></td>
       </tr>
       <tr>
         <th>Only 1</th>
-        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] === 1 ? 1 : 0).toLocaleString('en-US')}</td>
+        <td class="numeric">${usersWith1ReviewPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${d3.format(".1%")(usersWith1ReviewPublished / usersWithAtLeast1ReviewPublished)}</td>
       </tr>
       <tr>
         <th>More than 1</th>
-        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] > 1 ? 1 : 0).toLocaleString('en-US')}</td>
+        <td class="numeric">${usersWithMoreThan1ReviewsPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${d3.format(".1%")(usersWithMoreThan1ReviewsPublished / usersWithAtLeast1ReviewPublished)}</td>
       </tr>
       <tr>
         <th>More than 3</th>
-        <td class="numeric">${d3.sum(reviewsByAuthor, d => d[1] > 3 ? 1 : 0).toLocaleString('en-US')}</td>
+        <td class="numeric">${usersWithMoreThan3ReviewsPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${d3.format(".1%")(usersWithMoreThan3ReviewsPublished / usersWithAtLeast1ReviewPublished)}</td>
       </tr>
     </table>
   </div>
