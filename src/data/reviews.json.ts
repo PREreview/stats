@@ -30,6 +30,28 @@ const Reviews = Schema.Array(
   }),
 )
 
+const LegacyReviews = Schema.Array(
+  Schema.Struct({
+    createdAt: Temporal.InstantFromStringSchema,
+    authors: Schema.Array(
+      Schema.Union(
+        Schema.Struct({
+          isAnonymous: Schema.Literal(false),
+          orcid: OrcidId.OrcidIdSchema,
+        }),
+        Schema.Struct({
+          isAnonymous: Schema.Literal(true),
+          name: Schema.String,
+        }),
+      ),
+    ),
+    preprint: Schema.Struct({
+      handle: Doi.ParseDoiSchema,
+      preprintServer: PreprintServer.PreprintServerSchema,
+    }),
+  }),
+)
+
 const LegacyRapidReviews = Schema.Struct({
   data: Schema.Array(
     Schema.Struct({
@@ -76,6 +98,30 @@ const getLegacyRapidReviews = Effect.gen(function* () {
   )
 })
 
+const getLegacyReviews = Effect.gen(function* () {
+  const fs = yield* FileSystem.FileSystem
+
+  const file = yield* fs.readFileString('src/data/legacy/reviews.json')
+  const data = yield* Schema.decodeUnknown(Schema.parseJson(LegacyReviews))(file)
+
+  return Array.map(
+    data,
+    review =>
+      ({
+        authors: Array.map(review.authors, author =>
+          author.isAnonymous
+            ? { author: author.name, authorType: 'pseudonym' }
+            : { author: author.orcid, authorType: 'public' },
+        ),
+        createdAt: review.createdAt.toZonedDateTimeISO('UTC').toPlainDate(),
+        language: Option.some('en'),
+        preprint: review.preprint.handle,
+        server: review.preprint.preprintServer,
+        type: 'full',
+      }) satisfies Schema.Schema.Type<typeof Reviews>[number],
+  )
+})
+
 const getReviews = Effect.gen(function* () {
   const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
@@ -93,7 +139,7 @@ const getReviews = Effect.gen(function* () {
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
-  const data = yield* Effect.map(Effect.all([getReviews, getLegacyRapidReviews]), Array.flatten)
+  const data = yield* Effect.map(Effect.all([getReviews, getLegacyReviews, getLegacyRapidReviews]), Array.flatten)
 
   const encoded = yield* Schema.encode(Schema.parseJson(Reviews))(data)
 
