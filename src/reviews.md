@@ -29,6 +29,8 @@ const reviewType = id => {
       return 'Full'
     case 'structured':
       return 'Structured'
+    case 'rapid':
+      return 'Rapid'
     default:
       return id
   }
@@ -44,7 +46,7 @@ const chosenYear = view(
 )
 
 const chosenType = view(
-  Inputs.select([null, 'full', 'structured'], {
+  Inputs.select([null, 'full', 'structured', 'rapid'], {
     label: 'PREreview type',
     format: type => reviewType(type) ?? 'All',
   }),
