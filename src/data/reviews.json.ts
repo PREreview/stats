@@ -30,8 +30,7 @@ const Reviews = Schema.Array(
   }),
 )
 
-const program = Effect.gen(function* () {
-  const terminal = yield* Terminal.Terminal
+const getReviews = Effect.gen(function* () {
   const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
@@ -39,10 +38,16 @@ const program = Effect.gen(function* () {
     Redacted.value(token),
   )
 
-  const data = yield* HttpClient.fetchOk(request).pipe(
+  return yield* HttpClient.fetchOk(request).pipe(
     Effect.andThen(HttpClientResponse.schemaBodyJson(Reviews)),
     Effect.scoped,
   )
+})
+
+const program = Effect.gen(function* () {
+  const terminal = yield* Terminal.Terminal
+
+  const data = yield* getReviews
 
   const encoded = yield* Schema.encode(Schema.parseJson(Reviews))(data)
 
