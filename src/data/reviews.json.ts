@@ -1,7 +1,7 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
+import { FileSystem, HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { NodeFileSystem, NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
-import { Config, Effect, Redacted } from 'effect'
+import { Array, Config, Effect, Option, Redacted } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
 import * as OrcidId from '../lib/OrcidId.js'
@@ -26,9 +26,55 @@ const Reviews = Schema.Array(
     preprint: Doi.ParseDoiSchema,
     language: Schema.OptionFromUndefinedOr(LanguageCode.LanguageCodeSchema),
     server: PreprintServer.PreprintServerSchema,
-    type: Schema.Literal('full', 'structured'),
+    type: Schema.Literal('full', 'structured', 'rapid'),
   }),
 )
+
+const LegacyRapidReviews = Schema.Struct({
+  data: Schema.Array(
+    Schema.Struct({
+      createdAt: Temporal.InstantFromStringSchema,
+      author: Schema.Union(
+        Schema.Struct({
+          isAnonymous: Schema.Literal(false),
+          orcid: OrcidId.OrcidIdSchema,
+        }),
+        Schema.Struct({
+          isAnonymous: Schema.Literal(true),
+          name: Schema.String,
+        }),
+      ),
+      preprint: Schema.Struct({
+        handle: Doi.ParseDoiSchema,
+        preprintServer: Schema.Lowercase.pipe(Schema.compose(PreprintServer.PreprintServerSchema)),
+      }),
+    }),
+  ),
+})
+
+const getLegacyRapidReviews = Effect.gen(function* () {
+  const fs = yield* FileSystem.FileSystem
+
+  const file = yield* fs.readFileString('src/data/legacy/rapid-reviews.json')
+  const data = yield* Schema.decodeUnknown(Schema.parseJson(LegacyRapidReviews))(file)
+
+  return Array.map(
+    data.data,
+    review =>
+      ({
+        authors: [
+          review.author.isAnonymous
+            ? { author: review.author.name, authorType: 'pseudonym' }
+            : { author: review.author.orcid, authorType: 'public' },
+        ],
+        createdAt: review.createdAt.toZonedDateTimeISO('UTC').toPlainDate(),
+        language: Option.some('en'),
+        preprint: review.preprint.handle,
+        server: review.preprint.preprintServer,
+        type: 'rapid',
+      }) satisfies Schema.Schema.Type<typeof Reviews>[number],
+  )
+})
 
 const getReviews = Effect.gen(function* () {
   const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
@@ -47,11 +93,11 @@ const getReviews = Effect.gen(function* () {
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
-  const data = yield* getReviews
+  const data = yield* Effect.map(Effect.all([getReviews, getLegacyRapidReviews]), Array.flatten)
 
   const encoded = yield* Schema.encode(Schema.parseJson(Reviews))(data)
 
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer), Effect.provide(NodeFileSystem.layer)))
