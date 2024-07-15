@@ -68,7 +68,7 @@ const LegacyRapidReviews = Schema.Struct({
       ),
       preprint: Schema.Struct({
         handle: Doi.ParseDoiSchema,
-        preprintServer: Schema.Lowercase.pipe(Schema.compose(PreprintServer.PreprintServerSchema)),
+        preprintServer: PreprintServer.PreprintServerSchema,
       }),
     }),
   ),
