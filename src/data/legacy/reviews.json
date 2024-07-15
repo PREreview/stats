@@ -1,0 +1,1076 @@
+[
+  {
+    "createdAt": "2021-06-05T13:28:06Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-1800-2763"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.20.999938",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2021-06-05T13:27:51Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-1800-2763"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.20.999938",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-30T14:02:16Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-2700-4557"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2007.09477",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T17:17:58Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-9039-9219"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.04.187583",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-21T23:42:28Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Darkgreen Wasp"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.23.057810",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T13:14:46Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Darkcyan Lemur"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.05.26.114033",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-07-19T06:01:41Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Indigo Cobra"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.08.20148924",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T00:59:19Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-0176-0872"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.04.187583",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-11-06T11:30:25Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-4230-944X"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.10.14.20212415",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T17:47:27Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Purple Mole"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.04.187583",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-07-16T03:24:40Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6793-5968"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.06.19.161687",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T12:51:41Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Darkcyan Lemur"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.18.20197327",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-07-19T06:06:19Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-3677-4043"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.30.20047456",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-07-14T03:12:42Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6793-5968"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.06.16.20132464",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-18T18:17:32Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Magenta Shark"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.05.11.20096347",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T04:08:03Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-6134-3635"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.04.187583",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-15T21:45:50Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Gray Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.20944/preprints202003.0395.v1",
+      "preprintServer": "preprints.org"
+    }
+  },
+  {
+    "createdAt": "2020-05-03T16:53:29Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.16.20067405",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-15T21:50:36Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Gray Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.26434/chemrxiv.11938173.v7",
+      "preprintServer": "chemrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-14T12:05:02Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-5090-7722"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.13.20064014",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-29T16:03:32Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.24.004655",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-07-16T23:21:14Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Gray Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.05.13.20100404",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-16T18:18:51Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Seagreen Mongoose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2003.12444",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-29T21:27:38Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.15.20065532",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-28T03:42:06Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Orange Crow"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.27.270835",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-23T12:55:04Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ink Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.07.04.187583",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-23T03:51:29Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4634-4995"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.27.270835",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-10-02T01:24:18Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-7014-2002"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.11.20172643",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2021-01-25T23:59:20Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.11.03.20225581",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2021-01-27T02:08:30Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.16.20194787",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2021-01-31T19:39:04Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.03.20167593",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-24T04:48:06Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Orange Crow"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.14.20192609",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-01T22:14:28Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Brown Eagle"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.05.26.114033",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T15:04:19Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-1383-5608"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.12.20193219",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T10:05:55Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ultramarine Crocodile"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.18.20197327",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T00:54:54Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-1974-4379"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.11.20173005",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-10-09T03:35:48Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-5712-3931"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.01.20186320",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2021-01-31T17:17:00Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.12.20193086",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2021-01-31T17:19:32Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.09.04.20188771",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T06:44:52Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Amthyst Panther"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.06.20169581",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-09-22T08:48:39Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4508-0406"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.08.11.20173005",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-28T18:44:46Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Rosewood Owl"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.05.10.20097329",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-30T16:07:43Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Limegreen Dog"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.22.002386",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-12T17:02:13Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Forestgreen Panda"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.10.20033795",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-05-14T17:39:20Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Umber Duck"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.09.034462",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-20T19:50:33Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Gray Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.31.20048967",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-21T11:46:59Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Blue Wolf"
+      }
+    ],
+    "preprint": {
+      "handle": "10.20944/preprints202003.0395.v2",
+      "preprintServer": "preprints.org"
+    }
+  },
+  {
+    "createdAt": "2020-04-17T14:42:33Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Forestgreen Panda"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.24.20042937",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-20T02:21:53Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6793-5968"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.31.20048967",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-29T15:23:54Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Blue Wolf"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.16.20067405",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-21T18:10:53Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Gray Moose"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.22.002386",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-16T12:21:26Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Brown Bee"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.03.20047530",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-15T16:51:52Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Blue Wolf"
+      }
+    ],
+    "preprint": {
+      "handle": "10.21203/rs.2.24751/v2",
+      "preprintServer": "research-square"
+    }
+  },
+  {
+    "createdAt": "2020-03-30T16:42:51Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Limegreen Dog"
+      }
+    ],
+    "preprint": {
+      "handle": "10.20944/preprints202003.0345.v2",
+      "preprintServer": "preprints.org"
+    }
+  },
+  {
+    "createdAt": "2020-05-04T00:08:59Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4531-6685"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.31.20048967",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-15T03:48:22Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Yellow Dolphin"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2004.03384",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-30T14:24:59Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6493-4556"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2003.12444",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-26T09:05:59Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Yellowgreen Squid"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.04.18.20070912",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-31T13:57:43Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6493-4556"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.24.20042937",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-03T15:16:27Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Skyblue Llama"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2003.12444",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-31T00:50:59Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Sapphire Lobster"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.13.990226",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-14T21:26:29Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Darkgreen Raven"
+      }
+    ],
+    "preprint": {
+      "handle": "10.31730/osf.io/sy54p",
+      "preprintServer": "africarxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-28T20:20:13Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ruby Koala"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.10.20033795",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-30T12:14:37Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-1854-5899"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2003.12444",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-30T00:57:55Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Lightgray Horse"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.2003.12444",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2020-04-02T14:00:38Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Skyblue Llama"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.22.002386",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-23T17:38:55Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ultramarine Otter"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.09.20033381",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-03-26T10:53:35Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Limegreen Butterfly"
+      }
+    ],
+    "preprint": {
+      "handle": "10.31219/osf.io/abx7s",
+      "preprintServer": "osf-preprints"
+    }
+  },
+  {
+    "createdAt": "2020-03-19T10:32:58Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-4626-248X"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.03.10.20033795",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-02-04T21:53:20Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ink Turtle"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.30.20019844",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-02-02T15:53:24Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Ebony Lobster"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.26.20018754",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-01-29T12:44:33Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Vanilla Horse"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.27.20018986",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-01-26T20:52:20Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Mistyrose Chinchilla"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.24.915157",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2020-01-27T00:41:26Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-5090-7722"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.23.20018549",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-02-02T17:11:50Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Chocolate Otter"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2020.01.26.20018754",
+      "preprintServer": "medrxiv"
+    }
+  },
+  {
+    "createdAt": "2020-01-20T19:55:24Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Chocolate Otter"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/2019.12.27.889212",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2019-12-20T15:35:04Z",
+    "authors": [
+      {
+        "isAnonymous": true,
+        "name": "Silver Yak"
+      }
+    ],
+    "preprint": {
+      "handle": "10.48550/arxiv.1909.13766",
+      "preprintServer": "arxiv"
+    }
+  },
+  {
+    "createdAt": "2019-12-04T17:10:06Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0003-3503-9899"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/617795",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2018-03-16T10:55:07Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-3708-3546"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/282830",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2018-09-27T11:00:23Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0002-0290-0315"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/429498",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2017-09-20T11:11:42Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6045-2103"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/170506",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2019-10-22T15:37:26Z",
+    "authors": [
+      {
+        "isAnonymous": false,
+        "orcid": "0000-0001-6045-2103"
+      }
+    ],
+    "preprint": {
+      "handle": "10.1101/706275",
+      "preprintServer": "biorxiv"
+    }
+  },
+  {
+    "createdAt": "2017-12-21T11:55:51Z",
+    "authors": [],
+    "preprint": {
+      "handle": "10.17605/osf.io/g6wkp",
+      "preprintServer": "osf"
+    }
+  }
+]
