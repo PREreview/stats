@@ -35,11 +35,21 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
       ),
       Option.orElse(() =>
         Option.map(
-          Array.findFirst(rawTimeZones, timezone =>
-            Array.some(
-              timezone.mainCities,
-              mainCity => diacritics.remove(location).toLowerCase() === diacritics.remove(mainCity).toLowerCase(),
+          Array.matchLeft(
+            Array.filter(rawTimeZones, timezone =>
+              Array.some(
+                timezone.mainCities,
+                mainCity => diacritics.remove(location).toLowerCase() === diacritics.remove(mainCity).toLowerCase(),
+              ),
             ),
+            {
+              onEmpty: () => Option.none(),
+              onNonEmpty: (head, tail) =>
+                Array.match(tail, {
+                  onEmpty: () => Option.some(head),
+                  onNonEmpty: Option.none,
+                }),
+            },
           ),
           timeZone => timeZone.countryCode,
         ),

@@ -23,6 +23,7 @@ describe('guessCountry', () => {
     ['Québec', 'CA'],
     ['Rio de Janeiro, Brazil.', 'BR'],
     ['Sunnyvale, California', 'US'],
+    ['Sydney', 'AU'],
     ['The UK', 'GB'],
     ['UK', 'GB'],
     ['U.K.', 'GB'],
