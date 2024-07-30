@@ -30,6 +30,9 @@ const regionNameWithFlag = code => `${getFlagEmoji(code)} ${regionName(code)}`
 const visitorsByCountry = FileAttachment('./data/visitors-by-country.json')
   .json()
   .then(data => data.map(visitor => ({ ...visitor, date: parseYearMonth(visitor.yearMonth) })))
+const allVisitorsByReferrer = FileAttachment('./data/visitors-by-referrer.json')
+  .json()
+  .then(data => data.map(visitor => ({ ...visitor, date: parseYearMonth(visitor.yearMonth) })))
 ```
 
 ```js
@@ -50,6 +53,10 @@ const chosenYear = view(
 const visitorsByCountryInTimePeriod = chosenYear
   ? visitorsByCountry.filter(visitors => visitors.date.getUTCFullYear() === chosenYear)
   : visitorsByCountry
+
+const allVisitorsByReferrerInTimePeriod = chosenYear
+  ? allVisitorsByReferrer.filter(visitors => visitors.date.getUTCFullYear() === chosenYear)
+  : allVisitorsByReferrer
 ```
 
 ```js
@@ -94,5 +101,35 @@ function visitorsByLocation() {
   <div class="card">
     <h2>Visitors ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     ${visitorsByLocation()}
+  </div>
+</div>
+
+```js
+const visitorsByReferrer = Inputs.table(
+  d3.map(
+    d3.rollup(
+      allVisitorsByReferrerInTimePeriod,
+      visitors => d3.sum(visitors, visitor => visitor.number),
+      visitors => visitors.referrer,
+    ),
+    ([referrer, number]) => ({ referrer: referrer ?? 'Direct or unknown', number }),
+  ),
+  {
+    header: {
+      referrer: 'Referrer',
+      number: 'Number',
+    },
+    sort: 'number',
+    reverse: true,
+    required: false,
+    rows: 20,
+  },
+)
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    <h2>Visitors ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    ${visitorsByReferrer}
   </div>
 </div>
