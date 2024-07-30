@@ -1,8 +1,7 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
-import { Array, Config, Effect, Option, Redacted } from 'effect'
-import * as Iso3166 from '../lib/Iso3166.js'
+import { Array, Config, Effect, Redacted } from 'effect'
 import * as Temporal from '../lib/Temporal.js'
 import * as Url from '../lib/Url.js'
 
