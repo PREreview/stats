@@ -10,6 +10,7 @@ toc: false
 const requests = FileAttachment('./data/requests.json').json()
 const reviews = FileAttachment('./data/reviews.json').json()
 const users = FileAttachment('./data/users.json').json()
+const clubs = FileAttachment('./data/clubs.json').json()
 ```
 
 <div class="grid grid-cols-4">
@@ -26,6 +27,11 @@ const users = FileAttachment('./data/users.json').json()
   <div class="card">
     <h2>Total users</h2>
     <span class="big">${users.length.toLocaleString("en-US")}</span>
+  </div>
+
+  <div class="card">
+    <h2>Total clubs</h2>
+    <span class="big">${Object.keys(clubs).length.toLocaleString("en-US")}</span>
   </div>
 </div>
 
