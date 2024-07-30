@@ -22,6 +22,7 @@ const Reviews = Schema.Array(
         }),
       ),
     ),
+    club: Schema.OptionFromUndefinedOr(Schema.String),
     createdAt: Temporal.PlainDateFromStringSchema,
     preprint: Doi.ParseDoiSchema,
     language: Schema.OptionFromUndefinedOr(LanguageCode.LanguageCodeSchema),
@@ -89,6 +90,7 @@ const getLegacyRapidReviews = Effect.gen(function* () {
             ? { author: review.author.name, authorType: 'pseudonym' }
             : { author: review.author.orcid, authorType: 'public' },
         ],
+        club: Option.none(),
         createdAt: review.createdAt.toZonedDateTimeISO('UTC').toPlainDate(),
         language: Option.some('en'),
         preprint: review.preprint.handle,
@@ -113,6 +115,7 @@ const getLegacyReviews = Effect.gen(function* () {
             ? { author: author.name, authorType: 'pseudonym' }
             : { author: author.orcid, authorType: 'public' },
         ),
+        club: Option.none(),
         createdAt: review.createdAt.toZonedDateTimeISO('UTC').toPlainDate(),
         language: Option.some('en'),
         preprint: review.preprint.handle,
