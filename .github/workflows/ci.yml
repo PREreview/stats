@@ -52,6 +52,7 @@ jobs:
         run: npx observable build
         env:
           PREREVIEW_REVIEWS_DATA_TOKEN: ${{ secrets.PREREVIEW_REVIEWS_DATA_TOKEN }}
+          FATHOM_TOKEN: ${{ secrets.FATHOM_TOKEN }}
 
       - name: 'Upload build'
         uses: actions/upload-artifact@v4.3.4

@@ -1,14 +1,17 @@
 import { ParseResult, Schema } from '@effect/schema'
 import { Temporal } from '@js-temporal/polyfill'
 
-export const { Instant, PlainDate } = Temporal
+export const { Instant, PlainDate, PlainYearMonth } = Temporal
 
 export type Instant = Temporal.Instant
 export type PlainDate = Temporal.PlainDate
+export type PlainYearMonth = Temporal.PlainYearMonth
 
 export const InstantFromSelfSchema = Schema.instanceOf(Temporal.Instant)
 
 export const PlainDateFromSelfSchema = Schema.instanceOf(PlainDate)
+
+export const PlainYearMonthFromSelfSchema = Schema.instanceOf(PlainYearMonth)
 
 export const InstantFromStringSchema: Schema.Schema<Instant, string> = Schema.transformOrFail(
   Schema.String,
@@ -33,5 +36,18 @@ export const PlainDateFromStringSchema: Schema.Schema<PlainDate, string> = Schem
         catch: () => new ParseResult.Type(ast, date),
       }),
     encode: plainDate => ParseResult.succeed(plainDate.toString()),
+  },
+)
+
+export const PlainYearMonthFromStringSchema: Schema.Schema<PlainYearMonth, string> = Schema.transformOrFail(
+  Schema.String,
+  PlainYearMonthFromSelfSchema,
+  {
+    decode: (yearMonth, _, ast) =>
+      ParseResult.try({
+        try: () => PlainYearMonth.from(yearMonth, { overflow: 'reject' }),
+        catch: () => new ParseResult.Type(ast, yearMonth),
+      }),
+    encode: plainYearMonth => ParseResult.succeed(plainYearMonth.toString()),
   },
 )
