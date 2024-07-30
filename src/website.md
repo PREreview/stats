@@ -33,9 +33,29 @@ const visitorsByCountry = FileAttachment('./data/visitors-by-country.json')
 ```
 
 ```js
+const now = new Date()
+const firstVisitor = d3.min(visitorsByCountry, user => user.date)
+```
+
+```js
+const chosenYear = view(
+  Inputs.select([null, ..._.range(now.getUTCFullYear(), firstVisitor.getUTCFullYear() - 1)], {
+    label: 'Year',
+    format: year => year ?? 'All-time',
+  }),
+)
+```
+
+```js
+const visitorsByCountryInTimePeriod = chosenYear
+  ? visitorsByCountry.filter(visitors => visitors.date.getUTCFullYear() === chosenYear)
+  : visitorsByCountry
+```
+
+```js
 function visitorsByLocation() {
   const colors = d3.rollup(
-    visitorsByCountry.filter(visitors => visitors.country),
+    visitorsByCountryInTimePeriod.filter(visitors => visitors.country),
     visitors => d3.sum(visitors, visitor => visitor.number),
     visitors => visitors.country,
   )
@@ -72,7 +92,7 @@ function visitorsByLocation() {
 
 <div class="grid grid-cols-1">
   <div class="card">
-    <h2>Visitors</h2>
+    <h2>Visitors ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     ${visitorsByLocation()}
   </div>
 </div>
