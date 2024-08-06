@@ -12,6 +12,7 @@ const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const languageName = code => (code ? languageNames.of(code) : 'Unknown')
 
 const preprintServers = FileAttachment('./data/preprint-servers.json').json()
+const requests = FileAttachment('./data/requests.json').json()
 const reviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
@@ -21,6 +22,7 @@ const reviews = FileAttachment('./data/reviews.json')
 const now = new Date()
 const firstReview = d3.min(reviews, review => review.createdAt)
 
+const preprintsWithRequest = new d3.InternSet(d3.group(requests, request => request.preprint).keys())
 const preprintServerName = id => preprintServers[id]
 
 const reviewType = id => {
@@ -51,6 +53,8 @@ const chosenType = view(
     format: type => reviewType(type) ?? 'All',
   }),
 )
+
+const chosenRequest = view(Inputs.toggle({ label: 'Requested review' }))
 ```
 
 ```js
@@ -58,9 +62,13 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsSelected = chosenType
-  ? reviewsInTimePeriod.filter(review => review.type === chosenType)
+const reviewsWithRequest = chosenRequest
+  ? reviewsInTimePeriod.filter(review => preprintsWithRequest.has(review.preprint))
   : reviewsInTimePeriod
+
+const reviewsSelected = chosenType
+  ? reviewsWithRequest.filter(review => review.type === chosenType)
+  : reviewsWithRequest
 
 const languageColor = Plot.scale({
   color: {
@@ -82,9 +90,9 @@ const languageColor = Plot.scale({
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
-    ${chosenType ? html`
+    ${chosenRequest | chosenType ? html`
       <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
     ` : ''}
   </div>
@@ -93,7 +101,7 @@ const languageColor = Plot.scale({
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: `${chosenType ? reviewType(chosenType) : ''} PREreviews per ${chosenYear ? 'week' : 'month'}`,
+    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -140,7 +148,7 @@ function reviewsTimeline({ width } = {}) {
 ```js
 function reviewsByPreprintServer({ width } = {}) {
   return Plot.plot({
-    title: `${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
