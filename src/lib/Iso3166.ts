@@ -2,7 +2,7 @@ import { Schema } from '@effect/schema'
 import { rawTimeZones } from '@vvo/tzdb'
 import cities from 'all-the-cities'
 import diacritics from 'diacritics'
-import { Array, Option, type Predicate, String, flow } from 'effect'
+import { Array, Option, Order, type Predicate, String, flow } from 'effect'
 import iso3166 from 'i18n-iso-countries'
 import subDivisions from 'world_countries_lists/data/subdivisions/subdivisions.json'
 
@@ -13,7 +13,10 @@ export const isAlpha2Code: Predicate.Refinement<unknown, Alpha2Code> = (u): u is
 
 export const Alpha2CodeSchema: Schema.Schema<Alpha2Code, string> = Schema.String.pipe(Schema.filter(isAlpha2Code))
 
-const cities10000 = Array.filter(cities, city => city.population >= 10_000)
+const cities10000 = Array.filter(
+  Array.sortWith(cities, city => city.population, Order.reverse(Order.number)),
+  city => city.population >= 10_000,
+)
 
 export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flow(
   String.replaceAll('.', ''),
