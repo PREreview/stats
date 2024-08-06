@@ -37,7 +37,7 @@
     "prettier-plugin-sh": "^0.14.0",
     "prettier-plugin-toml": "^2.0.1",
     "typescript": "^5.5.4",
-    "vitest": "^2.0.2"
+    "vitest": "^2.0.5"
   },
   "engines": {
     "node": ">=18"
