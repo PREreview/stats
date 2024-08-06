@@ -14,6 +14,7 @@ describe('guessCountry', () => {
     ['Düsseldorf', 'DE'],
     ['Fayetteville GA (near Atlanta)', 'US'],
     ['GHANA', 'GH'],
+    ['Greater Boston, MA', 'US'],
     ['London', 'GB'],
     ['London, Ontario', 'CA'],
     ['London, UK', 'GB'],
