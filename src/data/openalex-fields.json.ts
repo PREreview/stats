@@ -17,7 +17,10 @@ const Fields = Schema.Struct({
   ),
 })
 
-const FieldNames = Schema.Record(FieldIdSchema, Schema.Struct({ name: Schema.String, domain: DomainIdSchema }))
+const FieldNames = Schema.Record({
+  key: FieldIdSchema,
+  value: Schema.Struct({ name: Schema.String, domain: DomainIdSchema }),
+})
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
