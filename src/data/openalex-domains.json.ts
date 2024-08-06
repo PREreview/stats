@@ -14,7 +14,7 @@ const Domains = Schema.Struct({
   ),
 })
 
-const DomainNames = Schema.Record(DomainIdSchema, Schema.String)
+const DomainNames = Schema.Record({ key: DomainIdSchema, value: Schema.String })
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal

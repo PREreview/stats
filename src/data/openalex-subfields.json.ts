@@ -17,7 +17,10 @@ const Subfields = Schema.Struct({
   ),
 })
 
-const SubfieldNames = Schema.Record(SubfieldIdSchema, Schema.Struct({ name: Schema.String, field: FieldIdSchema }))
+const SubfieldNames = Schema.Record({
+  key: SubfieldIdSchema,
+  value: Schema.Struct({ name: Schema.String, field: FieldIdSchema }),
+})
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal

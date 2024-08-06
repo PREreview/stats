@@ -4,7 +4,7 @@ import { Schema } from '@effect/schema'
 import { Effect } from 'effect'
 import * as PreprintServer from '../lib/PreprintServer.js'
 
-const Output = Schema.Record(Schema.String, Schema.String)
+const Output = Schema.Record({ key: Schema.String, value: Schema.String })
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
