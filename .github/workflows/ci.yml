@@ -55,7 +55,7 @@ jobs:
           FATHOM_TOKEN: ${{ secrets.FATHOM_TOKEN }}
 
       - name: 'Upload build'
-        uses: actions/upload-artifact@v4.3.5
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: dist
           path: dist/
@@ -94,7 +94,7 @@ jobs:
           target: prod
 
       - name: 'Upload build'
-        uses: actions/upload-artifact@v4.3.5
+        uses: actions/upload-artifact@v4.3.6
         with:
           name: image
           path: /tmp/image.tar
