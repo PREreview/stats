@@ -27,8 +27,8 @@ const clubs = Inputs.table(
   {
     columns: ['name', 'reviews'],
     header: { name: 'Name', reviews: 'Number of PREreviews' },
+    select: false,
     sort: 'name',
-    required: false,
     rows: 30,
   },
 )

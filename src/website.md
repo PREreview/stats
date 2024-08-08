@@ -119,9 +119,9 @@ const visitorsByReferrer = Inputs.table(
       referrer: 'Referrer',
       number: 'Number',
     },
+    select: false,
     sort: 'number',
     reverse: true,
-    required: false,
     rows: 20,
   },
 )
