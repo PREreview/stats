@@ -1,5 +1,7 @@
 /.dev/
 /.git/
 /.github/
+/integration/
+/integration-results/
 /node_modules/
 /src/.observablehq/

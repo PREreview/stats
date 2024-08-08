@@ -1,5 +1,6 @@
 /.dev/
 /dist/
+/integration-results/
 /node_modules/
 /src/.observablehq/
 /.env

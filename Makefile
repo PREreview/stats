@@ -1,4 +1,4 @@
-.PHONY: build build-image check format lint prod start test typecheck
+.PHONY: build build-image check format lint playwright-browser prod start test test-integration typecheck
 
 CADDY_PASSWORD=letmein
 IMAGE_TAG=prereview-stats
@@ -31,6 +31,12 @@ lint: node_modules
 
 test: node_modules
 	npx vitest run
+
+playwright-browser: node_modules
+	npx playwright install chromium
+
+test-integration: build node_modules playwright-browser
+	npx playwright test
 
 typecheck: node_modules
 	npx tsc --noEmit

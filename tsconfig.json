@@ -4,5 +4,5 @@
     "exactOptionalPropertyTypes": true,
     "resolveJsonModule": true
   },
-  "include": ["src", "test", "*.ts"]
+  "include": ["integration", "src", "test", "*.ts"]
 }
