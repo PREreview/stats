@@ -23,7 +23,6 @@ jobs:
     name: 'Build dist'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
-    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: 'Checkout code'
@@ -53,6 +52,7 @@ jobs:
         env:
           PREREVIEW_REVIEWS_DATA_TOKEN: ${{ secrets.PREREVIEW_REVIEWS_DATA_TOKEN }}
           FATHOM_TOKEN: ${{ secrets.FATHOM_TOKEN }}
+          SANDBOX: ${{ github.ref != 'refs/heads/main' }}
 
       - name: 'Upload build'
         uses: actions/upload-artifact@v4.3.6
@@ -64,7 +64,6 @@ jobs:
     name: 'Build image'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
-    if: github.ref == 'refs/heads/main' && !failure() && !cancelled()
     outputs:
       image: ${{ steps.build.outputs.imageid }}
     needs:

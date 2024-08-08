@@ -23,6 +23,12 @@ const Output = Schema.Array(
 
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
+  const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
+
+  if (sandbox) {
+    return yield* terminal.display('[]')
+  }
+
   const token = yield* Config.redacted('FATHOM_TOKEN')
 
   const request = HttpClientRequest.bearerToken(

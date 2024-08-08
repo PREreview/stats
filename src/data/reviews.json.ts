@@ -126,6 +126,12 @@ const getLegacyReviews = Effect.gen(function* () {
 })
 
 const getReviews = Effect.gen(function* () {
+  const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
+
+  if (sandbox) {
+    return []
+  }
+
   const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
