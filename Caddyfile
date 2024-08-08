@@ -1,9 +1,12 @@
 :80 {
 	@files {
-		not path /health
+		not path /health /robots.txt
 	}
 	@health {
 	  path /health
+	}
+	@robots {
+		path /robots.txt
 	}
 
   log
@@ -12,6 +15,11 @@
 	root * /usr/share/caddy
 
 	respond @health 200
+
+	respond @robots <<TXT
+		User-agent: *
+		Disallow: /
+		TXT 200
 
 	try_files @files {path}.html
 
