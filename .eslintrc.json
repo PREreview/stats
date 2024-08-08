@@ -47,6 +47,12 @@
         "@typescript-eslint/no-unused-vars": "off",
         "import/no-unresolved": "off"
       }
+    },
+    {
+      "files": ["integration/**/*.ts"],
+      "rules": {
+        "no-empty-pattern": "off"
+      }
     }
   ],
   "settings": {

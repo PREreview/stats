@@ -4,7 +4,7 @@ export { expect } from '@playwright/test'
 
 const appFixtures: Fixtures<Record<never, never>, Record<never, never>, PlaywrightTestArgs & PlaywrightTestOptions> = {
   baseURL: async ({}, use) => {
-    await use(`http://localhost:3000`)
+    await use('http://localhost:3000')
   },
 }
 
