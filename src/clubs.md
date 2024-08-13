@@ -7,15 +7,39 @@ toc: false
 # Clubs ♣️
 
 ```js
+const parseDate = d3.utcParse('%Y-%m-%d')
+
 const allClubs = FileAttachment('./data/clubs.json')
   .json()
   .then(data => Object.entries(data).map(([id, name]) => ({ id, name })))
-const allReviews = FileAttachment('./data/reviews.json').json()
+const allReviews = FileAttachment('./data/reviews.json')
+  .json()
+  .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
+```
+
+```js
+const now = new Date()
+const firstReview = d3.min(allReviews, review => review.createdAt)
+```
+
+```js
+const chosenYear = view(
+  Inputs.select([null, ..._.range(now.getUTCFullYear(), firstReview.getUTCFullYear() - 1)], {
+    label: 'Year',
+    format: year => year ?? 'All-time',
+  }),
+)
+```
+
+```js
+const reviewsInTimePeriod = chosenYear
+  ? allReviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
+  : allReviews
 ```
 
 ```js
 const numberOfReviewsByClub = d3.rollup(
-  allReviews,
+  reviewsInTimePeriod,
   d => d.length,
   d => d.club,
 )
@@ -26,7 +50,7 @@ const clubs = Inputs.table(
   allClubs.map(club => ({ ...club, reviews: numberOfReviewsByClub.get(club.id) })),
   {
     columns: ['name', 'reviews'],
-    header: { name: 'Name', reviews: 'Number of PREreviews' },
+    header: { name: 'Name', reviews: `Number of PREreviews${chosenYear ? ` in ${chosenYear}` : ''}` },
     select: false,
     sort: 'name',
     rows: 30,
