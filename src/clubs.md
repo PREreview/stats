@@ -35,6 +35,8 @@ const chosenYear = view(
 const reviewsInTimePeriod = chosenYear
   ? allReviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : allReviews
+
+const clubReviewsInTimePeriod = reviewsInTimePeriod.filter(review => review.club)
 ```
 
 ```js
@@ -44,6 +46,13 @@ const numberOfReviewsByClub = d3.rollup(
   d => d.club,
 )
 ```
+
+<div class="grid grid-cols-4">
+  <div class="card">
+    <h2>PREreviews published by clubs${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <span class="big">${reviewsInTimePeriod.length.toLocaleString("en-US")}</span>
+  </div>
+</div>
 
 ```js
 const clubs = Inputs.table(
