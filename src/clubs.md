@@ -50,7 +50,7 @@ const numberOfReviewsByClub = d3.rollup(
 <div class="grid grid-cols-4">
   <div class="card">
     <h2>PREreviews published by clubs${chosenYear ? ` in ${chosenYear}` : ''}</h2>
-    <span class="big">${reviewsInTimePeriod.length.toLocaleString("en-US")}</span>
+    <span class="big">${clubReviewsInTimePeriod.length.toLocaleString("en-US")}</span>
   </div>
 </div>
 
