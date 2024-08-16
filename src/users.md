@@ -58,9 +58,16 @@ const reviewType = id => {
 const users = FileAttachment('./data/users.json')
   .json()
   .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
-const reviews = FileAttachment('./data/reviews.json')
-  .json()
-  .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
+const reviews = Promise.all([users, FileAttachment('./data/reviews.json').json()]).then(([users, data]) =>
+  data.map(review => ({
+    ...review,
+    createdAt: parseDate(review.createdAt),
+    authors: review.authors.map(author => ({
+      ...author,
+      joined: author.authorType === 'public' ? users.find(user => user.orcid === author.author)?.timestamp : undefined,
+    })),
+  })),
+)
 ```
 
 ```js
@@ -103,6 +110,10 @@ const reviewsByAuthor = d3.rollup(
   d => `${d.authorType}:${d.author}`,
 )
 
+const reviewsByAuthorInTimePeriod = new Map(
+  reviewsByAuthor.entries().filter(([id]) => usersInTimePeriod.some(user => `public:${user.orcid}` === id)),
+)
+
 const careerStageColor = Plot.scale({
   color: {
     type: 'categorical',
@@ -115,6 +126,11 @@ const usersWithAtLeast1ReviewPublished = d3.sum(reviewsByAuthor, d => (d[1] >= 1
 const usersWith1ReviewPublished = d3.sum(reviewsByAuthor, d => (d[1] === 1 ? 1 : 0))
 const usersWithMoreThan1ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 1 ? 1 : 0))
 const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 3 ? 1 : 0))
+
+const usersInTimePeriodWithAtLeast1ReviewPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] >= 1 ? 1 : 0))
+const usersInTimePeriodWith1ReviewPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] === 1 ? 1 : 0))
+const usersInTimePeriodWithMoreThan1ReviewsPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] > 1 ? 1 : 0))
+const usersInTimePeriodWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] > 3 ? 1 : 0))
 ```
 
 <div class="grid grid-cols-4">
@@ -148,6 +164,35 @@ const usersWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthor, d => (d[1] > 
         <th>More than 3</th>
         <td class="numeric">${usersWithMoreThan3ReviewsPublished.toLocaleString('en-US')}</td>
         <td class="numeric">${usersWithAtLeast1ReviewPublished > 0 ? d3.format(".1%")(usersWithMoreThan3ReviewsPublished / usersWithAtLeast1ReviewPublished) : ''}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="card">
+    <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''} with ${chosenType ? reviewType(chosenType) : ''} PREreviews published using their public pseudonym ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <table>
+      <colgroup>
+        <col>
+        <col span="2" style="width: 5em">
+      </colgroup>
+      <tr class="highlight">
+        <th>At least 1</th>
+        <td class="numeric">${usersInTimePeriodWithAtLeast1ReviewPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${usersInTimePeriod.length > 0 ? d3.format(".1%")(usersInTimePeriodWithAtLeast1ReviewPublished / usersInTimePeriod.length) : ''}</td>
+      </tr>
+      <tr>
+        <th>Only 1</th>
+        <td class="numeric">${usersInTimePeriodWith1ReviewPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${usersInTimePeriod.length > 0 ? d3.format(".1%")(usersInTimePeriodWith1ReviewPublished / usersInTimePeriod.length) : ''}</td>
+      </tr>
+      <tr>
+        <th>More than 1</th>
+        <td class="numeric">${usersInTimePeriodWithMoreThan1ReviewsPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${usersInTimePeriod.length > 0 ? d3.format(".1%")(usersInTimePeriodWithMoreThan1ReviewsPublished / usersInTimePeriod.length) : ''}</td>
+      </tr>
+      <tr>
+        <th>More than 3</th>
+        <td class="numeric">${usersInTimePeriodWithMoreThan3ReviewsPublished.toLocaleString('en-US')}</td>
+        <td class="numeric">${usersInTimePeriod.length > 0 ? d3.format(".1%")(usersInTimePeriodWithMoreThan3ReviewsPublished / usersInTimePeriod.length) : ''}</td>
       </tr>
     </table>
   </div>
