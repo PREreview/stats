@@ -3,10 +3,12 @@ import { NodeTerminal } from '@effect/platform-node'
 import { Schema } from '@effect/schema'
 import { Array, Config, Effect, Option, Redacted } from 'effect'
 import * as Iso3166 from '../lib/Iso3166.js'
+import * as OrcidId from '../lib/OrcidId.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
   Schema.Struct({
+    orcid: OrcidId.OrcidIdSchema,
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
     location: Schema.OptionFromUndefinedOr(Schema.String),
     timestamp: Temporal.InstantFromStringSchema,
@@ -15,6 +17,7 @@ const Users = Schema.Array(
 
 const Output = Schema.Array(
   Schema.Struct({
+    orcid: OrcidId.OrcidIdSchema,
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
     location: Schema.OptionFromUndefinedOr(Schema.String),
     country: Schema.OptionFromUndefinedOr(Iso3166.Alpha2CodeSchema),
