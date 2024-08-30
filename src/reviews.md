@@ -12,7 +12,6 @@ const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const languageName = code => (code ? languageNames.of(code) : 'Unknown')
 
 const preprintServers = FileAttachment('./data/preprint-servers.json').json()
-const requests = FileAttachment('./data/requests.json').json()
 const reviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
@@ -22,7 +21,6 @@ const reviews = FileAttachment('./data/reviews.json')
 const now = new Date()
 const firstReview = d3.min(reviews, review => review.createdAt)
 
-const preprintsWithRequest = new d3.InternSet(d3.group(requests, request => request.preprint).keys())
 const preprintServerName = id => preprintServers[id]
 
 const reviewType = id => {
@@ -62,9 +60,7 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsWithRequest = chosenRequest
-  ? reviewsInTimePeriod.filter(review => preprintsWithRequest.has(review.preprint))
-  : reviewsInTimePeriod
+const reviewsWithRequest = chosenRequest ? reviewsInTimePeriod.filter(review => review.requested) : reviewsInTimePeriod
 
 const reviewsSelected = chosenType
   ? reviewsWithRequest.filter(review => review.type === chosenType)
