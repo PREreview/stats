@@ -17,6 +17,7 @@ const clubs = FileAttachment('./data/clubs.json').json()
   <div class="card">
     <h2>Total PREreviews</h2>
     <span class="big">${reviews.length.toLocaleString("en-US")}</span>
+    <div>${reviews.filter(review => review.live).length.toLocaleString("en-US")} Live Reviews</div>
   </div>
 
   <div class="card">
