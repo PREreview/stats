@@ -55,7 +55,7 @@ jobs:
           SANDBOX: ${{ github.ref != 'refs/heads/main' }}
 
       - name: 'Upload build'
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4.4.1
         with:
           name: dist
           path: dist/
@@ -93,7 +93,7 @@ jobs:
           target: prod
 
       - name: 'Upload build'
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4.4.1
         with:
           name: image
           path: /tmp/image.tar
@@ -199,7 +199,7 @@ jobs:
 
       - name: 'Store results'
         if: failure() && steps.playwright.outcome == 'failure'
-        uses: actions/upload-artifact@v4.3.6
+        uses: actions/upload-artifact@v4.4.1
         with:
           name: integration-tests-result
           path: integration-results
