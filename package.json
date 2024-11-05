@@ -20,7 +20,7 @@
     "world_countries_lists": "^2.9.0"
   },
   "devDependencies": {
-    "@dotenvx/dotenvx": "^1.6.4",
+    "@dotenvx/dotenvx": "^1.22.0",
     "@playwright/test": "^1.46.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@tsconfig/node20": "^20.1.4",
