@@ -22,6 +22,7 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
   String.replaceAll(/\((.+?)\)/g, ', $1'),
   String.replaceAll(/ [0-9]+/g, ' '),
   String.replaceAll(/( and | - )/gi, ', '),
+  String.replaceAll(/([a-z]+)[-–]([a-z]+)/gi, '$1, $2, $&'),
   String.replaceAll(/(^| )(the|near|greater) /gi, ''),
   location => Array.prepend(Array.map(location.split(',').reverse(), String.trim), location),
   Array.findFirst(location =>
