@@ -56,6 +56,8 @@ const chosenType = view(
 
 const chosenCollaborative = view(Inputs.toggle({ label: 'Collaborative' }))
 
+const chosenClub = view(Inputs.toggle({ label: 'In a club' }))
+
 const chosenRequest = view(Inputs.toggle({ label: 'Requested review' }))
 
 const chosenPseudonym = view(Inputs.toggle({ label: 'With a pseudonym' }))
@@ -74,9 +76,11 @@ const reviewsWithRequest = chosenRequest
   ? reviewsCollaborative.filter(review => review.requested)
   : reviewsCollaborative
 
+const reviewsClub = chosenClub ? reviewsWithRequest.filter(review => review.club) : reviewsWithRequest
+
 const reviewsWithPseudonym = chosenPseudonym
-  ? reviewsWithRequest.filter(review => review.authors.some(author => author.authorType === 'pseudonym'))
-  : reviewsWithRequest
+  ? reviewsClub.filter(review => review.authors.some(author => author.authorType === 'pseudonym'))
+  : reviewsClub
 
 const reviewsSelected = chosenType
   ? reviewsWithPseudonym.filter(review => review.type === chosenType)
@@ -100,7 +104,7 @@ const languageColor = Plot.scale({
 })
 
 const title = capitalize(
-  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
+  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenClub ? 'club ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
 )
 
 const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
@@ -110,7 +114,7 @@ const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
   <div class="card">
     <h2>${titleWithYear}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
-    ${chosenCollaborative | chosenPseudonym | chosenRequest | chosenType ? html`
+    ${chosenClub | chosenCollaborative | chosenPseudonym | chosenRequest | chosenType ? html`
       <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
     ` : ''}
   </div>
