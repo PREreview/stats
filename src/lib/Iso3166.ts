@@ -3,7 +3,7 @@ import cities from 'all-the-cities'
 import diacritics from 'diacritics'
 import { Array, Option, Order, type Predicate, Schema, String, flow } from 'effect'
 import iso3166 from 'i18n-iso-countries'
-import subDivisions from 'world_countries_lists/data/subdivisions/subdivisions.json'
+import subDivisions from 'world_countries_lists/data/subdivisions/subdivisions.json' with { type: 'json' }
 
 export type Alpha2Code = iso3166.Alpha2Code
 
