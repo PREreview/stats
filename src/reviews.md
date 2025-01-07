@@ -53,6 +53,8 @@ const chosenType = view(
 )
 
 const chosenRequest = view(Inputs.toggle({ label: 'Requested review' }))
+
+const chosenPseudonym = view(Inputs.toggle({ label: 'With a pseudonym' }))
 ```
 
 ```js
@@ -62,9 +64,13 @@ const reviewsInTimePeriod = chosenYear
 
 const reviewsWithRequest = chosenRequest ? reviewsInTimePeriod.filter(review => review.requested) : reviewsInTimePeriod
 
-const reviewsSelected = chosenType
-  ? reviewsWithRequest.filter(review => review.type === chosenType)
+const reviewsWithPseudonym = chosenPseudonym
+  ? reviewsWithRequest.filter(review => review.authors.some(author => author.authorType === 'pseudonym'))
   : reviewsWithRequest
+
+const reviewsSelected = chosenType
+  ? reviewsWithPseudonym.filter(review => review.type === chosenType)
+  : reviewsWithPseudonym
 
 const languageColor = Plot.scale({
   color: {
@@ -86,9 +92,9 @@ const languageColor = Plot.scale({
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
-    ${chosenRequest | chosenType ? html`
+    ${chosenPseudonym | chosenRequest | chosenType ? html`
       <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
     ` : ''}
   </div>
@@ -97,7 +103,7 @@ const languageColor = Plot.scale({
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews per ${chosenYear ? 'week' : 'month'}`,
+    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -144,7 +150,7 @@ function reviewsTimeline({ width } = {}) {
 ```js
 function reviewsByPreprintServer({ width } = {}) {
   return Plot.plot({
-    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
