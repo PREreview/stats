@@ -38,6 +38,14 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
         ),
       ),
       Option.orElse(() =>
+        location.length === 2
+          ? Option.map(
+              Array.findFirst(subDivisions, subDivision => subDivision.code === `US-${location}`),
+              subDivision => subDivision.country,
+            )
+          : Option.none(),
+      ),
+      Option.orElse(() =>
         Option.map(
           Array.matchLeft(
             Array.filter(rawTimeZones, timezone =>
