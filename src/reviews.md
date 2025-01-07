@@ -52,6 +52,8 @@ const chosenType = view(
   }),
 )
 
+const chosenCollaborative = view(Inputs.toggle({ label: 'Collaborative' }))
+
 const chosenRequest = view(Inputs.toggle({ label: 'Requested review' }))
 
 const chosenPseudonym = view(Inputs.toggle({ label: 'With a pseudonym' }))
@@ -62,7 +64,13 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsWithRequest = chosenRequest ? reviewsInTimePeriod.filter(review => review.requested) : reviewsInTimePeriod
+const reviewsCollaborative = chosenCollaborative
+  ? reviewsInTimePeriod.filter(review => review.authors.length > 1)
+  : reviewsInTimePeriod
+
+const reviewsWithRequest = chosenRequest
+  ? reviewsCollaborative.filter(review => review.requested)
+  : reviewsCollaborative
 
 const reviewsWithPseudonym = chosenPseudonym
   ? reviewsWithRequest.filter(review => review.authors.some(author => author.authorType === 'pseudonym'))
@@ -92,9 +100,9 @@ const languageColor = Plot.scale({
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
-    ${chosenPseudonym | chosenRequest | chosenType ? html`
+    ${chosenCollaborative | chosenPseudonym | chosenRequest | chosenType ? html`
       <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
     ` : ''}
   </div>
@@ -103,7 +111,7 @@ const languageColor = Plot.scale({
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} per ${chosenYear ? 'week' : 'month'}`,
+    title: `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -150,7 +158,7 @@ function reviewsTimeline({ width } = {}) {
 ```js
 function reviewsByPreprintServer({ width } = {}) {
   return Plot.plot({
-    title: `${chosenRequest ? 'Requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    title: `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
