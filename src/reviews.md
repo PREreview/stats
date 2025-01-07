@@ -7,6 +7,8 @@ toc: false
 # PREreviews ✍️
 
 ```js
+import { capitalize } from 'npm:effect/String'
+
 const parseDate = d3.utcParse('%Y-%m-%d')
 const languageNames = new Intl.DisplayNames(['en-US'], { type: 'language' })
 const languageName = code => (code ? languageNames.of(code) : 'Unknown')
@@ -97,7 +99,9 @@ const languageColor = Plot.scale({
   },
 })
 
-const title = `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`
+const title = capitalize(
+  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
+)
 
 const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
 ```
