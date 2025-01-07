@@ -26,6 +26,8 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
   location => Array.prepend(Array.map(location.split(',').reverse(), String.trim), location),
   Array.findFirst(location =>
     Option.fromNullable(iso3166.getAlpha2Code(location, 'en')).pipe(
+      Option.orElse(() => Option.fromNullable(iso3166.getAlpha2Code(location, 'es'))),
+      Option.orElse(() => Option.fromNullable(iso3166.getAlpha2Code(location, 'pt'))),
       Option.orElse(() =>
         Option.map(
           Array.findFirst(
