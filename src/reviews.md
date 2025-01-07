@@ -96,11 +96,15 @@ const languageColor = Plot.scale({
     unknown: 'var(--theme-foreground-muted)',
   },
 })
+
+const title = `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`
+
+const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
 ```
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>${titleWithYear}</h2>
     <span class="big">${reviewsSelected.length.toLocaleString("en-US")}</span>
     ${chosenCollaborative | chosenPseudonym | chosenRequest | chosenType ? html`
       <div>${d3.format(".1%")(reviewsSelected.length / reviewsInTimePeriod.length)} of all PREreviews</div>
@@ -111,7 +115,7 @@ const languageColor = Plot.scale({
 ```js
 function reviewsTimeline({ width } = {}) {
   return Plot.plot({
-    title: `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''} per ${chosenYear ? 'week' : 'month'}`,
+    title: `${title} per ${chosenYear ? 'week' : 'month'}`,
     width: Math.max(width, 600),
     height: 400,
     color: {
@@ -158,7 +162,7 @@ function reviewsTimeline({ width } = {}) {
 ```js
 function reviewsByPreprintServer({ width } = {}) {
   return Plot.plot({
-    title: `${chosenCollaborative ? 'Collaborative ' : ''}${chosenRequest ? (chosenCollaborative ? 'requested ' : 'Requested ') : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews ${chosenPseudonym ? ' using a pseudonym' : ''} ${chosenYear ? `in ${chosenYear}` : ''} by preprint server`,
+    title: `${titleWithYear} by preprint server`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
