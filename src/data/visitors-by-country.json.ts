@@ -1,7 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
-import { Schema } from '@effect/schema'
-import { Array, Config, Effect, Option, Redacted } from 'effect'
+import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
+import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import * as Iso3166 from '../lib/Iso3166.js'
 import * as Temporal from '../lib/Temporal.js'
 
@@ -22,6 +21,7 @@ const Output = Schema.Array(
 )
 
 const program = Effect.gen(function* () {
+  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
   const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
 
@@ -44,10 +44,9 @@ const program = Effect.gen(function* () {
     Redacted.value(token),
   )
 
-  const data = yield* HttpClient.fetchOk(request).pipe(
-    Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)),
-    Effect.scoped,
-  )
+  const data = yield* client
+    .execute(request)
+    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)), Effect.scoped)
 
   const transformedData = Array.map(data, visitors => ({
     number: visitors.visits,
@@ -60,4 +59,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))

@@ -1,7 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
-import { Schema } from '@effect/schema'
-import { Effect, Record } from 'effect'
+import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
+import { Effect, Record, Schema } from 'effect'
 import { FieldIdFromUrlSchema, FieldIdSchema, SubfieldIdFromUrlSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import { UrlFromStringSchema } from '../lib/Url.js'
 
@@ -23,21 +22,20 @@ const SubfieldNames = Schema.Record({
 })
 
 const program = Effect.gen(function* () {
+  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
 
   const request1 = HttpClientRequest.get('https://api.openalex.org/subfields?per-page=200')
 
-  const data = yield* HttpClient.fetchOk(request1).pipe(
-    Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)),
-    Effect.scoped,
-  )
+  const data = yield* client
+    .execute(request1)
+    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)), Effect.scoped)
 
   const request2 = HttpClientRequest.get('https://api.openalex.org/subfields?per-page=200&page=2')
 
-  const data2 = yield* HttpClient.fetchOk(request2).pipe(
-    Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)),
-    Effect.scoped,
-  )
+  const data2 = yield* client
+    .execute(request2)
+    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)), Effect.scoped)
 
   const transformedData = Record.fromIterableWith([...data.results, ...data2.results], subfield => [
     subfield.id,
@@ -49,4 +47,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))

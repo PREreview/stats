@@ -1,5 +1,4 @@
-import { Schema } from '@effect/schema'
-import { Brand, type Predicate } from 'effect'
+import { Brand, type Predicate, Schema } from 'effect'
 import orcidUtils from 'orcid-utils'
 
 export type OrcidId = Brand.Branded<string, 'OrcidId'>

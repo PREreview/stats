@@ -1,5 +1,4 @@
-import { ParseResult, Schema } from '@effect/schema'
-import { Brand, Either } from 'effect'
+import { Brand, Either, ParseResult, Schema } from 'effect'
 import { UrlFromSelfSchema } from './Url.js'
 
 type SubfieldId = string & Brand.Brand<'OpenAlexSubfieldId'>
