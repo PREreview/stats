@@ -6,7 +6,7 @@ IMAGE_TAG=prereview-stats
 export OBSERVABLE_TELEMETRY_DISABLE := 1
 
 node_modules: package.json package-lock.json
-	npm install
+	npm install --engine-strict
 	touch node_modules
 
 .env:

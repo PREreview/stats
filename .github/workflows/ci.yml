@@ -45,7 +45,7 @@ jobs:
           key: data-${{ hashFiles('src/data/*') }}-${{ steps.date.outputs.date }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Build dist'
         run: npx observable build
@@ -115,7 +115,7 @@ jobs:
           cache: ${{ !env.ACT && 'npm' || '' }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Run formatter'
         run: npx prettier --ignore-unknown --check '**'
@@ -137,7 +137,7 @@ jobs:
           cache: ${{ !env.ACT && 'npm' || '' }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Run the linter'
         run: npx eslint . --max-warnings 0
@@ -159,7 +159,7 @@ jobs:
           cache: ${{ !env.ACT && 'npm' || '' }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Run the tests'
         run: npx vitest run
@@ -183,7 +183,7 @@ jobs:
           cache: ${{ !env.ACT && 'npm' || '' }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Download dist'
         uses: actions/download-artifact@v4.1.8
@@ -221,7 +221,7 @@ jobs:
           cache: ${{ !env.ACT && 'npm' || '' }}
 
       - name: 'Install dependencies'
-        run: npm ci
+        run: npm ci --engine-strict
 
       - name: 'Run typechecker'
         run: npx tsc --noEmit
