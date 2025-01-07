@@ -1,7 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
-import { Schema } from '@effect/schema'
-import { Config, Effect, Record, Redacted } from 'effect'
+import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
+import { Config, Effect, Record, Redacted, Schema } from 'effect'
 
 const Clubs = Schema.Array(
   Schema.Struct({
@@ -13,6 +12,7 @@ const Clubs = Schema.Array(
 const Output = Schema.Record({ key: Schema.String, value: Schema.String })
 
 const program = Effect.gen(function* () {
+  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
   const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
 
@@ -27,10 +27,9 @@ const program = Effect.gen(function* () {
     Redacted.value(token),
   )
 
-  const data = yield* HttpClient.fetchOk(request).pipe(
-    Effect.andThen(HttpClientResponse.schemaBodyJson(Clubs)),
-    Effect.scoped,
-  )
+  const data = yield* client
+    .execute(request)
+    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Clubs)), Effect.scoped)
 
   const transformedData = Record.fromIterableWith(data, club => [club.id, club.name])
 
@@ -39,4 +38,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))

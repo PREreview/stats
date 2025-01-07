@@ -1,8 +1,7 @@
-import { Schema } from '@effect/schema'
 import { rawTimeZones } from '@vvo/tzdb'
 import cities from 'all-the-cities'
 import diacritics from 'diacritics'
-import { Array, Option, Order, type Predicate, String, flow } from 'effect'
+import { Array, Option, Order, type Predicate, Schema, String, flow } from 'effect'
 import iso3166 from 'i18n-iso-countries'
 import subDivisions from 'world_countries_lists/data/subdivisions/subdivisions.json'
 

@@ -1,7 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
-import { Schema } from '@effect/schema'
-import { Effect } from 'effect'
+import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
+import { Effect, Schema } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
 import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
@@ -21,18 +20,18 @@ const Requests = Schema.Array(
 )
 
 const program = Effect.gen(function* () {
+  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
 
   const request = HttpClientRequest.get('https://coar-notify.prereview.org/requests')
 
-  const data = yield* HttpClient.fetchOk(request).pipe(
-    Effect.andThen(HttpClientResponse.schemaBodyJson(Requests)),
-    Effect.scoped,
-  )
+  const data = yield* client
+    .execute(request)
+    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Requests)), Effect.scoped)
 
   const encoded = yield* Schema.encode(Schema.parseJson(Requests))(data)
 
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))

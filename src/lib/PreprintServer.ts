@@ -1,5 +1,4 @@
-import { Schema } from '@effect/schema'
-import type { Predicate } from 'effect'
+import { type Predicate, Schema } from 'effect'
 
 export type PreprintServer = keyof typeof preprintServers
 
