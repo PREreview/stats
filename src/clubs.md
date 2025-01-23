@@ -49,6 +49,11 @@ const numberOfReviewsByClub = d3.rollup(
 
 <div class="grid grid-cols-4">
   <div class="card">
+    <h2>Total clubs</h2>
+    <span class="big">${Object.keys(allClubs).length.toLocaleString("en-US")}</span>
+  </div>
+
+  <div class="card">
     <h2>PREreviews published by clubs${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${clubReviewsInTimePeriod.length.toLocaleString("en-US")}</span>
     <div>${d3.format(".1%")(clubReviewsInTimePeriod.length / reviewsInTimePeriod.length)} of all PREreviews</div>
