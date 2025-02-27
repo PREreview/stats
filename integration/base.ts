@@ -16,6 +16,10 @@ const appFixtures: Fixtures<Record<never, never>, Record<never, never>, Playwrig
     const errors: Array<string> = []
 
     context.on('weberror', error => {
+      if (error.error().message === 'ResizeObserver loop completed with undelivered notifications.') {
+        return // https://github.com/observablehq/framework/pull/1923
+      }
+
       errors.push(error.error().message)
     })
 
