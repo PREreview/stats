@@ -1,11 +1,12 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Effect, Record, Schema } from 'effect'
+import { Effect, flow, Record, Schema, Stream } from 'effect'
 import { FieldIdFromUrlSchema, FieldIdSchema, SubfieldIdFromUrlSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import { UrlFromStringSchema } from '../lib/Url.js'
 
 const Subfields = Schema.Struct({
-  results: Schema.Array(
+  meta: Schema.Struct({ next_cursor: Schema.optionalWith(Schema.String, { as: 'Option', nullable: true }) }),
+  results: Schema.Chunk(
     Schema.Struct({
       id: Schema.compose(UrlFromStringSchema, SubfieldIdFromUrlSchema),
       display_name: Schema.String,
@@ -22,22 +23,19 @@ const SubfieldNames = Schema.Record({
 })
 
 const program = Effect.gen(function* () {
-  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
 
-  const request1 = HttpClientRequest.get('https://api.openalex.org/subfields?per-page=200')
+  const data = yield* Stream.paginateChunkEffect(
+    '*',
+    flow(
+      cursor => HttpClient.get('https://api.openalex.org/subfields', { urlParams: { 'per-page': 100, cursor } }),
+      Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)),
+      Effect.scoped,
+      Effect.andThen(response => [response.results, response.meta.next_cursor]),
+    ),
+  ).pipe(Stream.runCollect)
 
-  const data = yield* client
-    .execute(request1)
-    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)), Effect.scoped)
-
-  const request2 = HttpClientRequest.get('https://api.openalex.org/subfields?per-page=200&page=2')
-
-  const data2 = yield* client
-    .execute(request2)
-    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)), Effect.scoped)
-
-  const transformedData = Record.fromIterableWith([...data.results, ...data2.results], subfield => [
+  const transformedData = Record.fromIterableWith(data, subfield => [
     subfield.id,
     { name: subfield.display_name, field: subfield.field.id },
   ])

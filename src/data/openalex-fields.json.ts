@@ -1,11 +1,12 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Effect, Record, Schema } from 'effect'
+import { Effect, flow, Record, Schema, Stream } from 'effect'
 import { DomainIdFromUrlSchema, DomainIdSchema, FieldIdFromUrlSchema, FieldIdSchema } from '../lib/OpenAlex.js'
 import { UrlFromStringSchema } from '../lib/Url.js'
 
 const Fields = Schema.Struct({
-  results: Schema.Array(
+  meta: Schema.Struct({ next_cursor: Schema.optionalWith(Schema.String, { as: 'Option', nullable: true }) }),
+  results: Schema.Chunk(
     Schema.Struct({
       id: Schema.compose(UrlFromStringSchema, FieldIdFromUrlSchema),
       display_name: Schema.String,
@@ -22,16 +23,19 @@ const FieldNames = Schema.Record({
 })
 
 const program = Effect.gen(function* () {
-  const client = yield* HttpClient.HttpClient
   const terminal = yield* Terminal.Terminal
 
-  const request = HttpClientRequest.get('https://api.openalex.org/fields?per-page=200')
+  const data = yield* Stream.paginateChunkEffect(
+    '*',
+    flow(
+      cursor => HttpClient.get('https://api.openalex.org/fields', { urlParams: { 'per-page': 100, cursor } }),
+      Effect.andThen(HttpClientResponse.schemaBodyJson(Fields)),
+      Effect.scoped,
+      Effect.andThen(response => [response.results, response.meta.next_cursor]),
+    ),
+  ).pipe(Stream.runCollect)
 
-  const data = yield* client
-    .execute(request)
-    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Fields)), Effect.scoped)
-
-  const transformedData = Record.fromIterableWith(data.results, field => [
+  const transformedData = Record.fromIterableWith(data, field => [
     field.id,
     { name: field.display_name, domain: field.domain.id },
   ])
