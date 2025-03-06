@@ -38,7 +38,7 @@
     "prettier-plugin-toml": "^2.0.2",
     "serve": "^14.2.4",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.8"
   },
   "engines": {
     "node": "22",
