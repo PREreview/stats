@@ -22,7 +22,7 @@ export const InstantFromStringSchema: Schema.Schema<Instant, string> = Schema.tr
         try: () => Instant.from(date),
         catch: () => new ParseResult.Type(ast, date),
       }),
-    encode: instant => ParseResult.succeed(instant.toString()),
+    encode: instant => ParseResult.succeed(instant.toString({ fractionalSecondDigits: 3 })),
   },
 )
 
