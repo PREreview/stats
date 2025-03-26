@@ -13,7 +13,7 @@ import i18nIsoCountries from 'npm:i18n-iso-countries'
 
 ```js
 const parseDate = d3.utcParse('%Y-%m-%d')
-const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%SZ')
+const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%S.%LZ')
 
 const regionNames = new Intl.DisplayNames(['en-US'], { type: 'region' })
 const regionName = code => regionNames.of(code)
