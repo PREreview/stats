@@ -29,7 +29,7 @@
     "@typescript-eslint/parser": "^8.26.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^10.1.1",
-    "eslint-import-resolver-typescript": "^4.2.1",
+    "eslint-import-resolver-typescript": "^4.2.5",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-markdown": "^5.1.0",
     "prettier": "^3.5.3",
