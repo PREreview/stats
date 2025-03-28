@@ -5,7 +5,7 @@
     "@effect/platform": "^0.80.2",
     "@effect/platform-node": "^0.76.5",
     "@geo-maps/countries-land-10km": "^0.6.0",
-    "@js-temporal/polyfill": "^0.4.4",
+    "@js-temporal/polyfill": "^0.5.0",
     "@observablehq/framework": "^1.13.2",
     "@vvo/tzdb": "^6.161.0",
     "all-the-cities": "^3.1.0",
