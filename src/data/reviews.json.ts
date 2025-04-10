@@ -145,7 +145,13 @@ const getReviews = Effect.gen(function* () {
     Redacted.value(token),
   )
 
-  return yield* client.execute(request).pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Reviews)), Effect.scoped)
+  return yield* client
+    .execute(request)
+    .pipe(
+      Effect.andThen(HttpClientResponse.filterStatusOk),
+      Effect.andThen(HttpClientResponse.schemaBodyJson(Reviews)),
+      Effect.scoped,
+    )
 })
 
 const program = Effect.gen(function* () {

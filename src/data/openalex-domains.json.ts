@@ -23,6 +23,7 @@ const program = Effect.gen(function* () {
     '*',
     flow(
       cursor => HttpClient.get('https://api.openalex.org/domains', { urlParams: { 'per-page': 100, cursor } }),
+      Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Domains)),
       Effect.scoped,
       Effect.andThen(response => [response.results, response.meta.next_cursor]),

@@ -46,7 +46,11 @@ const program = Effect.gen(function* () {
 
   const data = yield* client
     .execute(request)
-    .pipe(Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)), Effect.scoped)
+    .pipe(
+      Effect.andThen(HttpClientResponse.filterStatusOk),
+      Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)),
+      Effect.scoped,
+    )
 
   const transformedData = Array.map(data, visitors => ({
     number: visitors.visits,
