@@ -273,7 +273,7 @@ function requestsByPreprintServer({ width } = {}) {
     y: { label: '' },
     marks: [
       Plot.barX(
-        chosenField ? requestsBySubfield : requestsByField,
+        requestsSelected,
         Plot.groupY(
           {
             x: 'count',
