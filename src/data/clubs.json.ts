@@ -1,17 +1,19 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Config, Effect, Record, Redacted, Schema } from 'effect'
+import * as Temporal from '../lib/Temporal.js'
 
 const Clubs = Schema.Array(
   Schema.Struct({
     id: Schema.String,
     name: Schema.String,
+    added: Temporal.PlainDateFromStringSchema,
   }),
 )
 
 const Output = Schema.Record({
   key: Schema.String,
-  value: Schema.Struct({ name: Schema.String }),
+  value: Schema.Struct({ name: Schema.String, added: Temporal.PlainDateFromStringSchema }),
 })
 
 const program = Effect.gen(function* () {

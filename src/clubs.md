@@ -68,9 +68,10 @@ const clubs = Inputs.table(
     reviews: numberOfReviewsByClub.get(club.id),
   })),
   {
-    columns: ['sortName', 'reviews'],
+    columns: ['sortName', 'added', 'reviews'],
     header: {
       sortName: 'Name',
+      added: 'Added',
       reviews: `Number of PREreviews${chosenYear ? ` in ${chosenYear}` : ''}`,
     },
     format: {
