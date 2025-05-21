@@ -11,7 +11,7 @@ const parseDate = d3.utcParse('%Y-%m-%d')
 
 const allClubs = FileAttachment('./data/clubs.json')
   .json()
-  .then(data => Object.entries(data).map(([id, club]) => ({ id, ...club })))
+  .then(data => Object.entries(data).map(([id, club]) => ({ id, ...club, added: parseDate(club.added) })))
 const allReviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
