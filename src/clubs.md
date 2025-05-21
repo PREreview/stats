@@ -62,12 +62,22 @@ const numberOfReviewsByClub = d3.rollup(
 
 ```js
 const clubs = Inputs.table(
-  allClubs.map(club => ({ ...club, reviews: numberOfReviewsByClub.get(club.id) })),
+  allClubs.map(club => ({
+    ...club,
+    sortName: club.name.toLocaleLowerCase(),
+    reviews: numberOfReviewsByClub.get(club.id),
+  })),
   {
-    columns: ['name', 'reviews'],
-    header: { name: 'Name', reviews: `Number of PREreviews${chosenYear ? ` in ${chosenYear}` : ''}` },
+    columns: ['sortName', 'reviews'],
+    header: {
+      sortName: 'Name',
+      reviews: `Number of PREreviews${chosenYear ? ` in ${chosenYear}` : ''}`,
+    },
+    format: {
+      sortName: (_sortName, index, clubs) => clubs[index].name,
+    },
     select: false,
-    sort: 'name',
+    sort: 'sortName',
     rows: 30,
   },
 )
