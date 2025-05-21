@@ -9,7 +9,10 @@ const Clubs = Schema.Array(
   }),
 )
 
-const Output = Schema.Record({ key: Schema.String, value: Schema.String })
+const Output = Schema.Record({
+  key: Schema.String,
+  value: Schema.Struct({ name: Schema.String }),
+})
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
@@ -35,7 +38,7 @@ const program = Effect.gen(function* () {
       Effect.scoped,
     )
 
-  const transformedData = Record.fromIterableWith(data, club => [club.id, club.name])
+  const transformedData = Record.fromIterableWith(data, club => [club.id, club])
 
   const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)
 
