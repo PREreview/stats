@@ -20,6 +20,7 @@ const reviews = FileAttachment('./data/reviews.json')
 
 const openAlexDomains = FileAttachment('./data/openalex-domains.json').json()
 const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
+const openAlexSubfields = FileAttachment('./data/openalex-subfields.json').json()
 ```
 
 ```js
@@ -102,6 +103,7 @@ const reviewsSelected = chosenType
 
 const reviewsByField = reviewsSelected
   .flatMap(({ fields, ...review }) => fields.map(field => ({ ...review, field })))
+  .filter(review => (chosenDomain ? openAlexFields[review.field].domain === chosenDomain : true))
   .map(({ field, ...review }) => ({ ...review, field: openAlexFields[field].name }))
 
 const languageColor = Plot.scale({
