@@ -3,6 +3,7 @@ import { NodeFileSystem, NodeHttpClient, NodeTerminal } from '@effect/platform-n
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
+import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import * as OrcidId from '../lib/OrcidId.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
 import * as Temporal from '../lib/Temporal.js'
@@ -29,6 +30,9 @@ const Reviews = Schema.Array(
     requested: Schema.Boolean,
     server: PreprintServer.PreprintServerSchema,
     type: Schema.Literal('full', 'structured', 'rapid'),
+    domains: Schema.Array(DomainIdSchema),
+    fields: Schema.Array(FieldIdSchema),
+    subfields: Schema.Array(SubfieldIdSchema),
   }),
 )
 
@@ -99,6 +103,9 @@ const getLegacyRapidReviews = Effect.gen(function* () {
         requested: false,
         server: review.preprint.preprintServer,
         type: 'rapid',
+        domains: [],
+        fields: [],
+        subfields: [],
       }) satisfies Schema.Schema.Type<typeof Reviews>[number],
   )
 })
@@ -126,6 +133,9 @@ const getLegacyReviews = Effect.gen(function* () {
         requested: false,
         server: review.preprint.preprintServer,
         type: 'full',
+        domains: [],
+        fields: [],
+        subfields: [],
       }) satisfies Schema.Schema.Type<typeof Reviews>[number],
   )
 })
