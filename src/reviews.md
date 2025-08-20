@@ -64,6 +64,26 @@ const chosenDomain = view(
     format: domain => (domain ? openAlexDomains[domain] : 'All domains'),
   }),
 )
+```
+
+```js
+const chosenField = view(
+  Inputs.select(
+    [
+      null,
+      ...Object.keys(
+        Object.fromEntries(
+          Object.entries(openAlexFields).filter(([, field]) => (chosenDomain ? field.domain === chosenDomain : true)),
+        ),
+      ),
+    ],
+    {
+      label: 'Field',
+      disabled: chosenDomain === null,
+      format: field => (field ? openAlexFields[field].name : 'All fields'),
+    },
+  ),
+)
 
 const chosenCollaborative = view(Inputs.toggle({ label: 'Collaborative' }))
 
@@ -79,13 +99,15 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsInDomain = chosenDomain
-  ? reviewsInTimePeriod.filter(d => d.domains.includes(chosenDomain))
-  : reviewsInTimePeriod
+const reviewsInFieldOrDomain = chosenField
+  ? reviewsInTimePeriod.filter(d => d.fields.includes(chosenField))
+  : chosenDomain
+    ? reviewsInTimePeriod.filter(d => d.domains.includes(chosenDomain))
+    : reviewsInTimePeriod
 
 const reviewsCollaborative = chosenCollaborative
-  ? reviewsInDomain.filter(review => review.authors.length > 1)
-  : reviewsInDomain
+  ? reviewsInFieldOrDomain.filter(review => review.authors.length > 1)
+  : reviewsInFieldOrDomain
 
 const reviewsWithRequest = chosenRequest
   ? reviewsCollaborative.filter(review => review.requested)
@@ -106,6 +128,17 @@ const reviewsByField = reviewsSelected
   .filter(review => (chosenDomain ? openAlexFields[review.field].domain === chosenDomain : true))
   .map(({ field, ...review }) => ({ ...review, field: openAlexFields[field].name }))
 
+const reviewsBySubfield = reviewsSelected
+  .flatMap(({ subfields, ...review }) => subfields.map(subfield => ({ ...review, subfield })))
+  .filter(review =>
+    chosenField
+      ? openAlexSubfields[review.subfield].field === chosenField
+      : chosenDomain
+        ? openAlexFields[openAlexSubfields[review.subfield].field].domain === chosenDomain
+        : true,
+  )
+  .map(({ subfield, ...review }) => ({ ...review, subfield: openAlexSubfields[subfield].name }))
+
 const languageColor = Plot.scale({
   color: {
     type: 'categorical',
@@ -124,7 +157,7 @@ const languageColor = Plot.scale({
 })
 
 const title = capitalize(
-  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenDomain ? `${openAlexDomains[chosenDomain]} ` : ''}${chosenClub ? 'club ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
+  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenField ? `${openAlexFields[chosenField].name} ` : chosenDomain ? `${openAlexDomains[chosenDomain]} ` : ''}${chosenClub ? 'club ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
 )
 
 const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
@@ -188,9 +221,11 @@ function reviewsTimeline({ width } = {}) {
 </div>
 
 ```js
-function reviewsByFieldTimeline({ width } = {}) {
+function reviewsByFieldOrSubfieldTimeline({ width } = {}) {
   return Plot.plot({
-    title: `${titleWithYear} by field (reviews may have multiple fields)`,
+    title: chosenField
+      ? `${titleWithYear} by subfield (reviews may have multiple subfields)`
+      : `${titleWithYear} by field (reviews may have multiple fields)`,
     width: Math.max(width, 600),
     color: {
       ...languageColor,
@@ -201,13 +236,13 @@ function reviewsByFieldTimeline({ width } = {}) {
     y: { label: '' },
     marks: [
       Plot.barX(
-        reviewsByField,
+        chosenField ? reviewsBySubfield : reviewsByField,
         Plot.groupY(
           {
             x: 'count',
           },
           {
-            y: 'field',
+            y: chosenField ? 'subfield' : 'field',
             fill: 'language',
             order: languageColor.domain,
             sort: { y: 'x', reverse: true },
@@ -228,7 +263,7 @@ function reviewsByFieldTimeline({ width } = {}) {
 
 <div class="grid grid-cols-1">
   <div class="card">
-    ${resize((width) => reviewsByFieldTimeline({width}))}
+    ${resize((width) => reviewsByFieldOrSubfieldTimeline({width}))}
   </div>
 </div>
 
