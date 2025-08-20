@@ -17,6 +17,8 @@ const preprintServers = FileAttachment('./data/preprint-servers.json').json()
 const reviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
+
+const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
 ```js
@@ -85,6 +87,10 @@ const reviewsWithPseudonym = chosenPseudonym
 const reviewsSelected = chosenType
   ? reviewsWithPseudonym.filter(review => review.type === chosenType)
   : reviewsWithPseudonym
+
+const reviewsByField = reviewsSelected
+  .flatMap(({ fields, ...review }) => fields.map(field => ({ ...review, field })))
+  .map(({ field, ...review }) => ({ ...review, field: openAlexFields[field].name }))
 
 const languageColor = Plot.scale({
   color: {
@@ -164,6 +170,51 @@ function reviewsTimeline({ width } = {}) {
 <div class="grid grid-cols-1">
   <div class="card">
     ${resize((width) => reviewsTimeline({width}))}
+  </div>
+</div>
+
+```js
+function reviewsByFieldTimeline({ width } = {}) {
+  return Plot.plot({
+    title: `${titleWithYear} by field (reviews may have multiple fields)`,
+    width: Math.max(width, 600),
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
+    x: { grid: true, label: 'Reviews', tickFormat: Math.floor, interval: 1 },
+    y: { label: '' },
+    marks: [
+      Plot.barX(
+        reviewsByField,
+        Plot.groupY(
+          {
+            x: 'count',
+          },
+          {
+            y: 'field',
+            fill: 'language',
+            order: languageColor.domain,
+            sort: { y: 'x', reverse: true },
+            tip: {
+              format: {
+                fill: languageName,
+                y: false,
+              },
+            },
+          },
+        ),
+      ),
+      Plot.axisY({ lineWidth: 20, marginLeft: 220 }),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => reviewsByFieldTimeline({width}))}
   </div>
 </div>
 
