@@ -18,6 +18,7 @@ const reviews = FileAttachment('./data/reviews.json')
   .json()
   .then(data => data.map(review => ({ ...review, createdAt: parseDate(review.createdAt) })))
 
+const openAlexDomains = FileAttachment('./data/openalex-domains.json').json()
 const openAlexFields = FileAttachment('./data/openalex-fields.json').json()
 ```
 
@@ -56,6 +57,13 @@ const chosenType = view(
   }),
 )
 
+const chosenDomain = view(
+  Inputs.select([null, ...Object.keys(openAlexDomains)], {
+    label: 'Domain',
+    format: domain => (domain ? openAlexDomains[domain] : 'All domains'),
+  }),
+)
+
 const chosenCollaborative = view(Inputs.toggle({ label: 'Collaborative' }))
 
 const chosenClub = view(Inputs.toggle({ label: 'In a club' }))
@@ -70,9 +78,13 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsCollaborative = chosenCollaborative
-  ? reviewsInTimePeriod.filter(review => review.authors.length > 1)
+const reviewsInDomain = chosenDomain
+  ? reviewsInTimePeriod.filter(d => d.domains.includes(chosenDomain))
   : reviewsInTimePeriod
+
+const reviewsCollaborative = chosenCollaborative
+  ? reviewsInDomain.filter(review => review.authors.length > 1)
+  : reviewsInDomain
 
 const reviewsWithRequest = chosenRequest
   ? reviewsCollaborative.filter(review => review.requested)
@@ -110,7 +122,7 @@ const languageColor = Plot.scale({
 })
 
 const title = capitalize(
-  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenClub ? 'club ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
+  `${chosenCollaborative ? 'collaborative ' : ''}${chosenRequest ? 'requested ' : ''}${chosenDomain ? `${openAlexDomains[chosenDomain]} ` : ''}${chosenClub ? 'club ' : ''}${chosenType ? reviewType(chosenType) : ''} PREreviews${chosenPseudonym ? ' using a pseudonym' : ''}`,
 )
 
 const titleWithYear = `${title} ${chosenYear ? ` in ${chosenYear}` : ''}`
