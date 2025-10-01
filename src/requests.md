@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: Review requests
 toc: false
 ---

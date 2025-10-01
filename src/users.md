@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: PREreviewers
 toc: false
 ---

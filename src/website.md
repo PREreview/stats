@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: Website
 toc: false
 ---
