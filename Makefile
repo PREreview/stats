@@ -1,4 +1,4 @@
-.PHONY: build build-image check format lint playwright-browser prod start test test-integration typecheck
+.PHONY: build build-image check format lint-ts playwright-browser prod start test test-integration typecheck
 
 CADDY_PASSWORD=letmein
 IMAGE_TAG=prereview-stats
@@ -21,12 +21,12 @@ build: .env node_modules
 build-image: build
 	docker build --target prod --tag ${IMAGE_TAG} .
 
-check: format lint test typecheck
+check: format lint-ts test typecheck
 
 format: node_modules
 	npx prettier --ignore-unknown --check '**'
 
-lint: node_modules
+lint-ts: node_modules
 	npx eslint . --max-warnings 0
 
 test: node_modules

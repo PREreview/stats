@@ -120,8 +120,8 @@ jobs:
       - name: 'Run formatter'
         run: npx prettier --ignore-unknown --check '**'
 
-  lint:
-    name: 'Lint'
+  lint-ts:
+    name: 'Lint TypeScript'
     runs-on: ubuntu-22.04
     timeout-minutes: 30
     if: github.event_name != 'schedule'
@@ -236,7 +236,7 @@ jobs:
     needs:
       - build-image
       - format
-      - lint
+      - lint-ts
       - test
       - test-integration
       - typecheck
