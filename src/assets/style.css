@@ -1,2 +1,12 @@
 @import url('observablehq:default.css');
 @import url('observablehq:theme-air.css');
+
+:root {
+  --sans-serif:
+    'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans',
+    'Liberation Sans', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+body {
+  font-family: var(--sans-serif);
+}

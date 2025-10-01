@@ -23,6 +23,9 @@ export default {
   root: 'src',
 
   style: 'assets/style.css',
+  globalStylesheets: [
+    'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap',
+  ],
 
   // Some additional configuration options and their defaults:
   // theme: "default", // try "light", "dark", "slate", etc.
