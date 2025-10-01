@@ -1,12 +1,25 @@
 @import url('observablehq:default.css');
 @import url('observablehq:theme-air.css');
+@import url('color.css');
 
 :root {
   --sans-serif:
     'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Noto Sans',
     'Liberation Sans', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --theme-foreground: var(--color-black-800);
+  --theme-background: var(--color-white);
+  --theme-foreground-alt: var(--color-red-600);
+  --theme-foreground-muted: var(--color-black-200);
+  --theme-foreground-faint: var(--color-black-70);
+  --theme-foreground-fainter: var(--color-black-30);
+  --theme-foreground-faintest: var(--color-black-10);
+  --theme-foreground-focus: var(--color-blue-200);
 }
 
 body {
   font-family: var(--sans-serif);
+}
+
+td {
+  color: var(--theme-foreground);
 }
