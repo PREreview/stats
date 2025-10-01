@@ -120,6 +120,28 @@ jobs:
       - name: 'Run formatter'
         run: npx prettier --ignore-unknown --check '**'
 
+  lint-css:
+    name: 'Lint CSS'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    if: github.event_name != 'schedule'
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v5.0.0
+
+      - name: 'Set up Node.js'
+        uses: actions/setup-node@v5.0.0
+        with:
+          node-version-file: package.json
+          cache: ${{ !env.ACT && 'npm' || '' }}
+
+      - name: 'Install dependencies'
+        run: npm ci --engine-strict
+
+      - name: 'Run the linter'
+        run: npx stylelint 'src/**/*.css'
+
   lint-ts:
     name: 'Lint TypeScript'
     runs-on: ubuntu-22.04
@@ -236,6 +258,7 @@ jobs:
     needs:
       - build-image
       - format
+      - lint-css
       - lint-ts
       - test
       - test-integration
