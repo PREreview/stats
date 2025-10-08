@@ -3,7 +3,7 @@ title: PREreviews
 toc: false
 ---
 
-# PREreviews ✍️
+# PREreviews
 
 ```js
 import { capitalize } from 'npm:effect/String'

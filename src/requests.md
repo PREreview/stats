@@ -3,7 +3,7 @@ title: Review requests
 toc: false
 ---
 
-# Review requests 🤞
+# Review requests
 
 ```js
 const parseTimestamp = d3.utcParse('%Y-%m-%dT%H:%M:%S.%LZ')

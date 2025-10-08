@@ -3,7 +3,7 @@ title: Website
 toc: false
 ---
 
-# Website 🌐
+# Website
 
 ```js
 import countries from 'npm:@geo-maps/countries-land-10km'

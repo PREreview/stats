@@ -3,7 +3,7 @@ title: Clubs
 toc: false
 ---
 
-# Clubs ♣️
+# Clubs
 
 ```js
 const parseDate = d3.utcParse('%Y-%m-%d')

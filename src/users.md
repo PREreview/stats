@@ -3,7 +3,7 @@ title: PREreviewers
 toc: false
 ---
 
-# PREreviewers 🫅
+# PREreviewers
 
 ```js
 import countries from 'npm:@geo-maps/countries-land-10km'
