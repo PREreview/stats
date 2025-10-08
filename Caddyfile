@@ -5,6 +5,9 @@
 	@health {
 		path /health
 	}
+	@private {
+		path /private/* /_file/data/private/*
+	}
 	@robots {
 		path /robots.txt
 	}
@@ -25,7 +28,7 @@
 
 	file_server @files
 
-	basic_auth @files {
+	basic_auth @private {
 		prereview {$PASSWORD}
 	}
 }
