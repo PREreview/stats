@@ -4,6 +4,13 @@ toc: false
 
 <div class="hero">
   <h1>PREreview Stats</h1>
+
+  <p>
+    Welcome to PREreview’s public stats dashboard! We’ve gathered together some aggregate,
+    anonymized data here to celebrate our community members’ contributions to open peer review
+    and to demonstrate PREreview’s growth and impact over time. Please let us know if you have
+    any questions by writing us at <a href="mailto:help@prereview.org">help@prereview.org</a>.
+  </p>
 </div>
 
 ```js
@@ -43,7 +50,7 @@ const clubs = FileAttachment('./data/clubs.json').json()
   flex-direction: column;
   align-items: center;
   font-family: var(--sans-serif);
-  margin: 4rem 0 8rem;
+  margin: 4rem 0 6rem;
   text-wrap: balance;
   text-align: center;
 }
@@ -55,6 +62,11 @@ const clubs = FileAttachment('./data/clubs.json').json()
   font-size: 14vw;
   font-weight: 900;
   line-height: 1;
+}
+
+.hero p {
+  text-align: left;
+  text-wrap-style: pretty;
 }
 
 @media (min-width: 640px) {
