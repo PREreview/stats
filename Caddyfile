@@ -3,14 +3,14 @@
 		not path /health /robots.txt
 	}
 	@health {
-	  path /health
+		path /health
 	}
 	@robots {
 		path /robots.txt
 	}
 
-  log
-  log_skip @health
+	log
+	log_skip @health
 
 	root * /usr/share/caddy
 
