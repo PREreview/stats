@@ -54,10 +54,10 @@ const reviewType = id => {
       return id
   }
 }
-const users = FileAttachment('./data/users.json')
+const users = FileAttachment('../data/private/users.json')
   .json()
   .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
-const reviews = Promise.all([users, FileAttachment('./data/reviews.json').json()]).then(([users, data]) =>
+const reviews = Promise.all([users, FileAttachment('../data/reviews.json').json()]).then(([users, data]) =>
   data.map(review => ({
     ...review,
     createdAt: parseDate(review.createdAt),

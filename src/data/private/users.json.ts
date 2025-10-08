@@ -1,17 +1,28 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Config, Effect, Redacted, Schema } from 'effect'
-import * as Temporal from '../lib/Temporal.js'
+import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
+import * as Iso3166 from '../../lib/Iso3166.js'
+import * as OrcidId from '../../lib/OrcidId.js'
+import * as Temporal from '../../lib/Temporal.js'
 
 const Users = Schema.Array(
   Schema.Struct({
+    orcid: OrcidId.OrcidIdSchema,
+    careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
+    location: Schema.OptionFromUndefinedOr(Schema.String),
     timestamp: Temporal.InstantFromStringSchema,
   }),
 )
 
-const Output = Schema.Struct({
-  count: Schema.NonNegativeInt,
-})
+const Output = Schema.Array(
+  Schema.Struct({
+    orcid: OrcidId.OrcidIdSchema,
+    careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
+    location: Schema.OptionFromUndefinedOr(Schema.String),
+    country: Schema.OptionFromUndefinedOr(Iso3166.Alpha2CodeSchema),
+    timestamp: Temporal.InstantFromStringSchema,
+  }),
+)
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
@@ -37,7 +48,12 @@ const program = Effect.gen(function* () {
       Effect.scoped,
     )
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Output))({ count: data.length })
+  const transformedData = Array.map(data, user => ({
+    ...user,
+    country: Option.flatMap(user.location, Iso3166.guessCountry),
+  }))
+
+  const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)
 
   yield* terminal.display(encoded)
 })
