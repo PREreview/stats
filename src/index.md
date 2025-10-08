@@ -50,13 +50,13 @@ const clubs = FileAttachment('./data/clubs.json').json()
   flex-direction: column;
   align-items: center;
   font-family: var(--sans-serif);
-  margin: 4rem 0 6rem;
+  margin: 0 0 1rem;
   text-wrap: balance;
   text-align: center;
 }
 
 .hero h1 {
-  margin: 1rem 0;
+  margin: 0;
   padding: 1rem 0;
   max-width: none;
   font-size: 14vw;
@@ -70,7 +70,12 @@ const clubs = FileAttachment('./data/clubs.json').json()
 }
 
 @media (min-width: 640px) {
+  .hero {
+    margin: 4rem 0 6rem;
+  }
+
   .hero h1 {
+    margin: 1rem 0;
     font-size: 90px;
   }
 }
