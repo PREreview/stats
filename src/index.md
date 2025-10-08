@@ -33,7 +33,7 @@ const clubs = FileAttachment('./data/clubs.json').json()
   </div>
 
   <div class="card">
-    <h2>Total users</h2>
+    <h2>Total PREreviewers</h2>
     <span class="big">${users.count.toLocaleString("en-US")}</span>
   </div>
 
