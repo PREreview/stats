@@ -1,8 +1,7 @@
 {
-  "extends": "@tsconfig/node22/tsconfig.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
-    "module": "nodenext",
     "resolveJsonModule": true
   },
   "include": ["integration", "src", "test", "*.ts"]
