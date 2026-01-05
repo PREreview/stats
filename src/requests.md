@@ -96,8 +96,10 @@ const languageColor = Plot.scale({
   },
 })
 
+const requestedReviews = d3.filter(reviews, review => review.requested)
+
 const requestsGroupedByPreprint = d3.group(requestsSelected, request => request.preprint)
-const reviewsGroupedByPreprint = d3.group(reviews, reviews => reviews.preprint)
+const reviewsGroupedByPreprint = d3.group(requestedReviews, reviews => reviews.preprint)
 
 const requestsWithAReview = d3.filter(requestsSelected, request => reviewsGroupedByPreprint.has(request.preprint))
 const requestsWithAReviewGroupedByPreprint = d3.group(requestsWithAReview, request => request.preprint)
