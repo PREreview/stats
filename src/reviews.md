@@ -310,3 +310,34 @@ function reviewsByPreprintServer({ width } = {}) {
     ${resize((width) => reviewsByPreprintServer({width}))}
   </div>
 </div>
+
+```js
+function reviewsByLanguage({ width } = {}) {
+  return Plot.plot({
+    title: `${titleWithYear} by language`,
+    width,
+    height: 100,
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
+    x: { label: 'Reviews' },
+    marks: [
+      Plot.barX(
+        reviewsSelected,
+        Plot.groupZ(
+          { x: 'count' },
+          { fill: 'language', order: languageColor.domain, tip: { format: { fill: languageName } } },
+        ),
+      ),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => reviewsByLanguage({width}))}
+  </div>
+</div>
