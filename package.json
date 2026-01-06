@@ -15,7 +15,7 @@
     "effect": "^3.3.5",
     "i18n-iso-countries": "^7.14.0",
     "iso-639-1": "^3.1.5",
-    "orcid-utils": "^1.2.2",
+    "orcid-utils": "^1.2.3",
     "world_countries_lists": "^3.3.0"
   },
   "devDependencies": {
