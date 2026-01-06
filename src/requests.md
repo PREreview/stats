@@ -304,3 +304,38 @@ function requestsByPreprintServer({ width } = {}) {
     ${resize((width) => requestsByPreprintServer({width}))}
   </div>
 </div>
+
+```js
+function requestsByLanguage({ width } = {}) {
+  return Plot.plot({
+    title: chosenField
+      ? `${openAlexFields[chosenField].name} requests ${chosenYear ? `in ${chosenYear}` : ''} by language`
+      : chosenDomain
+        ? `${openAlexDomains[chosenDomain]} requests ${chosenYear ? `in ${chosenYear}` : ''} by language`
+        : `Requests ${chosenYear ? `in ${chosenYear}` : ''} by language`,
+    width,
+    height: 100,
+    color: {
+      ...languageColor,
+      legend: true,
+      tickFormat: languageName,
+    },
+    x: { label: 'Requests' },
+    marks: [
+      Plot.barX(
+        requestsSelected,
+        Plot.groupZ(
+          { x: 'count' },
+          { fill: 'language', order: languageColor.domain, tip: { format: { fill: languageName } } },
+        ),
+      ),
+    ],
+  })
+}
+```
+
+<div class="grid grid-cols-1">
+  <div class="card">
+    ${resize((width) => requestsByLanguage({width}))}
+  </div>
+</div>
