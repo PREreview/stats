@@ -31,4 +31,8 @@
 	basic_auth @private {
 		prereview {$PASSWORD}
 	}
+
+	handle_errors 401 {
+		respond "This page is only available to PREreview staff."
+	}
 }
