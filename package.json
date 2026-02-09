@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@dotenvx/dotenvx": "^1.51.4",
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.58.2",
     "@prettier/plugin-xml": "^3.4.2",
     "@tsconfig/node24": "^24.0.3",
     "@types/all-the-cities": "^3.1.3",
