@@ -2,13 +2,12 @@ import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@ef
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Array, Config, Effect, Redacted, Schema } from 'effect'
 import * as Temporal from '../lib/Temporal.js'
-import * as Url from '../lib/Url.js'
 
 const Visitors = Schema.Array(
   Schema.Struct({
     visits: Schema.NumberFromString,
     date: Temporal.PlainYearMonthFromStringSchema,
-    referrer_hostname: Schema.OptionFromNullOr(Url.UrlFromStringSchema),
+    referrer_hostname: Schema.OptionFromNonEmptyTrimmedString,
   }),
 )
 
@@ -16,7 +15,7 @@ const Output = Schema.Array(
   Schema.Struct({
     number: Schema.NumberFromString,
     yearMonth: Temporal.PlainYearMonthFromStringSchema,
-    referrer: Schema.OptionFromNullOr(Url.UrlFromStringSchema),
+    referrer: Schema.OptionFromNullOr(Schema.NonEmptyTrimmedString),
   }),
 )
 
