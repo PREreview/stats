@@ -88,6 +88,8 @@ const chosenType = view(
     format: type => reviewType(type) ?? 'All',
   }),
 )
+
+const chosenClub = view(Inputs.toggle({ label: 'In a club' }))
 ```
 
 ```js
@@ -96,9 +98,9 @@ const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
 
-const reviewsSelected = chosenType
-  ? reviewsInTimePeriod.filter(review => review.type === chosenType)
-  : reviewsInTimePeriod
+const reviewsClub = chosenClub ? reviewsInTimePeriod.filter(review => review.club) : reviewsInTimePeriod
+
+const reviewsSelected = chosenType ? reviewsClub.filter(review => review.type === chosenType) : reviewsClub
 
 const userReviews = reviewsSelected.flatMap(({ authors, ...review }) =>
   authors.map(author => ({ ...review, ...author })),
