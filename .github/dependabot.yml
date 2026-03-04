@@ -26,6 +26,10 @@ updates:
         patterns:
           - '@effect/*'
           - 'effect'
+      stylelint:
+        patterns:
+          - 'stylelint'
+          - 'stylelint-*'
       typescript-eslint:
         patterns:
           - '@typescript-eslint/*'
