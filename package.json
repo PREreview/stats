@@ -43,7 +43,7 @@
     "stylelint-config-standard": "^40.0.0",
     "stylelint-plugin-logical-css": "^2.0.2",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "engines": {
     "node": "24",
