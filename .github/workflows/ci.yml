@@ -77,7 +77,7 @@ jobs:
         uses: docker/setup-buildx-action@v4.0.0
 
       - name: 'Download dist'
-        uses: actions/download-artifact@v8.0.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: dist
           path: dist/
@@ -208,7 +208,7 @@ jobs:
         run: npm ci --engine-strict
 
       - name: 'Download dist'
-        uses: actions/download-artifact@v8.0.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: dist
           path: dist/
@@ -274,7 +274,7 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
       - name: 'Download image'
-        uses: actions/download-artifact@v8.0.0
+        uses: actions/download-artifact@v8.0.1
         with:
           name: image
           path: /tmp
