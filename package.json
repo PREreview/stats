@@ -2,8 +2,8 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@effect/platform": "^0.95.0",
-    "@effect/platform-node": "^0.105.0",
+    "@effect/platform": "^0.96.0",
+    "@effect/platform-node": "^0.106.0",
     "@geo-maps/countries-land-10km": "^0.6.0",
     "@js-temporal/polyfill": "^0.5.1",
     "@observablehq/framework": "^1.13.4",
