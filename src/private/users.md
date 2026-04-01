@@ -169,7 +169,7 @@ const usersInTimePeriodWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthorInT
     </table>
   </div>
   <div class="card">
-    <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''} with ${chosenType ? reviewType(chosenType) : ''} PREreviews published using their public pseudonym ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''} with ${chosenType ? reviewType(chosenType) : ''} PREreviews published using their public persona ${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <table>
       <colgroup>
         <col>
