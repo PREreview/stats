@@ -35,7 +35,7 @@
     "eslint-plugin-markdown": "^5.1.0",
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "prettier-plugin-sh": "^0.18.0",
+    "prettier-plugin-sh": "^0.18.1",
     "prettier-plugin-toml": "^2.0.6",
     "serve": "^14.2.6",
     "stylelint": "^17.6.0",
