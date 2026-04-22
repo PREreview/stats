@@ -10,7 +10,7 @@ const Users = Schema.Array(
     orcid: OrcidId.OrcidIdSchema,
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
     location: Schema.OptionFromUndefinedOr(Schema.String),
-    timestamp: Temporal.InstantFromStringSchema,
+    timestamp: Schema.Union(Temporal.InstantFromStringSchema, Schema.Literal('not available from import source')),
   }),
 )
 
@@ -20,7 +20,7 @@ const Output = Schema.Array(
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
     location: Schema.OptionFromUndefinedOr(Schema.String),
     country: Schema.OptionFromUndefinedOr(Iso3166.Alpha2CodeSchema),
-    timestamp: Temporal.InstantFromStringSchema,
+    timestamp: Schema.OptionFromUndefinedOr(Temporal.InstantFromStringSchema),
   }),
 )
 
@@ -51,6 +51,7 @@ const program = Effect.gen(function* () {
   const transformedData = Array.map(data, user => ({
     ...user,
     country: Option.flatMap(user.location, Iso3166.guessCountry),
+    timestamp: Option.liftPredicate(user.timestamp, timestamp => timestamp !== 'not available from import source'),
   }))
 
   const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)

@@ -5,7 +5,7 @@ import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
   Schema.Struct({
-    timestamp: Temporal.InstantFromStringSchema,
+    timestamp: Schema.Union(Temporal.InstantFromStringSchema, Schema.Literal('not available from import source')),
   }),
 )
 

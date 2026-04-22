@@ -56,7 +56,7 @@ const reviewType = id => {
 }
 const users = FileAttachment('../data/private/users.json')
   .json()
-  .then(data => data.map(user => ({ ...user, timestamp: parseTimestamp(user.timestamp) })))
+  .then(data => data.map(user => ({ ...user, timestamp: user.timestamp ? parseTimestamp(user.timestamp) : undefined })))
 const reviews = Promise.all([users, FileAttachment('../data/reviews.json').json()]).then(([users, data]) =>
   data.map(review => ({
     ...review,
@@ -71,7 +71,9 @@ const reviews = Promise.all([users, FileAttachment('../data/reviews.json').json(
 
 ```js
 const now = new Date()
-const firstUser = d3.min(users, user => user.timestamp)
+const usersWithTimestamp = users.filter(user => user.timestamp)
+const usersWithoutTimestamp = users.filter(user => !user.timestamp)
+const firstUser = d3.min(usersWithTimestamp, user => user.timestamp)
 ```
 
 ```js
@@ -93,7 +95,9 @@ const chosenClub = view(Inputs.toggle({ label: 'In a club' }))
 ```
 
 ```js
-const usersInTimePeriod = chosenYear ? users.filter(user => user.timestamp.getUTCFullYear() === chosenYear) : users
+const usersInTimePeriod = chosenYear
+  ? usersWithTimestamp.filter(user => user.timestamp.getUTCFullYear() === chosenYear)
+  : users
 const reviewsInTimePeriod = chosenYear
   ? reviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : reviews
@@ -224,7 +228,6 @@ function mostAuthored({ width } = {}) {
 ```js
 function usersTimeline({ width } = {}) {
   return Plot.plot({
-    title: `PREreviewers joining ${chosenYear ? `in ${chosenYear} per week` : 'per month'}`,
     width: Math.max(width, 600),
     height: 400,
     y: { grid: true, label: 'PREreviewers', tickFormat: Math.floor, interval: 1 },
@@ -256,6 +259,8 @@ function usersTimeline({ width } = {}) {
 
 <div class="grid grid-cols-1">
   <div class="card">
+    <h2>${`PREreviewers joining ${chosenYear ? `in ${chosenYear} per week` : 'per month'}`}</h2>
+    <div class="muted">${chosenYear || usersWithoutTimestamp.length === 0 ? '' : `Joining date not available for ${usersWithoutTimestamp.length} PREreviewer${usersWithoutTimestamp.length > 1 ? 's' : ''} (joined before February 2021)`}</div>
     ${resize((width) => usersTimeline({width}))}
   </div>
 </div>
