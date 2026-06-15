@@ -136,6 +136,13 @@ const usersInTimePeriodWithAtLeast1ReviewPublished = d3.sum(reviewsByAuthorInTim
 const usersInTimePeriodWith1ReviewPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] === 1 ? 1 : 0))
 const usersInTimePeriodWithMoreThan1ReviewsPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] > 1 ? 1 : 0))
 const usersInTimePeriodWithMoreThan3ReviewsPublished = d3.sum(reviewsByAuthorInTimePeriod, d => (d[1] > 3 ? 1 : 0))
+
+const usersInTimePeriodOptedInToRequestNotifications = d3.filter(
+  usersInTimePeriod,
+  user => user.requestNotifications === 'opted-in',
+)
+
+const usersInTimePeriodOrcidRecordConnected = d3.filter(usersInTimePeriod, user => user.orcidRecordConnected)
 ```
 
 <div class="grid grid-cols-4">
@@ -262,6 +269,23 @@ function usersTimeline({ width } = {}) {
     <h2>${`PREreviewers joining ${chosenYear ? `in ${chosenYear} per week` : 'per month'}`}</h2>
     <div class="muted">${chosenYear || usersWithoutTimestamp.length === 0 ? '' : `Joining date not available for ${usersWithoutTimestamp.length} PREreviewer${usersWithoutTimestamp.length > 1 ? 's' : ''} (joined before February 2021)`}</div>
     ${resize((width) => usersTimeline({width}))}
+  </div>
+</div>
+
+<div class="grid grid-cols-4">
+  <div class="card">
+    <h2>PREreviewers opted in to request notifications ${chosenYear ? ` joining in ${chosenYear}` : ''}</h2> 
+    <span class="big">${usersInTimePeriodOptedInToRequestNotifications.length.toLocaleString("en-US")}</span>
+    ${usersInTimePeriodOptedInToRequestNotifications.length > 0 ? html`
+      <div>${d3.format(".1%")(usersInTimePeriodOptedInToRequestNotifications.length / usersInTimePeriod.length)} of all PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''}</div>
+    `: ''}
+  </div>
+  <div class="card">
+    <h2>PREreviewers with connected ORCID record ${chosenYear ? ` joining in ${chosenYear}` : ''}</h2>
+    <span class="big">${usersInTimePeriodOrcidRecordConnected.length.toLocaleString("en-US")}</span>
+    ${usersInTimePeriodOrcidRecordConnected.length > 0 ? html`
+      <div>${d3.format(".1%")(usersInTimePeriodOrcidRecordConnected.length / usersInTimePeriod.length)} of all PREreviewers ${chosenYear ? ` joining in ${chosenYear}` : ''}</div>
+    `: ''}
   </div>
 </div>
 

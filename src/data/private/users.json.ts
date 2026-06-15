@@ -9,6 +9,8 @@ const Users = Schema.Array(
   Schema.Struct({
     orcid: OrcidId.OrcidIdSchema,
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
+    requestNotifications: Schema.Literal('not-opted-in', 'opted-in', 'opted-out'),
+    orcidRecordConnected: Schema.Boolean,
     location: Schema.OptionFromUndefinedOr(Schema.String),
     timestamp: Schema.Union(Temporal.InstantFromStringSchema, Schema.Literal('not available from import source')),
   }),
@@ -18,6 +20,8 @@ const Output = Schema.Array(
   Schema.Struct({
     orcid: OrcidId.OrcidIdSchema,
     careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
+    requestNotifications: Schema.Literal('not-opted-in', 'opted-in', 'opted-out'),
+    orcidRecordConnected: Schema.Boolean,
     location: Schema.OptionFromUndefinedOr(Schema.String),
     country: Schema.OptionFromUndefinedOr(Iso3166.Alpha2CodeSchema),
     timestamp: Schema.OptionFromUndefinedOr(Temporal.InstantFromStringSchema),
