@@ -15,6 +15,7 @@ export const preprintServers = {
   ecoevorxiv: 'EcoEvoRxiv',
   edarxiv: 'EdArXiv',
   engrxiv: 'engrXiv',
+  'jmir-preprints': 'JMIR Preprints',
   jxiv: 'Jxiv',
   'lifecycle-journal': 'Lifecycle Journal',
   medrxiv: 'medRxiv',
@@ -32,6 +33,7 @@ export const preprintServers = {
   socarxiv: 'SocArXiv',
   ssrn: 'SSRN',
   techrxiv: 'TechRxiv',
+  umsida: 'UMSIDA Preprints',
   verixiv: 'VeriXiv',
   zenodo: 'Zenodo',
 } as const
