@@ -12,7 +12,6 @@ import i18nIsoCountries from 'npm:i18n-iso-countries'
 
 ```js
 const parseYear = d3.utcParse('%Y')
-const parseYearMonth = d3.utcParse('%Y-%m')
 
 const regionNames = new Intl.DisplayNames(['en-US'], { type: 'region' })
 const regionName = code => regionNames.of(code)
@@ -32,7 +31,7 @@ const visitorsByCountry = FileAttachment('./data/visitors-by-country.json')
   .then(data => data.map(visitor => ({ ...visitor, date: parseYear(visitor.year) })))
 const allVisitorsByReferrer = FileAttachment('./data/visitors-by-referrer.json')
   .json()
-  .then(data => data.map(visitor => ({ ...visitor, date: parseYearMonth(visitor.yearMonth) })))
+  .then(data => data.map(visitor => ({ ...visitor, date: parseYear(visitor.year) })))
 ```
 
 ```js
