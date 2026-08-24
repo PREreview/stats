@@ -7,7 +7,7 @@ import * as Temporal from '../lib/Temporal.js'
 const Visitors = Schema.Array(
   Schema.Struct({
     visits: Schema.NumberFromString,
-    date: Temporal.PlainYearMonthFromStringSchema,
+    date: Temporal.PlainYearFromStringSchema,
     country_code: Schema.OptionFromNullOr(Schema.Union(Iso3166.Alpha2CodeSchema, Schema.Literal('un'))),
   }),
 )
@@ -15,7 +15,7 @@ const Visitors = Schema.Array(
 const Output = Schema.Array(
   Schema.Struct({
     number: Schema.NumberFromString,
-    yearMonth: Temporal.PlainYearMonthFromStringSchema,
+    year: Temporal.PlainYearFromStringSchema,
     country: Schema.OptionFromNullOr(Iso3166.Alpha2CodeSchema),
   }),
 )
@@ -37,8 +37,9 @@ const program = Effect.gen(function* () {
         entity: 'pageview',
         entity_id: 'FEAJEBBA',
         aggregates: 'visits',
-        date_grouping: 'month',
+        date_grouping: 'year',
         field_grouping: 'country_code',
+        limit: 1_000,
       },
     }),
     Redacted.value(token),
@@ -54,7 +55,7 @@ const program = Effect.gen(function* () {
 
   const transformedData = Array.map(data, visitors => ({
     number: visitors.visits,
-    yearMonth: visitors.date,
+    year: visitors.date,
     country: Option.filter(visitors.country_code, Iso3166.isAlpha2Code),
   }))
 

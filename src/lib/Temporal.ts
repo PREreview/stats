@@ -51,3 +51,7 @@ export const PlainYearMonthFromStringSchema: Schema.Schema<PlainYearMonth, strin
     encode: plainYearMonth => ParseResult.succeed(plainYearMonth.toString()),
   },
 )
+
+export const PlainYearFromStringSchema: Schema.Schema<number, string> = Schema.NumberFromString.pipe(
+  Schema.compose(Schema.Int),
+)
