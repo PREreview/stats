@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
+import { Array, Config, Effect, flow, Option, Redacted, Schema } from 'effect'
 import * as Iso3166 from '../lib/Iso3166.js'
 import * as Temporal from '../lib/Temporal.js'
 
@@ -31,27 +31,32 @@ const program = Effect.gen(function* () {
 
   const token = yield* Config.redacted('FATHOM_TOKEN')
 
-  const request = HttpClientRequest.bearerToken(
-    HttpClientRequest.get('https://api.usefathom.com/v1/aggregations', {
-      urlParams: {
-        entity: 'pageview',
-        entity_id: 'FEAJEBBA',
-        aggregates: 'visits',
-        date_grouping: 'year',
-        field_grouping: 'country_code',
-        limit: 1_000,
-      },
-    }),
-    Redacted.value(token),
-  )
+  const currentYear = yield* Temporal.currentPlainYear
 
-  const data = yield* client
-    .execute(request)
-    .pipe(
+  const yearRange = Array.range(2021, currentYear)
+
+  const data = yield* Effect.forEach(
+    yearRange,
+    flow(
+      year =>
+        HttpClientRequest.get('https://api.usefathom.com/v1/aggregations', {
+          urlParams: {
+            entity: 'pageview',
+            entity_id: 'FEAJEBBA',
+            aggregates: 'visits',
+            date_grouping: 'year',
+            field_grouping: 'country_code',
+            limit: 1_000,
+            date_from: `${year}-01-01 00:00:00`,
+            date_to: `${year}-12-31 23:59:59`,
+          },
+        }),
+      HttpClientRequest.bearerToken(Redacted.value(token)),
+      client.execute,
       Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)),
-      Effect.scoped,
-    )
+    ),
+  ).pipe(Effect.andThen(Array.flatten))
 
   const transformedData = Array.map(data, visitors => ({
     number: visitors.visits,

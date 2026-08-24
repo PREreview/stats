@@ -1,11 +1,24 @@
 import { Temporal } from '@js-temporal/polyfill'
-import { ParseResult, Schema } from 'effect'
+import { Clock, Effect, ParseResult, Schema } from 'effect'
 
 export const { Instant, PlainDate, PlainYearMonth } = Temporal
 
 export type Instant = Temporal.Instant
 export type PlainDate = Temporal.PlainDate
 export type PlainYearMonth = Temporal.PlainYearMonth
+
+export const currentInstant = Effect.andThen(Clock.currentTimeMillis, millis =>
+  Temporal.Instant.fromEpochMilliseconds(millis),
+)
+
+export const currentPlainDate = Effect.andThen(currentInstant, instant =>
+  instant.toZonedDateTimeISO('UTC').toPlainDate(),
+)
+
+export const currentPlainYear = Effect.andThen(
+  currentInstant,
+  instant => instant.toZonedDateTimeISO('UTC').toPlainDate().year,
+)
 
 export const InstantFromSelfSchema = Schema.instanceOf(Temporal.Instant)
 
