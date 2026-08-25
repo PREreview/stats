@@ -1,3 +1,4 @@
+import eslintConfigPrettier from 'eslint-config-prettier'
 import importPlugin from 'eslint-plugin-import'
 import markdown from 'eslint-plugin-markdown'
 import tseslint from 'typescript-eslint'
@@ -11,6 +12,7 @@ export default tseslint.config(
   importPlugin.flatConfigs.recommended,
   importPlugin.flatConfigs.typescript,
   ...markdown.configs.recommended,
+  eslintConfigPrettier,
   {
     languageOptions: {
       parserOptions: {
