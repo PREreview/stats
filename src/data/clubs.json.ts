@@ -8,12 +8,17 @@ const Clubs = Schema.Array(
     id: Schema.String,
     name: Schema.String,
     added: Temporal.PlainDateFromStringSchema,
+    status: Schema.Literal('active', 'inactive'),
   }),
 )
 
 const Output = Schema.Record({
   key: Schema.String,
-  value: Schema.Struct({ name: Schema.String, added: Temporal.PlainDateFromStringSchema }),
+  value: Schema.Struct({
+    name: Schema.String,
+    added: Temporal.PlainDateFromStringSchema,
+    status: Schema.Literal('active', 'inactive'),
+  }),
 })
 
 const program = Effect.gen(function* () {

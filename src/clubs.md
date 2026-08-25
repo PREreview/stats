@@ -28,14 +28,20 @@ const chosenYear = view(
     format: year => year ?? 'All-time',
   }),
 )
+
+const chosenActive = view(Inputs.toggle({ label: 'Active clubs only' }))
 ```
 
 ```js
+const clubsWithStatus = chosenActive ? allClubs.filter(club => club.status === 'active') : allClubs
+
 const reviewsInTimePeriod = chosenYear
   ? allReviews.filter(review => review.createdAt.getUTCFullYear() === chosenYear)
   : allReviews
 
-const clubReviewsInTimePeriod = reviewsInTimePeriod.filter(review => review.club)
+const clubReviewsInTimePeriod = reviewsInTimePeriod.filter(review =>
+  clubsWithStatus.some(club => club.id === review.club),
+)
 ```
 
 ```js
@@ -48,12 +54,12 @@ const numberOfReviewsByClub = d3.rollup(
 
 <div class="grid grid-cols-4">
   <div class="card">
-    <h2>Total clubs</h2>
-    <span class="big">${Object.keys(allClubs).length.toLocaleString("en-US")}</span>
+    <h2>Total ${chosenActive ? 'active' : '' } clubs</h2>
+    <span class="big">${Object.keys(clubsWithStatus).length.toLocaleString("en-US")}</span>
   </div>
 
   <div class="card">
-    <h2>PREreviews published by clubs${chosenYear ? ` in ${chosenYear}` : ''}</h2>
+    <h2>PREreviews published by ${chosenActive ? 'active' : '' } clubs${chosenYear ? ` in ${chosenYear}` : ''}</h2>
     <span class="big">${clubReviewsInTimePeriod.length.toLocaleString("en-US")}</span>
     <div>${d3.format(".1%")(clubReviewsInTimePeriod.length / reviewsInTimePeriod.length)} of all PREreviews</div>
   </div>
@@ -61,7 +67,7 @@ const numberOfReviewsByClub = d3.rollup(
 
 ```js
 const clubs = Inputs.table(
-  allClubs.map(club => ({
+  clubsWithStatus.map(club => ({
     ...club,
     sortName: club.name.toLocaleLowerCase(),
     reviews: numberOfReviewsByClub.get(club.id),
