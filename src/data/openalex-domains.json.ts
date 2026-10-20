@@ -1,6 +1,6 @@
-import { HttpClient, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Effect, flow, Record, Schema, Stream } from 'effect'
+import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
 import { DomainIdFromUrlSchema, DomainIdSchema } from '../lib/OpenAlex.js'
 import { UrlFromStringSchema } from '../lib/Url.js'
 
@@ -19,10 +19,17 @@ const DomainNames = Schema.Record({ key: DomainIdSchema, value: Schema.String })
 const program = Effect.gen(function* () {
   const terminal = yield* Terminal.Terminal
 
+  const token = yield* Config.redacted('OPENALEX_API_KEY')
+
+  const httpClient = yield* Effect.andThen(
+    HttpClient.HttpClient,
+    HttpClient.mapRequest(HttpClientRequest.bearerToken(token)),
+  )
+
   const data = yield* Stream.paginateChunkEffect(
     '*',
     flow(
-      cursor => HttpClient.get('https://api.openalex.org/domains', { urlParams: { 'per-page': 100, cursor } }),
+      cursor => httpClient.get('https://api.openalex.org/domains', { urlParams: { 'per-page': 100, cursor } }),
       Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Domains)),
       Effect.scoped,
