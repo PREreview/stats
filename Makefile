@@ -13,10 +13,10 @@ node_modules: package.json package-lock.json
 	cp .env.dist .env
 
 start: .env node_modules
-	npx @dotenvx/dotenvx run -- npx observable preview
+	set -a; . .env; set +a; npx observable preview
 
 build: .env node_modules
-	npx @dotenvx/dotenvx run -- npx observable build
+	set -a; . .env; set +a; npx observable build
 
 build-image: build
 	docker build --target prod --tag ${IMAGE_TAG} .
