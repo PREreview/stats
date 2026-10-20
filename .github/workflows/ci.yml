@@ -52,6 +52,7 @@ jobs:
         env:
           PREREVIEW_REVIEWS_DATA_TOKEN: ${{ secrets.PREREVIEW_REVIEWS_DATA_TOKEN }}
           FATHOM_TOKEN: ${{ secrets.FATHOM_TOKEN }}
+          OPENALEX_API_KEY: ${{ secrets.OPENALEX_API_KEY }}
           SANDBOX: ${{ github.ref != 'refs/heads/main' }}
 
       - name: 'Upload build'
