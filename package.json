@@ -19,7 +19,7 @@
     "world_countries_lists": "^3.3.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0",
+    "@playwright/test": "^1.64.1",
     "@prettier/plugin-xml": "^3.4.2",
     "@tsconfig/node24": "^24.0.5",
     "@types/all-the-cities": "^3.1.3",
