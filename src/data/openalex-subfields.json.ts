@@ -38,7 +38,6 @@ const program = Effect.gen(function* () {
       cursor => httpClient.get('https://api.openalex.org/subfields', { urlParams: { 'per-page': 100, cursor } }),
       Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Subfields)),
-      Effect.scoped,
       Effect.andThen(response => [response.results, response.meta.next_cursor]),
     ),
   ).pipe(Stream.runCollect)

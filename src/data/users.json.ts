@@ -31,11 +31,7 @@ const program = Effect.gen(function* () {
 
   const data = yield* client
     .execute(request)
-    .pipe(
-      Effect.andThen(HttpClientResponse.filterStatusOk),
-      Effect.andThen(HttpClientResponse.schemaBodyJson(Users)),
-      Effect.scoped,
-    )
+    .pipe(Effect.andThen(HttpClientResponse.filterStatusOk), Effect.andThen(HttpClientResponse.schemaBodyJson(Users)))
 
   const encoded = yield* Schema.encode(Schema.parseJson(Output))({ count: data.length })
 

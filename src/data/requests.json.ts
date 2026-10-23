@@ -33,7 +33,6 @@ const program = Effect.gen(function* () {
     HttpClient.execute(request),
     Effect.andThen(HttpClientResponse.filterStatusOk),
     Effect.andThen(HttpClientResponse.schemaBodyJson(Requests)),
-    Effect.scoped,
   )
 
   const encoded = yield* Schema.encode(Schema.parseJson(Requests))(data)
