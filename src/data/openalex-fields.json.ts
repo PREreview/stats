@@ -2,16 +2,15 @@ import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@ef
 import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
 import { DomainIdFromUrlSchema, DomainIdSchema, FieldIdFromUrlSchema, FieldIdSchema } from '../lib/OpenAlex.js'
-import { UrlFromStringSchema } from '../lib/Url.js'
 
 const Fields = Schema.Struct({
   meta: Schema.Struct({ next_cursor: Schema.optionalWith(Schema.String, { as: 'Option', nullable: true }) }),
   results: Schema.Chunk(
     Schema.Struct({
-      id: Schema.compose(UrlFromStringSchema, FieldIdFromUrlSchema),
+      id: Schema.compose(Schema.URL, FieldIdFromUrlSchema),
       display_name: Schema.String,
       domain: Schema.Struct({
-        id: Schema.compose(UrlFromStringSchema, DomainIdFromUrlSchema),
+        id: Schema.compose(Schema.URL, DomainIdFromUrlSchema),
       }),
     }),
   ),

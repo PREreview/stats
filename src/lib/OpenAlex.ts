@@ -1,5 +1,4 @@
 import { Brand, Either, ParseResult, Schema } from 'effect'
-import { UrlFromSelfSchema } from './Url.js'
 
 type SubfieldId = string & Brand.Brand<'OpenAlexSubfieldId'>
 
@@ -7,7 +6,7 @@ const SubfieldId = Brand.nominal<SubfieldId>()
 
 export const SubfieldIdSchema = Schema.String.pipe(Schema.fromBrand(SubfieldId))
 
-export const SubfieldIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, SubfieldIdSchema, {
+export const SubfieldIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, SubfieldIdSchema, {
   decode: (url, _, ast) =>
     url.origin === 'https://openalex.org' && url.pathname.startsWith('/subfields/')
       ? Either.right(decodeURIComponent(url.pathname.substring(11)))
@@ -21,7 +20,7 @@ const FieldId = Brand.nominal<FieldId>()
 
 export const FieldIdSchema = Schema.String.pipe(Schema.fromBrand(FieldId))
 
-export const FieldIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, FieldIdSchema, {
+export const FieldIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, FieldIdSchema, {
   decode: (url, _, ast) =>
     url.origin === 'https://openalex.org' && url.pathname.startsWith('/fields/')
       ? Either.right(decodeURIComponent(url.pathname.substring(8)))
@@ -35,7 +34,7 @@ const DomainId = Brand.nominal<DomainId>()
 
 export const DomainIdSchema = Schema.String.pipe(Schema.fromBrand(DomainId))
 
-export const DomainIdFromUrlSchema = Schema.transformOrFail(UrlFromSelfSchema, DomainIdSchema, {
+export const DomainIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, DomainIdSchema, {
   decode: (url, _, ast) =>
     url.origin === 'https://openalex.org' && url.pathname.startsWith('/domains/')
       ? Either.right(decodeURIComponent(url.pathname.substring(9)))
