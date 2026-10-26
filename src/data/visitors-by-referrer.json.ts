@@ -21,7 +21,7 @@ const Visitors = Schema.Array(
 
 const Output = Schema.Array(
   Schema.Struct({
-    number: Schema.NumberFromString,
+    number: Schema.Int.check(Schema.isGreaterThan(0)),
     year: Temporal.PlainYearFromStringSchema,
     referrer: Schema.OptionFromNullOr(Schema.Trimmed.check(Schema.isNonEmpty())),
   }),

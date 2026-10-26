@@ -14,7 +14,7 @@ const Visitors = Schema.Array(
 
 const Output = Schema.Array(
   Schema.Struct({
-    number: Schema.NumberFromString,
+    number: Schema.Int.check(Schema.isGreaterThanOrEqualTo(0)),
     year: Temporal.PlainYearFromStringSchema,
     country: Schema.OptionFromNullOr(Iso3166.Alpha2CodeSchema),
   }),
