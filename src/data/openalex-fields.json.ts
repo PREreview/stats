@@ -1,6 +1,6 @@
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
-import { display, runLoader } from '../lib/Loader.js'
+import { runLoader } from '../lib/Loader.js'
 import { DomainIdFromUrlSchema, DomainIdSchema, FieldIdFromUrlSchema, FieldIdSchema } from '../lib/OpenAlex.js'
 
 const Fields = Schema.Struct({
@@ -41,7 +41,7 @@ const program = Effect.gen(function* () {
     { name: field.display_name, domain: field.domain.id },
   ])
 
-  yield* display(FieldNames, transformedData)
+  return transformedData
 })
 
-await runLoader(program)
+await runLoader(program, FieldNames)

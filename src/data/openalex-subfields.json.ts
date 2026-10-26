@@ -1,6 +1,6 @@
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
-import { display, runLoader } from '../lib/Loader.js'
+import { runLoader } from '../lib/Loader.js'
 import { FieldIdFromUrlSchema, FieldIdSchema, SubfieldIdFromUrlSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 
 const Subfields = Schema.Struct({
@@ -41,7 +41,7 @@ const program = Effect.gen(function* () {
     { name: subfield.display_name, field: subfield.field.id },
   ])
 
-  yield* display(SubfieldNames, transformedData)
+  return transformedData
 })
 
-await runLoader(program)
+await runLoader(program, SubfieldNames)

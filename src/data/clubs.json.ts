@@ -1,6 +1,6 @@
 import { Config, Effect, Record, Redacted, Schema } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
-import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
+import { runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Clubs = Schema.Array(
@@ -37,7 +37,7 @@ const program = Effect.gen(function* () {
 
   const transformedData = Record.fromIterableWith(data, club => [club.id, club])
 
-  yield* display(Output, transformedData)
+  return transformedData
 })
 
-await runLoader(unlessSandbox(program, '[]'))
+await runLoader(unlessSandbox(program, {}), Output)

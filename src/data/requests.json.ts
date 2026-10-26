@@ -2,7 +2,7 @@ import { Config, Effect, pipe, Redacted, Schema } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
-import { display, runLoader } from '../lib/Loader.js'
+import { runLoader } from '../lib/Loader.js'
 import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
 import * as Temporal from '../lib/Temporal.js'
@@ -33,7 +33,7 @@ const program = Effect.gen(function* () {
     Effect.andThen(HttpClientResponse.schemaBodyJson(Requests)),
   )
 
-  yield* display(Requests, data)
+  return data
 })
 
-await runLoader(program)
+await runLoader(program, Requests)

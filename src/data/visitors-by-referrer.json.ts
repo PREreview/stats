@@ -1,6 +1,6 @@
 import { Array, Config, Effect, flow, Option, Redacted, Schema, SchemaTransformation, String } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
-import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
+import { runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Visitors = Schema.Array(
@@ -68,7 +68,7 @@ const program = Effect.gen(function* () {
     }),
   )
 
-  yield* display(Output, transformedData)
+  return transformedData
 })
 
-await runLoader(unlessSandbox(program, '[]'))
+await runLoader(unlessSandbox(program, []), Output)

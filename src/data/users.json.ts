@@ -1,6 +1,6 @@
 import { Config, Effect, Redacted, Schema } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
-import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
+import { runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
@@ -27,7 +27,7 @@ const program = Effect.gen(function* () {
     .execute(request)
     .pipe(Effect.andThen(HttpClientResponse.filterStatusOk), Effect.andThen(HttpClientResponse.schemaBodyJson(Users)))
 
-  yield* display(Output, { count: data.length })
+  return { count: data.length }
 })
 
-await runLoader(unlessSandbox(program, '[]'))
+await runLoader(unlessSandbox(program, { count: 0 }), Output)

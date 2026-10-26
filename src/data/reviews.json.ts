@@ -2,7 +2,7 @@ import { Array, Config, Effect, FileSystem, Option, Redacted, Schema } from 'eff
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
-import { display, runLoader } from '../lib/Loader.js'
+import { runLoader } from '../lib/Loader.js'
 import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import * as OrcidId from '../lib/OrcidId.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
@@ -163,7 +163,7 @@ const getReviews = Effect.gen(function* () {
 const program = Effect.gen(function* () {
   const data = yield* Effect.map(Effect.all([getReviews, getLegacyReviews, getLegacyRapidReviews]), Array.flatten)
 
-  yield* display(Reviews, data)
+  return data
 })
 
-await runLoader(program)
+await runLoader(program, Reviews)

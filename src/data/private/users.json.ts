@@ -1,7 +1,7 @@
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Iso3166 from '../../lib/Iso3166.js'
-import { display, runLoader, unlessSandbox } from '../../lib/Loader.js'
+import { runLoader, unlessSandbox } from '../../lib/Loader.js'
 import * as OrcidId from '../../lib/OrcidId.js'
 import * as Temporal from '../../lib/Temporal.js'
 
@@ -48,7 +48,7 @@ const program = Effect.gen(function* () {
     timestamp: Option.liftPredicate(user.timestamp, timestamp => timestamp !== 'not available from import source'),
   }))
 
-  yield* display(Output, transformedData)
+  return transformedData
 })
 
-await runLoader(unlessSandbox(program, '[]'))
+await runLoader(unlessSandbox(program, []), Output)
