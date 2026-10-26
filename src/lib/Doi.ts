@@ -1,11 +1,11 @@
-import { Brand, Either, Option, ParseResult, type Predicate, Schema, String, flow } from 'effect'
+import { Brand, Effect, Option, type Predicate, Schema, SchemaIssue, SchemaTransformation, String, flow } from 'effect'
 
 export type Doi = Brand.Branded<string, 'Doi'>
 
 const isDoi: Predicate.Refinement<unknown, Doi> = (u): u is Doi =>
   typeof u === 'string' && /^10[.][0-9]{2,}(?:[.][0-9]+)*\/\S+$/.test(u) && !u.endsWith('/.') && !u.endsWith('/..')
 
-export const Doi = Brand.refined<Doi>(isDoi, s => Brand.error(`Expected ${s} to be a DOI`))
+export const Doi = Brand.make<Doi>(s => isDoi(s) || `Expected ${s} to be a DOI`)
 
 const parse: (s: string) => Option.Option<Doi> = flow(String.trim, s => {
   if (isDoi(s)) {
@@ -29,18 +29,22 @@ const parse: (s: string) => Option.Option<Doi> = flow(String.trim, s => {
   }
 })
 
-const LowercasedStringSchema = Schema.transform(Schema.String, Schema.String.pipe(Schema.lowercased()), {
-  decode: s => s.toLowerCase(),
-  encode: s => s,
-})
+const LowercasedStringSchema = Schema.String.pipe(
+  Schema.decodeTo(Schema.String.check(Schema.isLowercased()), SchemaTransformation.toLowerCase()),
+)
 
-export const DoiSchema = LowercasedStringSchema.pipe(Schema.fromBrand(Doi))
+export const DoiSchema = LowercasedStringSchema.pipe(Schema.fromBrand('Doi', Doi))
 
-export const ParseDoiSchema: Schema.Schema<Doi, string> = Schema.transformOrFail(
-  LowercasedStringSchema,
-  Schema.typeSchema(DoiSchema),
-  {
-    decode: s => Either.fromOption(parse(s), () => new ParseResult.Type(DoiSchema.ast, s)),
-    encode: ParseResult.succeed,
-  },
+export const ParseDoiSchema: Schema.Codec<Doi, string> = LowercasedStringSchema.pipe(
+  Schema.decodeTo(
+    Schema.toType(DoiSchema),
+    SchemaTransformation.transformEffect({
+      decode: (s, options) =>
+        Option.match(parse(s), {
+          onNone: () => Effect.fail(new SchemaIssue.InvalidValue(undefined, s, options)),
+          onSome: Effect.succeed,
+        }),
+      encode: Effect.succeed,
+    }),
+  ),
 )

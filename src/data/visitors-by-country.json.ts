@@ -1,5 +1,5 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Array, Config, Effect, flow, Option, Redacted, Schema } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Iso3166 from '../lib/Iso3166.js'
 import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
@@ -8,7 +8,7 @@ const Visitors = Schema.Array(
   Schema.Struct({
     visits: Schema.NumberFromString,
     date: Temporal.PlainYearFromStringSchema,
-    country_code: Schema.OptionFromNullOr(Schema.Union(Iso3166.Alpha2CodeSchema, Schema.Literal('un'))),
+    country_code: Schema.OptionFromNullOr(Schema.Union([Iso3166.Alpha2CodeSchema, Schema.Literal('un')])),
   }),
 )
 
@@ -23,7 +23,7 @@ const Output = Schema.Array(
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
 
-  const token = yield* Config.redacted('FATHOM_TOKEN')
+  const token = yield* Config.Redacted('FATHOM_TOKEN')
 
   const currentYear = yield* Temporal.currentPlainYear
 

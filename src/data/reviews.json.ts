@@ -1,5 +1,5 @@
-import { FileSystem, HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
-import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
+import { Array, Config, Effect, FileSystem, Option, Redacted, Schema } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
 import { display, runLoader } from '../lib/Loader.js'
@@ -11,7 +11,7 @@ import * as Temporal from '../lib/Temporal.js'
 const Reviews = Schema.Array(
   Schema.Struct({
     authors: Schema.Array(
-      Schema.Union(
+      Schema.Union([
         Schema.Struct({
           authorType: Schema.Literal('public'),
           author: OrcidId.OrcidIdSchema,
@@ -20,16 +20,16 @@ const Reviews = Schema.Array(
           authorType: Schema.Literal('pseudonym'),
           author: Schema.String,
         }),
-      ),
+      ]),
     ),
-    club: Schema.OptionFromUndefinedOr(Schema.String),
+    club: Schema.OptionFromOptional(Schema.String),
     createdAt: Temporal.PlainDateFromStringSchema,
     preprint: Doi.ParseDoiSchema,
-    language: Schema.OptionFromUndefinedOr(LanguageCode.LanguageCodeSchema),
+    language: Schema.OptionFromOptional(LanguageCode.LanguageCodeSchema),
     live: Schema.Boolean,
     requested: Schema.Boolean,
     server: PreprintServer.PreprintServerSchema,
-    type: Schema.Literal('full', 'structured', 'rapid'),
+    type: Schema.Literals(['full', 'structured', 'rapid']),
     domains: Schema.Array(DomainIdSchema),
     fields: Schema.Array(FieldIdSchema),
     subfields: Schema.Array(SubfieldIdSchema),
@@ -40,7 +40,7 @@ const LegacyReviews = Schema.Array(
   Schema.Struct({
     createdAt: Temporal.InstantFromStringSchema,
     authors: Schema.Array(
-      Schema.Union(
+      Schema.Union([
         Schema.Struct({
           isAnonymous: Schema.Literal(false),
           orcid: OrcidId.OrcidIdSchema,
@@ -49,7 +49,7 @@ const LegacyReviews = Schema.Array(
           isAnonymous: Schema.Literal(true),
           name: Schema.String,
         }),
-      ),
+      ]),
     ),
     preprint: Schema.Struct({
       handle: Doi.ParseDoiSchema,
@@ -62,7 +62,7 @@ const LegacyRapidReviews = Schema.Struct({
   data: Schema.Array(
     Schema.Struct({
       createdAt: Temporal.InstantFromStringSchema,
-      author: Schema.Union(
+      author: Schema.Union([
         Schema.Struct({
           isAnonymous: Schema.Literal(false),
           orcid: OrcidId.OrcidIdSchema,
@@ -71,7 +71,7 @@ const LegacyRapidReviews = Schema.Struct({
           isAnonymous: Schema.Literal(true),
           name: Schema.String,
         }),
-      ),
+      ]),
       preprint: Schema.Struct({
         handle: Doi.ParseDoiSchema,
         preprintServer: PreprintServer.PreprintServerSchema,
@@ -84,7 +84,7 @@ const getLegacyRapidReviews = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
 
   const file = yield* fs.readFileString('src/data/legacy/rapid-reviews.json')
-  const data = yield* Schema.decodeUnknown(Schema.parseJson(LegacyRapidReviews))(file)
+  const data = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(LegacyRapidReviews))(file)
 
   return Array.map(
     data.data,
@@ -114,7 +114,7 @@ const getLegacyReviews = Effect.gen(function* () {
   const fs = yield* FileSystem.FileSystem
 
   const file = yield* fs.readFileString('src/data/legacy/reviews.json')
-  const data = yield* Schema.decodeUnknown(Schema.parseJson(LegacyReviews))(file)
+  const data = yield* Schema.decodeUnknownEffect(Schema.fromJsonString(LegacyReviews))(file)
 
   return Array.map(
     data,
@@ -142,13 +142,13 @@ const getLegacyReviews = Effect.gen(function* () {
 
 const getReviews = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
-  const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
+  const sandbox = yield* Config.withDefault(Config.Boolean('SANDBOX'), false)
 
   if (sandbox) {
     return []
   }
 
-  const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
+  const token = yield* Config.Redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
     HttpClientRequest.get('https://prereview.org/reviews-data'),

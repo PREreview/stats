@@ -1,5 +1,5 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, Record, Redacted, Schema } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
@@ -8,23 +8,23 @@ const Clubs = Schema.Array(
     id: Schema.String,
     name: Schema.String,
     added: Temporal.PlainDateFromStringSchema,
-    status: Schema.Literal('active', 'inactive'),
+    status: Schema.Literals(['active', 'inactive']),
   }),
 )
 
-const Output = Schema.Record({
-  key: Schema.String,
-  value: Schema.Struct({
+const Output = Schema.Record(
+  Schema.String,
+  Schema.Struct({
     name: Schema.String,
     added: Temporal.PlainDateFromStringSchema,
-    status: Schema.Literal('active', 'inactive'),
+    status: Schema.Literals(['active', 'inactive']),
   }),
-})
+)
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
 
-  const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
+  const token = yield* Config.Redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
     HttpClientRequest.get('https://prereview.org/clubs-data'),

@@ -1,35 +1,32 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import { display, runLoader } from '../lib/Loader.js'
 import { DomainIdFromUrlSchema, DomainIdSchema, FieldIdFromUrlSchema, FieldIdSchema } from '../lib/OpenAlex.js'
 
 const Fields = Schema.Struct({
-  meta: Schema.Struct({ next_cursor: Schema.optionalWith(Schema.String, { as: 'Option', nullable: true }) }),
-  results: Schema.Chunk(
+  meta: Schema.Struct({ next_cursor: Schema.OptionFromOptionalNullOr(Schema.String) }),
+  results: Schema.Array(
     Schema.Struct({
-      id: Schema.compose(Schema.URL, FieldIdFromUrlSchema),
+      id: Schema.URLFromString.pipe(Schema.decodeTo(FieldIdFromUrlSchema)),
       display_name: Schema.String,
       domain: Schema.Struct({
-        id: Schema.compose(Schema.URL, DomainIdFromUrlSchema),
+        id: Schema.URLFromString.pipe(Schema.decodeTo(DomainIdFromUrlSchema)),
       }),
     }),
   ),
 })
 
-const FieldNames = Schema.Record({
-  key: FieldIdSchema,
-  value: Schema.Struct({ name: Schema.String, domain: DomainIdSchema }),
-})
+const FieldNames = Schema.Record(FieldIdSchema, Schema.Struct({ name: Schema.String, domain: DomainIdSchema }))
 
 const program = Effect.gen(function* () {
-  const token = yield* Config.redacted('OPENALEX_API_KEY')
+  const token = yield* Config.Redacted('OPENALEX_API_KEY')
 
   const httpClient = yield* Effect.map(
     HttpClient.HttpClient,
     HttpClient.mapRequest(HttpClientRequest.bearerToken(token)),
   )
 
-  const data = yield* Stream.paginateChunkEffect(
+  const data = yield* Stream.paginate(
     '*',
     flow(
       cursor => httpClient.get('https://api.openalex.org/fields', { urlParams: { 'per-page': 100, cursor } }),

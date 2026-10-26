@@ -26,7 +26,7 @@
     "import/no-extraneous-dependencies": ["error"],
     "import/no-internal-modules": [
       "error",
-      { "allow": ["*/lib/*", "vitest/config", "world_countries_lists/data/**/*.json"] }
+      { "allow": ["*/lib/*", "effect/http", "vitest/config", "world_countries_lists/data/**/*.json"] }
     ],
     "import/no-named-as-default": "off",
     "import/no-named-as-default-member": "off",

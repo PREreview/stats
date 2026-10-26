@@ -1,5 +1,5 @@
 import { Temporal } from '@js-temporal/polyfill'
-import { Clock, Effect, ParseResult, Schema } from 'effect'
+import { Clock, Effect, Number, Option, Schema, SchemaGetter, SchemaIssue, SchemaTransformation } from 'effect'
 
 export const { Instant, PlainDate, PlainYearMonth } = Temporal
 
@@ -24,45 +24,56 @@ export const PlainDateFromSelfSchema = Schema.instanceOf(PlainDate)
 
 export const PlainYearMonthFromSelfSchema = Schema.instanceOf(PlainYearMonth)
 
-export const InstantFromStringSchema: Schema.Schema<Instant, string> = Schema.transformOrFail(
-  Schema.String,
-  InstantFromSelfSchema,
-  {
-    decode: (date, _, ast) =>
-      ParseResult.try({
-        try: () => Instant.from(date),
-        catch: () => new ParseResult.Type(ast, date),
-      }),
-    encode: instant => ParseResult.succeed(instant.toString({ fractionalSecondDigits: 3 })),
-  },
+export const InstantFromStringSchema: Schema.Codec<Instant, string> = Schema.String.pipe(
+  Schema.decodeTo(
+    InstantFromSelfSchema,
+    SchemaTransformation.transformEffect({
+      decode: (date, options) =>
+        Effect.try({
+          try: () => Instant.from(date),
+          catch: () => new SchemaIssue.InvalidValue(undefined, date, options),
+        }),
+      encode: instant => Effect.succeed(instant.toString({ fractionalSecondDigits: 3 })),
+    }),
+  ),
 )
 
-export const PlainDateFromStringSchema: Schema.Schema<PlainDate, string> = Schema.transformOrFail(
-  Schema.String,
-  PlainDateFromSelfSchema,
-  {
-    decode: (date, _, ast) =>
-      ParseResult.try({
-        try: () => PlainDate.from(date, { overflow: 'reject' }),
-        catch: () => new ParseResult.Type(ast, date),
-      }),
-    encode: plainDate => ParseResult.succeed(plainDate.toString()),
-  },
+export const PlainDateFromStringSchema: Schema.Codec<PlainDate, string> = Schema.String.pipe(
+  Schema.decodeTo(
+    PlainDateFromSelfSchema,
+    SchemaTransformation.transformEffect({
+      decode: (date, options) =>
+        Effect.try({
+          try: () => PlainDate.from(date, { overflow: 'reject' }),
+          catch: () => new SchemaIssue.InvalidValue(undefined, date, options),
+        }),
+      encode: plainDate => Effect.succeed(plainDate.toString()),
+    }),
+  ),
 )
 
-export const PlainYearMonthFromStringSchema: Schema.Schema<PlainYearMonth, string> = Schema.transformOrFail(
-  Schema.String,
-  PlainYearMonthFromSelfSchema,
-  {
-    decode: (yearMonth, _, ast) =>
-      ParseResult.try({
-        try: () => PlainYearMonth.from(yearMonth, { overflow: 'reject' }),
-        catch: () => new ParseResult.Type(ast, yearMonth),
-      }),
-    encode: plainYearMonth => ParseResult.succeed(plainYearMonth.toString()),
-  },
+export const PlainYearMonthFromStringSchema: Schema.Codec<PlainYearMonth, string> = Schema.String.pipe(
+  Schema.decodeTo(
+    PlainYearMonthFromSelfSchema,
+    SchemaTransformation.transformEffect({
+      decode: (yearMonth, options) =>
+        Effect.try({
+          try: () => PlainYearMonth.from(yearMonth, { overflow: 'reject' }),
+          catch: () => new SchemaIssue.InvalidValue(undefined, yearMonth, options),
+        }),
+      encode: plainYearMonth => Effect.succeed(plainYearMonth.toString()),
+    }),
+  ),
 )
 
-export const PlainYearFromStringSchema: Schema.Schema<number, string> = Schema.NumberFromString.pipe(
-  Schema.compose(Schema.Int),
+export const PlainYearFromStringSchema: Schema.Codec<number, string> = Schema.String.pipe(
+  Schema.decodeTo(Schema.Int, {
+    decode: SchemaGetter.transformEffect(year =>
+      Option.match(Number.parse(year), {
+        onNone: () => Effect.fail(new SchemaIssue.InvalidValue()),
+        onSome: Effect.succeed,
+      }),
+    ),
+    encode: SchemaGetter.String(),
+  }),
 )

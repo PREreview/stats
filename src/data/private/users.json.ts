@@ -1,5 +1,5 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Iso3166 from '../../lib/Iso3166.js'
 import { display, runLoader, unlessSandbox } from '../../lib/Loader.js'
 import * as OrcidId from '../../lib/OrcidId.js'
@@ -8,30 +8,30 @@ import * as Temporal from '../../lib/Temporal.js'
 const Users = Schema.Array(
   Schema.Struct({
     orcid: OrcidId.OrcidIdSchema,
-    careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
-    requestNotifications: Schema.Literal('not-opted-in', 'opted-in', 'opted-out'),
+    careerStage: Schema.OptionFromOptional(Schema.Literals(['early', 'mid', 'late'])),
+    requestNotifications: Schema.Literals(['not-opted-in', 'opted-in', 'opted-out']),
     orcidRecordConnected: Schema.Boolean,
-    location: Schema.OptionFromUndefinedOr(Schema.String),
-    timestamp: Schema.Union(Temporal.InstantFromStringSchema, Schema.Literal('not available from import source')),
+    location: Schema.OptionFromOptional(Schema.String),
+    timestamp: Schema.Union([Temporal.InstantFromStringSchema, Schema.Literal('not available from import source')]),
   }),
 )
 
 const Output = Schema.Array(
   Schema.Struct({
     orcid: OrcidId.OrcidIdSchema,
-    careerStage: Schema.OptionFromUndefinedOr(Schema.Literal('early', 'mid', 'late')),
-    requestNotifications: Schema.Literal('not-opted-in', 'opted-in', 'opted-out'),
+    careerStage: Schema.OptionFromOptional(Schema.Literals(['early', 'mid', 'late'])),
+    requestNotifications: Schema.Literals(['not-opted-in', 'opted-in', 'opted-out']),
     orcidRecordConnected: Schema.Boolean,
-    location: Schema.OptionFromUndefinedOr(Schema.String),
-    country: Schema.OptionFromUndefinedOr(Iso3166.Alpha2CodeSchema),
-    timestamp: Schema.OptionFromUndefinedOr(Temporal.InstantFromStringSchema),
+    location: Schema.OptionFromOptional(Schema.String),
+    country: Schema.OptionFromOptional(Iso3166.Alpha2CodeSchema),
+    timestamp: Schema.OptionFromOptional(Temporal.InstantFromStringSchema),
   }),
 )
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
 
-  const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
+  const token = yield* Config.Redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
     HttpClientRequest.get('https://prereview.org/users-data'),

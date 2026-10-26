@@ -10,10 +10,10 @@ export type Alpha2Code = iso3166.Alpha2Code
 export const isAlpha2Code: Predicate.Refinement<unknown, Alpha2Code> = (u): u is Alpha2Code =>
   typeof u === 'string' && Object.hasOwn(iso3166.getAlpha2Codes(), u)
 
-export const Alpha2CodeSchema: Schema.Schema<Alpha2Code, string> = Schema.String.pipe(Schema.filter(isAlpha2Code))
+export const Alpha2CodeSchema: Schema.Codec<Alpha2Code, string> = Schema.String.pipe(Schema.refine(isAlpha2Code))
 
 const cities10000 = Array.filter(
-  Array.sortWith(cities, city => city.population, Order.reverse(Order.number)),
+  Array.sortWith(cities, city => city.population, Order.flip(Order.Number)),
   city => city.population >= 10_000,
 )
 
@@ -26,9 +26,9 @@ export const guessCountry: (location: string) => Option.Option<Alpha2Code> = flo
   String.replaceAll(/(^| )(the|near|greater) /gi, ''),
   location => Array.prepend(Array.map(location.split(',').reverse(), String.trim), location),
   Array.findFirst(location =>
-    Option.fromNullable(iso3166.getAlpha2Code(location, 'en')).pipe(
-      Option.orElse(() => Option.fromNullable(iso3166.getAlpha2Code(location, 'es'))),
-      Option.orElse(() => Option.fromNullable(iso3166.getAlpha2Code(location, 'pt'))),
+    Option.fromUndefinedOr(iso3166.getAlpha2Code(location, 'en')).pipe(
+      Option.orElse(() => Option.fromUndefinedOr(iso3166.getAlpha2Code(location, 'es'))),
+      Option.orElse(() => Option.fromUndefinedOr(iso3166.getAlpha2Code(location, 'pt'))),
       Option.orElse(() =>
         Option.map(
           Array.findFirst(

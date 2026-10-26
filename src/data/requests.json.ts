@@ -1,5 +1,5 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, pipe, Redacted, Schema } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
 import { display, runLoader } from '../lib/Loader.js'
@@ -11,7 +11,7 @@ const Requests = Schema.Array(
   Schema.Struct({
     timestamp: Temporal.InstantFromStringSchema,
     preprint: Doi.ParseDoiSchema,
-    server: Schema.Union(PreprintServer.PreprintServerSchema, Schema.Literal('unable to determine server')),
+    server: Schema.Union([PreprintServer.PreprintServerSchema, Schema.Literal('unable to determine server')]),
     language: Schema.OptionFromNullOr(LanguageCode.LanguageCodeSchema),
     fields: Schema.Array(FieldIdSchema),
     subfields: Schema.Array(SubfieldIdSchema),
@@ -20,7 +20,7 @@ const Requests = Schema.Array(
 )
 
 const program = Effect.gen(function* () {
-  const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
+  const token = yield* Config.Redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
   const request = HttpClientRequest.bearerToken(
     HttpClientRequest.get('https://prereview.org/requests-data'),

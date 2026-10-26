@@ -6,4 +6,4 @@ export { type LanguageCode } from 'iso-639-1'
 export const isLanguageCode: Predicate.Refinement<unknown, LanguageCode> = (u): u is LanguageCode =>
   typeof u === 'string' && iso6391.validate(u)
 
-export const LanguageCodeSchema: Schema.Schema<LanguageCode, string> = Schema.String.pipe(Schema.filter(isLanguageCode))
+export const LanguageCodeSchema: Schema.Codec<LanguageCode, string> = Schema.String.pipe(Schema.refine(isLanguageCode))

@@ -1,5 +1,5 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
-import { Array, Config, Effect, flow, Redacted, Schema } from 'effect'
+import { Array, Config, Effect, flow, Option, Redacted, Schema, SchemaTransformation, String } from 'effect'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from 'effect/http'
 import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
@@ -7,7 +7,15 @@ const Visitors = Schema.Array(
   Schema.Struct({
     visits: Schema.NumberFromString,
     date: Temporal.PlainYearFromStringSchema,
-    referrer_hostname: Schema.OptionFromNonEmptyTrimmedString,
+    referrer_hostname: Schema.String.pipe(
+      Schema.decodeTo(
+        Schema.Option(Schema.Trimmed.check(Schema.isNonEmpty())),
+        SchemaTransformation.transform({
+          decode: hostname => Option.filter(Option.some(hostname.trim()), String.isNonEmpty),
+          encode: Option.getOrElse(() => ''),
+        }),
+      ),
+    ),
   }),
 )
 
@@ -15,14 +23,14 @@ const Output = Schema.Array(
   Schema.Struct({
     number: Schema.NumberFromString,
     year: Temporal.PlainYearFromStringSchema,
-    referrer: Schema.OptionFromNullOr(Schema.NonEmptyTrimmedString),
+    referrer: Schema.OptionFromNullOr(Schema.Trimmed.check(Schema.isNonEmpty())),
   }),
 )
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
 
-  const token = yield* Config.redacted('FATHOM_TOKEN')
+  const token = yield* Config.Redacted('FATHOM_TOKEN')
 
   const currentYear = yield* Temporal.currentPlainYear
 

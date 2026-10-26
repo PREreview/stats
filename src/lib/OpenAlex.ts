@@ -1,43 +1,58 @@
-import { Brand, Either, ParseResult, Schema } from 'effect'
+import { Brand, Effect, Schema, SchemaIssue, SchemaTransformation } from 'effect'
 
 type SubfieldId = string & Brand.Brand<'OpenAlexSubfieldId'>
 
 const SubfieldId = Brand.nominal<SubfieldId>()
 
-export const SubfieldIdSchema = Schema.String.pipe(Schema.fromBrand(SubfieldId))
+export const SubfieldIdSchema = Schema.String.pipe(Schema.fromBrand('OpenAlexSubfieldId', SubfieldId))
 
-export const SubfieldIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, SubfieldIdSchema, {
-  decode: (url, _, ast) =>
-    url.origin === 'https://openalex.org' && url.pathname.startsWith('/subfields/')
-      ? Either.right(decodeURIComponent(url.pathname.substring(11)))
-      : Either.left(new ParseResult.Type(ast, url)),
-  encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/subfields/${encodeURIComponent(topicId)}`)),
-})
+export const SubfieldIdFromUrlSchema = Schema.URL.pipe(
+  Schema.decodeTo(
+    SubfieldIdSchema,
+    SchemaTransformation.transformEffect({
+      decode: (url, options) =>
+        url.origin === 'https://openalex.org' && url.pathname.startsWith('/subfields/')
+          ? Effect.succeed(decodeURIComponent(url.pathname.substring(11)))
+          : Effect.fail(new SchemaIssue.InvalidValue(undefined, url, options)),
+      encode: topicId => Effect.succeed(new URL(`https://openalex.org/subfields/${encodeURIComponent(topicId)}`)),
+    }),
+  ),
+)
 
 type FieldId = string & Brand.Brand<'OpenAlexFieldId'>
 
 const FieldId = Brand.nominal<FieldId>()
 
-export const FieldIdSchema = Schema.String.pipe(Schema.fromBrand(FieldId))
+export const FieldIdSchema = Schema.String.pipe(Schema.fromBrand('OpenAlexFieldId', FieldId))
 
-export const FieldIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, FieldIdSchema, {
-  decode: (url, _, ast) =>
-    url.origin === 'https://openalex.org' && url.pathname.startsWith('/fields/')
-      ? Either.right(decodeURIComponent(url.pathname.substring(8)))
-      : Either.left(new ParseResult.Type(ast, url)),
-  encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/fields/${encodeURIComponent(topicId)}`)),
-})
+export const FieldIdFromUrlSchema = Schema.URL.pipe(
+  Schema.decodeTo(
+    FieldIdSchema,
+    SchemaTransformation.transformEffect({
+      decode: (url, options) =>
+        url.origin === 'https://openalex.org' && url.pathname.startsWith('/fields/')
+          ? Effect.succeed(decodeURIComponent(url.pathname.substring(8)))
+          : Effect.fail(new SchemaIssue.InvalidValue(undefined, url, options)),
+      encode: topicId => Effect.succeed(new URL(`https://openalex.org/fields/${encodeURIComponent(topicId)}`)),
+    }),
+  ),
+)
 
 type DomainId = string & Brand.Brand<'OpenAlexDomainId'>
 
 const DomainId = Brand.nominal<DomainId>()
 
-export const DomainIdSchema = Schema.String.pipe(Schema.fromBrand(DomainId))
+export const DomainIdSchema = Schema.String.pipe(Schema.fromBrand('OpenAlexDomainId', DomainId))
 
-export const DomainIdFromUrlSchema = Schema.transformOrFail(Schema.URLFromSelf, DomainIdSchema, {
-  decode: (url, _, ast) =>
-    url.origin === 'https://openalex.org' && url.pathname.startsWith('/domains/')
-      ? Either.right(decodeURIComponent(url.pathname.substring(9)))
-      : Either.left(new ParseResult.Type(ast, url)),
-  encode: topicId => ParseResult.succeed(new URL(`https://openalex.org/domains/${encodeURIComponent(topicId)}`)),
-})
+export const DomainIdFromUrlSchema = Schema.URL.pipe(
+  Schema.decodeTo(
+    DomainIdSchema,
+    SchemaTransformation.transformEffect({
+      decode: (url, options) =>
+        url.origin === 'https://openalex.org' && url.pathname.startsWith('/domains/')
+          ? Effect.succeed(decodeURIComponent(url.pathname.substring(9)))
+          : Effect.fail(new SchemaIssue.InvalidValue(undefined, url, options)),
+      encode: topicId => Effect.succeed(new URL(`https://openalex.org/domains/${encodeURIComponent(topicId)}`)),
+    }),
+  ),
+)

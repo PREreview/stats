@@ -41,4 +41,4 @@ export const preprintServers = {
 const isPreprintServer: Predicate.Refinement<unknown, PreprintServer> = (u): u is PreprintServer =>
   typeof u === 'string' && Object.hasOwn(preprintServers, u)
 
-export const PreprintServerSchema = Schema.String.pipe(Schema.filter(isPreprintServer))
+export const PreprintServerSchema = Schema.String.pipe(Schema.refine(isPreprintServer))
