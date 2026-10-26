@@ -7,7 +7,7 @@ import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex
 import * as PreprintServer from '../lib/PreprintServer.js'
 import * as Temporal from '../lib/Temporal.js'
 
-const Requests = Schema.Chunk(
+const Requests = Schema.Array(
   Schema.Struct({
     timestamp: Temporal.InstantFromStringSchema,
     preprint: Doi.ParseDoiSchema,
