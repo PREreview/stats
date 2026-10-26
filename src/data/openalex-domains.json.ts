@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
+import { runLoader } from '../lib/Loader.js'
 import { DomainIdFromUrlSchema, DomainIdSchema } from '../lib/OpenAlex.js'
 
 const Domains = Schema.Struct({
@@ -42,4 +42,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))
+await runLoader(program)

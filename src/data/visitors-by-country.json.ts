@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Array, Config, Effect, flow, Option, Redacted, Schema } from 'effect'
 import * as Iso3166 from '../lib/Iso3166.js'
+import { runLoader } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Visitors = Schema.Array(
@@ -69,4 +69,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeHttpClient.layer), Effect.provide(NodeTerminal.layer)))
+await runLoader(program)

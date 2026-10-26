@@ -1,6 +1,6 @@
 import { Terminal } from '@effect/platform'
-import { NodeTerminal } from '@effect/platform-node'
 import { Effect, Schema } from 'effect'
+import { runLoader } from '../lib/Loader.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
 
 const Output = Schema.Record({ key: Schema.String, value: Schema.String })
@@ -13,4 +13,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(program.pipe(Effect.provide(NodeTerminal.layer)))
+await runLoader(program)

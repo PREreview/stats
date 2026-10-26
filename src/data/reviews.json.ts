@@ -1,8 +1,8 @@
 import { FileSystem, HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
-import { NodeFileSystem, NodeHttpClient, NodeTerminal } from '@effect/platform-node'
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
+import { runLoader } from '../lib/Loader.js'
 import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import * as OrcidId from '../lib/OrcidId.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
@@ -170,10 +170,4 @@ const program = Effect.gen(function* () {
   yield* terminal.display(encoded)
 })
 
-await Effect.runPromise(
-  program.pipe(
-    Effect.provide(NodeHttpClient.layer),
-    Effect.provide(NodeTerminal.layer),
-    Effect.provide(NodeFileSystem.layer),
-  ),
-)
+await runLoader(program)
