@@ -8,7 +8,7 @@ import subDivisions from 'world_countries_lists/data/subdivisions/subdivisions.j
 export type Alpha2Code = iso3166.Alpha2Code
 
 export const isAlpha2Code: Predicate.Refinement<unknown, Alpha2Code> = (u): u is Alpha2Code =>
-  typeof u === 'string' && u in iso3166.getAlpha2Codes()
+  typeof u === 'string' && Object.hasOwn(iso3166.getAlpha2Codes(), u)
 
 export const Alpha2CodeSchema: Schema.Schema<Alpha2Code, string> = Schema.String.pipe(Schema.filter(isAlpha2Code))
 

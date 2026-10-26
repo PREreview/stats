@@ -9,7 +9,7 @@ describe('Alpha2CodeSchema', () => {
     expect(actual).toStrictEqual(input)
   })
 
-  test.for(['', 'gb', 'UK', 'GBR', 'XX', 123])("doesn't decode %s", input => {
+  test.for(['', 'gb', 'UK', 'GBR', 'XX', 123, 'toString'])("doesn't decode %s", input => {
     expect(() => Schema.decodeUnknownSync(_.Alpha2CodeSchema)(input)).toThrow()
   })
 
