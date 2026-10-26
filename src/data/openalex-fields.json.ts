@@ -24,7 +24,7 @@ const FieldNames = Schema.Record({
 const program = Effect.gen(function* () {
   const token = yield* Config.redacted('OPENALEX_API_KEY')
 
-  const httpClient = yield* Effect.andThen(
+  const httpClient = yield* Effect.map(
     HttpClient.HttpClient,
     HttpClient.mapRequest(HttpClientRequest.bearerToken(token)),
   )
@@ -35,7 +35,7 @@ const program = Effect.gen(function* () {
       cursor => httpClient.get('https://api.openalex.org/fields', { urlParams: { 'per-page': 100, cursor } }),
       Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Fields)),
-      Effect.andThen(response => [response.results, response.meta.next_cursor]),
+      Effect.map(response => [response.results, response.meta.next_cursor]),
     ),
   ).pipe(Stream.runCollect)
 

@@ -7,15 +7,13 @@ export type Instant = Temporal.Instant
 export type PlainDate = Temporal.PlainDate
 export type PlainYearMonth = Temporal.PlainYearMonth
 
-export const currentInstant = Effect.andThen(Clock.currentTimeMillis, millis =>
+export const currentInstant = Effect.map(Clock.currentTimeMillis, millis =>
   Temporal.Instant.fromEpochMilliseconds(millis),
 )
 
-export const currentPlainDate = Effect.andThen(currentInstant, instant =>
-  instant.toZonedDateTimeISO('UTC').toPlainDate(),
-)
+export const currentPlainDate = Effect.map(currentInstant, instant => instant.toZonedDateTimeISO('UTC').toPlainDate())
 
-export const currentPlainYear = Effect.andThen(
+export const currentPlainYear = Effect.map(
   currentInstant,
   instant => instant.toZonedDateTimeISO('UTC').toPlainDate().year,
 )

@@ -50,7 +50,7 @@ const program = Effect.gen(function* () {
       Effect.andThen(HttpClientResponse.filterStatusOk),
       Effect.andThen(HttpClientResponse.schemaBodyJson(Visitors)),
     ),
-  ).pipe(Effect.andThen(Array.flatten))
+  ).pipe(Effect.map(Array.flatten))
 
   const transformedData = Array.map(data, visitors => ({
     number: visitors.visits,
