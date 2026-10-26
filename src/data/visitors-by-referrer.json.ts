@@ -1,6 +1,6 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Array, Config, Effect, flow, Redacted, Schema } from 'effect'
-import { display, runLoader } from '../lib/Loader.js'
+import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Visitors = Schema.Array(
@@ -21,12 +21,6 @@ const Output = Schema.Array(
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
-  const terminal = yield* Terminal.Terminal
-  const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
-
-  if (sandbox) {
-    return yield* terminal.display('[]')
-  }
 
   const token = yield* Config.redacted('FATHOM_TOKEN')
 
@@ -69,4 +63,4 @@ const program = Effect.gen(function* () {
   yield* display(Output, transformedData)
 })
 
-await runLoader(program)
+await runLoader(unlessSandbox(program, '[]'))

@@ -1,6 +1,6 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, Redacted, Schema } from 'effect'
-import { display, runLoader } from '../lib/Loader.js'
+import { display, runLoader, unlessSandbox } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
@@ -15,12 +15,6 @@ const Output = Schema.Struct({
 
 const program = Effect.gen(function* () {
   const client = yield* HttpClient.HttpClient
-  const terminal = yield* Terminal.Terminal
-  const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
-
-  if (sandbox) {
-    return yield* terminal.display('[]')
-  }
 
   const token = yield* Config.redacted('PREREVIEW_REVIEWS_DATA_TOKEN')
 
@@ -36,4 +30,4 @@ const program = Effect.gen(function* () {
   yield* display(Output, { count: data.length })
 })
 
-await runLoader(program)
+await runLoader(unlessSandbox(program, '[]'))

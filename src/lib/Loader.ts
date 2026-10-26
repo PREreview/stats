@@ -1,6 +1,6 @@
 import { Terminal } from '@effect/platform'
 import { NodeFileSystem, NodeHttpClient, NodeTerminal } from '@effect/platform-node'
-import { Effect, Layer, Schema } from 'effect'
+import { Config, Effect, Layer, Schema } from 'effect'
 
 const NodeLayer = Layer.mergeAll(NodeFileSystem.layer, NodeHttpClient.layer, NodeTerminal.layer)
 
@@ -14,4 +14,17 @@ export const display = <A, I, R>(schema: Schema.Schema<A, I, R>, data: A) =>
     const encoded = yield* Schema.encode(Schema.parseJson(schema))(data)
 
     yield* terminal.display(encoded)
+  })
+
+export const unlessSandbox = <A, E, R>(program: Effect.Effect<A, E, R>, sandboxOutput: string) =>
+  Effect.gen(function* () {
+    const sandbox = yield* Config.withDefault(Config.boolean('SANDBOX'), false)
+
+    if (sandbox) {
+      const terminal = yield* Terminal.Terminal
+
+      return yield* terminal.display(sandboxOutput)
+    }
+
+    return yield* program
   })
