@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { Config, Effect, Record, Redacted, Schema } from 'effect'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Clubs = Schema.Array(
@@ -43,9 +43,7 @@ const program = Effect.gen(function* () {
 
   const transformedData = Record.fromIterableWith(data, club => [club.id, club])
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)
-
-  yield* terminal.display(encoded)
+  yield* display(Output, transformedData)
 })
 
 await runLoader(program)

@@ -1,6 +1,6 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import { FieldIdFromUrlSchema, FieldIdSchema, SubfieldIdFromUrlSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 
 const Subfields = Schema.Struct({
@@ -22,8 +22,6 @@ const SubfieldNames = Schema.Record({
 })
 
 const program = Effect.gen(function* () {
-  const terminal = yield* Terminal.Terminal
-
   const token = yield* Config.redacted('OPENALEX_API_KEY')
 
   const httpClient = yield* Effect.andThen(
@@ -46,9 +44,7 @@ const program = Effect.gen(function* () {
     { name: subfield.display_name, field: subfield.field.id },
   ])
 
-  const encoded = yield* Schema.encode(Schema.parseJson(SubfieldNames))(transformedData)
-
-  yield* terminal.display(encoded)
+  yield* display(SubfieldNames, transformedData)
 })
 
 await runLoader(program)

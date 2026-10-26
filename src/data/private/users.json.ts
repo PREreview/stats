@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import * as Iso3166 from '../../lib/Iso3166.js'
-import { runLoader } from '../../lib/Loader.js'
+import { display, runLoader } from '../../lib/Loader.js'
 import * as OrcidId from '../../lib/OrcidId.js'
 import * as Temporal from '../../lib/Temporal.js'
 
@@ -54,9 +54,7 @@ const program = Effect.gen(function* () {
     timestamp: Option.liftPredicate(user.timestamp, timestamp => timestamp !== 'not available from import source'),
   }))
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)
-
-  yield* terminal.display(encoded)
+  yield* display(Output, transformedData)
 })
 
 await runLoader(program)

@@ -1,6 +1,6 @@
-import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Config, Effect, flow, Record, Schema, Stream } from 'effect'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import { DomainIdFromUrlSchema, DomainIdSchema } from '../lib/OpenAlex.js'
 
 const Domains = Schema.Struct({
@@ -16,8 +16,6 @@ const Domains = Schema.Struct({
 const DomainNames = Schema.Record({ key: DomainIdSchema, value: Schema.String })
 
 const program = Effect.gen(function* () {
-  const terminal = yield* Terminal.Terminal
-
   const token = yield* Config.redacted('OPENALEX_API_KEY')
 
   const httpClient = yield* Effect.andThen(
@@ -37,9 +35,7 @@ const program = Effect.gen(function* () {
 
   const transformedData = Record.fromIterableWith(data, domain => [domain.id, domain.display_name])
 
-  const encoded = yield* Schema.encode(Schema.parseJson(DomainNames))(transformedData)
-
-  yield* terminal.display(encoded)
+  yield* display(DomainNames, transformedData)
 })
 
 await runLoader(program)

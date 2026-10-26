@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { Config, Effect, Redacted, Schema } from 'effect'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Users = Schema.Array(
@@ -33,9 +33,7 @@ const program = Effect.gen(function* () {
     .execute(request)
     .pipe(Effect.andThen(HttpClientResponse.filterStatusOk), Effect.andThen(HttpClientResponse.schemaBodyJson(Users)))
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Output))({ count: data.length })
-
-  yield* terminal.display(encoded)
+  yield* display(Output, { count: data.length })
 })
 
 await runLoader(program)

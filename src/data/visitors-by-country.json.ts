@@ -1,7 +1,7 @@
 import { HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
 import { Array, Config, Effect, flow, Option, Redacted, Schema } from 'effect'
 import * as Iso3166 from '../lib/Iso3166.js'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import * as Temporal from '../lib/Temporal.js'
 
 const Visitors = Schema.Array(
@@ -64,9 +64,7 @@ const program = Effect.gen(function* () {
     country: Option.filter(visitors.country_code, Iso3166.isAlpha2Code),
   }))
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Output))(transformedData)
-
-  yield* terminal.display(encoded)
+  yield* display(Output, transformedData)
 })
 
 await runLoader(program)

@@ -1,8 +1,8 @@
-import { FileSystem, HttpClient, HttpClientRequest, HttpClientResponse, Terminal } from '@effect/platform'
+import { FileSystem, HttpClient, HttpClientRequest, HttpClientResponse } from '@effect/platform'
 import { Array, Config, Effect, Option, Redacted, Schema } from 'effect'
 import * as Doi from '../lib/Doi.js'
 import * as LanguageCode from '../lib/LanguageCode.js'
-import { runLoader } from '../lib/Loader.js'
+import { display, runLoader } from '../lib/Loader.js'
 import { DomainIdSchema, FieldIdSchema, SubfieldIdSchema } from '../lib/OpenAlex.js'
 import * as OrcidId from '../lib/OrcidId.js'
 import * as PreprintServer from '../lib/PreprintServer.js'
@@ -161,13 +161,9 @@ const getReviews = Effect.gen(function* () {
 })
 
 const program = Effect.gen(function* () {
-  const terminal = yield* Terminal.Terminal
-
   const data = yield* Effect.map(Effect.all([getReviews, getLegacyReviews, getLegacyRapidReviews]), Array.flatten)
 
-  const encoded = yield* Schema.encode(Schema.parseJson(Reviews))(data)
-
-  yield* terminal.display(encoded)
+  yield* display(Reviews, data)
 })
 
 await runLoader(program)
