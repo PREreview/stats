@@ -1,6 +1,24 @@
-import { Option } from 'effect'
+import { Option, Schema } from 'effect'
 import { describe, expect, test } from 'vitest'
 import * as _ from '../src/lib/Iso3166.js'
+
+describe('Alpha2CodeSchema', () => {
+  test.for(['GB', 'US', 'DZ'])('decodes %s', input => {
+    const actual = Schema.decodeUnknownSync(_.Alpha2CodeSchema)(input)
+
+    expect(actual).toStrictEqual(input)
+  })
+
+  test.for(['', 'gb', 'UK', 'GBR', 'XX', 123])("doesn't decode %s", input => {
+    expect(() => Schema.decodeUnknownSync(_.Alpha2CodeSchema)(input)).toThrow()
+  })
+
+  test('encodes', () => {
+    const actual = Schema.encodeSync(_.Alpha2CodeSchema)('GB')
+
+    expect(actual).toStrictEqual('GB')
+  })
+})
 
 describe('guessCountry', () => {
   test.for([
